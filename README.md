@@ -22,7 +22,8 @@ cp .env.example .env
 ```
 
 For the **DANGO_SECRET_KEY** environnement variable you must generate it using this command:
-```python3 -c 'from django.core.management.utils import get_random_secret_key; print(get_random_secret_key())'
+```
+python3 -c 'from django.core.management.utils import get_random_secret_key; print(get_random_secret_key())'
 ```
 
 ### 3. Build and Run Docker Containers
