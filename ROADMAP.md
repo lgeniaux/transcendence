@@ -68,11 +68,11 @@
 #### Technologies:
   - ThreeJS, WebGL.
 
-### 8. Intégration PONG backend + Tournoi (JUSTIN)
+### 8. Intégration PONG backend + Tournoi (JUSTIN - MAX)
 #### Sous-tâches:
   - Mise en place des endpoints pour gérer le jeu
   - Mise en place des endpoints pour récupérer les données.
-  - Mise en place du système de tournoi)
+  - Mise en place du système de tournoi
 #### Technologies:
   - Django, Django REST framework, WebSockets?
 
