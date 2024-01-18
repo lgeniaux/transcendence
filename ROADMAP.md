@@ -33,6 +33,7 @@
 #### Sous-tâches:
   - Intégration de Bootstrap pour la conception réactive.
   - Création des composants UI (entêtes, pieds de page, barres de navigation).
+  - Création de maquettes et wireframe pour les pages du site
 #### Technologies:
   - JavaScript, HTML5, CSS3, Bootstrap.
 
