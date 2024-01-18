@@ -1,15 +1,16 @@
 # Roadmap ft_transcendence
 
 ## Table des Matières
-1. [Configuration du Projet](#1-configuration-du-projet-jours-1-2)
-2. [Mise en Place du Framework Backend](#2-mise-en-place-du-framework-backend-jours-3-7)
-3. [Développement du Framework Frontend et de l'UI](#3-développement-du-framework-frontend-et-de-lui-jours-8-12)
-4. [Intégration de la Base de Données](#4-intégration-de-la-base-de-données-jours-13-15)
-5. [Gestion des Utilisateurs et Authentification](#5-gestion-des-utilisateurs-et-authentification-jours-16-20)
-6. [Fonctionnalité de Chat en Direct](#6-fonctionnalité-de-chat-en-direct-jours-21-23)
-7. [Mise en Œuvre des Graphiques 3D](#7-mise-en-œuvre-des-graphiques-3d-jours-24-26)
-8. [Tableaux de Bord des Statistiques Utilisateur et Jeu](#8-tableaux-de-bord-des-statistiques-utilisateur-et-jeu-jours-27-28)
-9. [Conformité au RGPD et Gestion des Données](#9-conformité-au-rgpd-et-gestion-des-données-jours-29-30)
+1. [Configuration du Projet](#1-configuration-du-projet)
+2. [Mise en Place du Framework Backend](#2-mise-en-place-du-framework-backend)
+3. [Développement du Framework Frontend et de l'UI](#3-développement-du-framework-frontend-et-de-lui)
+4. [Intégration de la Base de Données](#4-intégration-de-la-base-de-données)
+5. [Gestion des Utilisateurs et Authentification](#5-gestion-des-utilisateurs-et-authentification)
+6. [Fonctionnalité de Chat en Direct](#6-fonctionnalité-de-chat-en-direct)
+7. [Mise en Œuvre des Graphiques 3D](#7-mise-en-œuvre-des-graphiques-3d)
+8. [Intégration backend 3D](#8-intégration-backend-3d)
+9. [Tableaux de Bord des Statistiques Utilisateur et Jeu](#9-tableaux-de-bord-des-statistiques-utilisateur-et-jeu)
+10. [Conformité au RGPD et Gestion des Données](#10-conformité-au-rgpd-et-gestion-des-données)
 
 ---
 
