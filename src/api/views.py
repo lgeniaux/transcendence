@@ -7,6 +7,7 @@ from .serializers import GameSerializer, UserRegistrationSerializer
 from django.contrib.auth import authenticate
 from django.contrib.auth.models import User
 from django.db import IntegrityError
+from rest_framework.permissions import IsAuthenticated
 
 # LIST OF ALL API ENDPOINTS
 
@@ -14,6 +15,7 @@ class GameList(APIView):
     """
     List all games
     """
+    permission_classes = [IsAuthenticated] #this will make sure that the user is authenticated before accessing the endpoint
     def get(self, request, format=None):
         games = Game.objects.all()
         serializer = GameSerializer(games, many=True)
