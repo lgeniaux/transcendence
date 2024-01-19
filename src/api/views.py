@@ -5,6 +5,8 @@ from rest_framework import status
 from .models import Game
 from .serializers import GameSerializer, UserRegistrationSerializer
 from django.contrib.auth import authenticate
+from django.contrib.auth.models import User
+from django.db import IntegrityError
 
 # LIST OF ALL API ENDPOINTS
 
@@ -17,15 +19,19 @@ class GameList(APIView):
         serializer = GameSerializer(games, many=True)
         return Response(serializer.data)
     
-class UserRegistration(APIView):
+class UserRegistrationView(APIView):
     """
     Register a new user
     """
-    def post(self, request, format=None):
+    def post(self, request, *args, **kwargs):
         serializer = UserRegistrationSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response({"message": "User successfully registered"}, status=status.HTTP_201_CREATED)
+        if serializer.is_valid(): #Note de Louis: is_valid will check all functions that starts with validate_*
+            try:
+                serializer.save()
+                return Response(serializer.data, status=status.HTTP_201_CREATED)
+            except IntegrityError:
+                return Response({"error": "A user with that username or email already exists."},
+                                status=status.HTTP_400_BAD_REQUEST)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
 class UserLogin(APIView):
