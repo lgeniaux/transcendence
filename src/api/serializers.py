@@ -5,7 +5,7 @@ from django.contrib.auth.hashers import make_password
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ['user_id', 'pseudo', 'email', 'avatar', 'online_status']
+        fields = ['user_id', 'username', 'email', 'avatar', 'online_status']
 
 class GameSerializer(serializers.ModelSerializer):
     class Meta:
@@ -20,11 +20,11 @@ class LiveChatSerializer(serializers.ModelSerializer):
 class UserRegistrationSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ['pseudo', 'email', 'password', 'avatar']
+        fields = ['username', 'email', 'password', 'avatar']
     
     def create(self, validated_data):
         user = User.objects.create(
-            pseudo=validated_data['pseudo'],
+            username=validated_data['username'],
             email=validated_data['email'],
             avatar=validated_data['avatar'],
             password=make_password(validated_data['password'])
@@ -36,8 +36,7 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError("A user with that email already exists.")
         return value
     
-    def validate_pseudo(self, value):
-        if User.objects.filter(pseudo=value).exists():
+    def validate_username(self, value):
+        if User.objects.filter(username=value).exists():
             raise serializers.ValidationError("A user with that username already exists.")
         return value
-    
