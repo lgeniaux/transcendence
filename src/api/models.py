@@ -8,9 +8,9 @@ class User(AbstractUser):
     user_id = models.AutoField(primary_key=True)
     pseudo = models.CharField(max_length=50, unique=True)
     email = models.EmailField(max_length=254, unique=True)
-    hashed_password = models.CharField(max_length=128)
     avatar = models.ImageField(upload_to='avatars/', null=True, blank=True)
     online_status = models.BooleanField(default=False)
+    # Note de Louis: I didn't add a password field because it is already included in AbstractUser
     
 class Game(models.Model):
     def __str__(self):
