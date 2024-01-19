@@ -8,7 +8,8 @@ from django.contrib.auth import authenticate
 from django.contrib.auth.models import User
 from django.db import IntegrityError
 from rest_framework.permissions import IsAuthenticated
-
+from django.utils.decorators import method_decorator
+from django.views.decorators.csrf import csrf_protect, csrf_exempt
 # LIST OF ALL API ENDPOINTS
 
 class GameList(APIView):
@@ -32,6 +33,9 @@ class UserRegistrationView(APIView):
                 serializer.save()
                 return Response(serializer.data, status=status.HTTP_201_CREATED)
             except IntegrityError:
+                #debug purpose
+                print(serializer.errors)
+                print(serializer.validated_data)
                 return Response({"error": "A user with that username or email already exists."},
                                 status=status.HTTP_400_BAD_REQUEST)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
@@ -47,3 +51,10 @@ class UserLogin(APIView):
         if user:
             return Response({"message": "User successfully logged in"}, status=status.HTTP_200_OK)
         return Response({"message": "Wrong credentials"}, status=status.HTTP_401_UNAUTHORIZED)
+
+
+def register_view(request):
+    return render(request, 'authentication/register.html')
+
+def login_view(request):
+    return render(request, 'authentication/login.html')
