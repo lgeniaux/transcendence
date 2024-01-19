@@ -51,6 +51,7 @@ The application should now be running and accessible at [http://localhost:8000](
 ## Common Commands
 - **Starting the application**: `docker-compose up`
 - **Stopping the application**: `docker-compose down`
+- **Delete the volumes (very useful, use this after modifying .env)**: `docker-compose down --volumes`
 - **Rebuilding the application**: `docker-compose up --build`
 - **Running Django management commands**: `docker-compose exec web python manage.py [command]`
 
