@@ -23,5 +23,6 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', include(('api.urls', 'api'), namespace='api')),
     path('register/', register_view, name='register'),
-    path('login/', login_view, name='login')
+    path('login/', login_view, name='login'),
+    path('livechat/', include(('livechat.urls', 'livechat'), namespace='livechat')),
 ]

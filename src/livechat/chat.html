@@ -1,0 +1,21 @@
+<!-- livechat/templates/livechat/chat.html -->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Live Chat</title>
+    <!-- Ajoutez ici votre CSS et JavaScript si nécessaire -->
+</head>
+<body>
+    <div id="chat-box">
+        <div id="chat-messages">
+            {% for message in messages %}
+                <p><strong>{{ message.author.username }}:</strong> {{ message.content }}</p>
+            {% endfor %}
+        </div>
+        <input type="text" id="chat-message-input" placeholder="Type your message...">
+        <button id="chat-message-send">Send</button>
+    </div>
+
+    <!-- JavaScript pour WebSocket et la gestion des messages -->
+</body>
+</html>
