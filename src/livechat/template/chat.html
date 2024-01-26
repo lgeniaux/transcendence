@@ -19,3 +19,9 @@
     <!-- JavaScript pour WebSocket et la gestion des messages -->
 </body>
 </html>
+
+{% for message in messages %}
+    <div class="message">
+        <strong>{{ message.author.username }}:</strong> {{ message.content }}
+    </div>
+{% endfor %}

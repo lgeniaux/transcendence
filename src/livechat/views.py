@@ -1,16 +1,13 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from .models import Message
 
 def chat_view(request):
-    """
-    Cette vue gère l'affichage de la chat-box.
-    Elle récupère tous les messages depuis la base de données et les passe au template.
-    """
-    # Récupérer les messages depuis la base de données, par exemple les 50 derniers messages
-    messages = Message.objects.all().order_by('-timestamp')[:50]
-    
-    # Si vous souhaitez inverser l'ordre pour que les plus récents soient en haut, vous pouvez faire:
-    messages = reversed(messages)
-    
-    # Retourne la réponse HTTP avec le template chargé et les messages passés en contexte
+    messages = Message.objects.all().order_by('timestamp')
     return render(request, 'livechat/chat.html', {'messages': messages})
+
+def post_message(request):
+    if request.method == 'POST':
+        content = request.POST.get('content')
+        if content:
+            Message.objects.create(author=request.user, content=content)
+    return redirect('chat')
