@@ -1,13 +1,10 @@
+import logging
+from django.http import JsonResponse
+
 from django.shortcuts import render, redirect
 from .models import Message
+from django.contrib.auth.decorators import login_required
 
 def chat_view(request):
     messages = Message.objects.all().order_by('timestamp')
-    return render(request, 'livechat/chat.html', {'messages': messages})
-
-def post_message(request):
-    if request.method == 'POST':
-        content = request.POST.get('content')
-        if content:
-            Message.objects.create(author=request.user, content=content)
-    return redirect('chat')
+    return render(request, 'chat.html', {'messages': messages})    
