@@ -6,7 +6,7 @@ body
 h1
 {
 	color: black;
-	font-size: 128px;
+	font-size: 16vh;
 	font-family: 'Brandish', sans-serif;
 }
 
@@ -35,10 +35,11 @@ h1
 	display: flex;
 	flex-direction: column;
 	background-color: white;
-	border: 16px solid grey;
+	border: 2vh solid grey;
     flex: 1;	/* Permet de faire en sorte que la div prenne toute la place disponible */
     overflow-y: auto; /* Permet de faire défiler les messages si nécessaire */
-    padding: 20px;
+    padding: 10px;
+	height: 100%;
 }
 
 .chatbox-input
