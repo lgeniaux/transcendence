@@ -6,7 +6,7 @@
     <title>Register</title>
 </head>
 <body>
-    <form action="{% url 'api:register-user' %}" method="post" enctype="multipart/form-data">
+    <form action="{% url 'authentication:register-user' %}" method="post" enctype="multipart/form-data">
         {% csrf_token %}
         <label for="username">Username</label>
         <input type="text" name="username" id="username">

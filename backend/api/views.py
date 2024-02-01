@@ -51,10 +51,3 @@ class UserLogin(APIView):
         if user:
             return Response({"message": "User successfully logged in"}, status=status.HTTP_200_OK)
         return Response({"message": "Wrong credentials"}, status=status.HTTP_401_UNAUTHORIZED)
-
-
-def register_view(request):
-    return render(request, 'authentication/register.html')
-
-def login_view(request):
-    return render(request, 'authentication/login.html')
