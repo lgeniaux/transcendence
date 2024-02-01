@@ -22,3 +22,7 @@ RUN chown -R django:django /usr/src/app
 
 # Switch to the 'django' user
 USER django
+
+# Add the frontend directory as an environment variable
+ENV FRONTEND_FOLDER=/usr/src/app/frontend
+

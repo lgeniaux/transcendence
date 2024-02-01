@@ -45,6 +45,7 @@ class UserLogin(APIView):
     Login a user
     """
     def post(self, request, format=None):
+        print("Login POST request received")
         username = request.data.get('username')
         password = request.data.get('password')
         user = authenticate(username=username, password=password)
