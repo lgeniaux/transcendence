@@ -5,7 +5,7 @@ function initLoginForm() {
     var loginForm = document.getElementById('loginForm');
     if (loginForm) {
         loginForm.addEventListener('submit', function(event) {
-            event.preventDefault(); // Prevent default form submission
+            event.preventDefault();
             loginUser();
         });
     }
@@ -15,11 +15,11 @@ function loginUser() {
     var username = document.querySelector('[name="username"]').value;
     var password = document.querySelector('[name="password"]').value;
 
-    fetch('/api/login-user/', { // Update with the correct URL to your API endpoint
+    fetch('/api/login-user/', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
-            'X-CSRFToken': getCookie('csrftoken') // Include CSRF token from cookie
+            'X-CSRFToken': getCookie('csrftoken')
         },
         body: JSON.stringify({ username: username, password: password })
     })
