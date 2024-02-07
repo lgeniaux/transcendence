@@ -1,6 +1,15 @@
 name: Transcendence CI
 
-on: [push, pull_request]
+on: 
+name: Transcendence CI
+
+on:
+  push:
+    branches:
+      - '*'
+  pull_request:
+    branches:
+      - master
 
 jobs:
   docker:
@@ -16,19 +25,15 @@ jobs:
     - name: Build and start containers
       run: docker-compose up -d --build
       working-directory: ./
-
-    - name : Wait for containers to start
       run: sleep 10
 
-    - name : Check web container
+    - name : Check containers
       run: docker ps | grep ft_transcendence_web 
-    
-    - name : Check db container
       run: docker ps | grep ft_transcendence_db
-      
+  
+
   django:
     - name: Run tests
       run: docker-compose exec web pytest
-      
-    - name: Clean up
+
       run: docker-compose down --volumes
