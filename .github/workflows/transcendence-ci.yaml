@@ -1,8 +1,5 @@
 name: Transcendence CI
 
-on: 
-name: Transcendence CI
-
 on:
   push:
     branches:
