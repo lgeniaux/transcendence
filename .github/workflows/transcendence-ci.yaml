@@ -12,9 +12,6 @@ jobs:
     - name: Build and run Docker Compose
       run: docker-compose up -d --build
 
-    - name: Wait for PostgreSQL to become ready
-      run: until docker-compose exec postgres pg_isready ; do sleep 1 ; done
-
     - name: Run Django migrations
       run: docker-compose exec web python manage.py migrate
 
