@@ -1,10 +1,24 @@
 // register.js
 
+function checkPassword() {
+    var password = document.querySelector('[name="password"]').value;
+    var password2 = document.querySelector('[name="confirmPassword"]').value;
+    if (password !== password2) {
+        console.log('Passwords do not match');
+        return false;
+    }
+    console.log('Passwords match');
+    return true;
+}
+
 function initRegisterForm() {
     var registerForm = document.getElementById('registerForm');
     if (registerForm) {
         registerForm.addEventListener('submit', function(event) {
             event.preventDefault(); // Prevent default form submission
+            if (!checkPassword()) {
+                return;
+            }
             registerUser();
         });
     }
@@ -25,7 +39,7 @@ function registerUser() {
     })
     .then(response => response.json())
     .then(data => {
-        console.log(data.message);
+        console.log(data); // for the moment just log in the console
         
     })
     .catch(error => console.error('Error:', error));

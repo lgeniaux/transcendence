@@ -3,7 +3,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from .models import Game
-from .serializers import GameSerializer, UserRegistrationSerializer
+from .serializers import GameSerializer, UserRegistrationSerializer, UserLoginSerializer
 from django.contrib.auth import authenticate
 from django.contrib.auth.models import User
 from django.db import IntegrityError
@@ -29,26 +29,23 @@ class UserRegistrationView(APIView):
     def post(self, request, *args, **kwargs):
         serializer = UserRegistrationSerializer(data=request.data)
         if serializer.is_valid(): #Note de Louis: is_valid will check all functions that starts with validate_*
-            try:
-                serializer.save()
-                return Response(serializer.data, status=status.HTTP_201_CREATED)
-            except IntegrityError:
-                #debug purpose
-                print(serializer.errors)
-                print(serializer.validated_data)
-                return Response({"error": "A user with that username or email already exists."},
-                                status=status.HTTP_400_BAD_REQUEST)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            user = serializer.save()
+            return Response({"message": "User successfully registered"}, status=status.HTTP_201_CREATED)
+        else:
+            print(f"Error: {serializer.errors}")
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            
     
 class UserLogin(APIView):
     """
     Login a user
     """
     def post(self, request, format=None):
-        print("Login POST request received")
-        username = request.data.get('username')
-        password = request.data.get('password')
-        user = authenticate(username=username, password=password)
-        if user:
-            return Response({"message": "User successfully logged in"}, status=status.HTTP_200_OK)
-        return Response({"message": "Wrong credentials"}, status=status.HTTP_401_UNAUTHORIZED)
+        serializer = UserLoginSerializer(data=request.data)
+        if serializer.is_valid():
+            user = serializer.validated_data['user']
+            token = serializer.create(serializer.validated_data)
+            return Response({"message": "User successfully logged in", "token": token}, status=status.HTTP_200_OK)
+        else:
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        
