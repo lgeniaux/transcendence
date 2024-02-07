@@ -3,7 +3,7 @@ name: Transcendence CI
 on: [push, pull_request]
 
 jobs:
-  test:
+  docker:
     runs-on: ubuntu-latest
 
     steps:
@@ -17,9 +17,16 @@ jobs:
       run: docker-compose up -d --build
       working-directory: ./
 
-    - name : Check coontainers
-      run: docker ps
+    - name : Wait for containers to start
+      run: sleep 10
+
+    - name : Check web container
+      run: docker ps | grep ft_transcendence_web 
     
+    - name : Check db container
+      run: docker ps | grep ft_transcendence_db
+      
+  django:
     - name: Run tests
       run: docker-compose exec web pytest
       
