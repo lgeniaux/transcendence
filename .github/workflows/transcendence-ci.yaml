@@ -1,0 +1,27 @@
+name: Transcendence CI
+
+on: [push, pull_request]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v1
+
+    - name: Build and start containers
+      run: docker-compose up -d --build
+      working-directory: ./
+
+    - name : Check coontainers
+      run: docker ps
+    
+    - name: Run tests
+      run: docker-compose exec web pytest
+      
+    - name: Clean up
+      run: docker-compose down --volumes
