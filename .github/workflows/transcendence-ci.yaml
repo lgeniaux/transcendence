@@ -25,12 +25,6 @@ jobs:
         sleep 10
       working-directory: ./
 
-    - name: Check ft_transcendence_web container
-      run: docker ps | grep ft_transcendence_web 
-
-    - name: Check ft_transcendence_db container
-      run: docker ps | grep ft_transcendence_db
-
   django:
     needs: docker
     runs-on: ubuntu-latest
