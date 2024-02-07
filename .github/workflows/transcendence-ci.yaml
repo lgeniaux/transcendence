@@ -25,11 +25,8 @@ jobs:
     steps:
     - uses: actions/checkout@v2
 
-    - name: Build the Docker image
-      run: docker build . -t transcendence
-
-    - name: Run Docker Compose
-      run: docker-compose up -d
+    - name: Build and run Docker Compose
+      run: docker-compose up -d --build
 
     - name: Wait for PostgreSQL to become ready
       run: until docker-compose exec postgres pg_isready ; do sleep 1 ; done
