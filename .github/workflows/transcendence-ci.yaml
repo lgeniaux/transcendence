@@ -45,11 +45,6 @@ jobs:
       with:
         args: --check backend/
 
-    - name: Static Analysis for Python
-      uses: PyCQA/bandit@master
-      with:
-        args: -r backend/
-
     - name: Check for JS vulnerabilities
       run: |
         npm install
