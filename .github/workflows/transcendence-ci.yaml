@@ -13,10 +13,10 @@ jobs:
       run: docker-compose up -d --build
 
     - name: Run Django migrations
-      run: docker-compose exec -T web python manage.py migrate
+      run: docker-compose exec -T web python backend/manage.py migrate
 
     - name: Run PyTest
-      run: docker-compose exec -T web pytest backend/
+      run: docker-compose exec -T web pytest backend
 
     - name: Lint Python Code
       uses: psf/black@stable
