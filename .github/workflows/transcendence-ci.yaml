@@ -31,5 +31,5 @@ jobs:
     steps:
     - name: Run tests and bring down containers
       run: |
-        docker-compose exec web pytest
+        docker-compose exec web pytest backend
         docker-compose down --volumes

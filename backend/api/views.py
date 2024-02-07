@@ -45,7 +45,7 @@ class UserLogin(APIView):
         if serializer.is_valid():
             user = serializer.validated_data['user']
             token = serializer.create(serializer.validated_data)
-            return Response({"message": "User successfully logged in", "token": token}, status=status.HTTP_200_OK)
+            return Response(UserLoginSerializer(user).data, status=status.HTTP_200_OK)
         else:
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            return Response(serializer.errors, status=status.HTTP_401_UNAUTHORIZED)
         
