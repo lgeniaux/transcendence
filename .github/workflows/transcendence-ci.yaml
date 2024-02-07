@@ -1,32 +1,64 @@
 name: Transcendence CI
 
-on:
-  push:
-    branches:
-      - '*'
-  pull_request:
-    branches:
-      - master
+on: [push, pull_request]
 
 jobs:
-  docker:
+  build-and-test:
     runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:12
+        env:
+          POSTGRES_DB: dbname
+          POSTGRES_USER: user
+          POSTGRES_PASSWORD: password
+        ports:
+          - 5432:5432
+        # Set health checks to wait until postgres is ready
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v2
+    - uses: actions/checkout@v2
 
-    - name: Set up Docker Buildx
-      uses: docker/setup-buildx-action@v1
+    - name: Build the Docker image
+      run: docker build . -t transcendence
 
-    - name: Build and start containers
+    - name: Run Docker Compose
+      run: docker-compose up -d
+
+    - name: Wait for PostgreSQL to become ready
+      run: until docker-compose exec postgres pg_isready ; do sleep 1 ; done
+
+    - name: Run Django migrations
+      run: docker-compose exec web python manage.py migrate
+
+    - name: Run PyTest
+      run: docker-compose exec web pytest backend/
+
+    - name: Lint Python Code
+      uses: psf/black@stable
+      with:
+        args: --check backend/
+
+    - name: Static Analysis for Python
+      uses: PyCQA/bandit@master
+      with:
+        args: -r backend/
+
+    - name: Check for JS vulnerabilities
       run: |
-        docker-compose up -d --build
-        sleep 10
-      working-directory: ./
+        npm install
+        npm audit
 
-  django:
-    needs: docker
-    runs-on: ubuntu-latest
-    steps:
-    - name: Run tests and bring down containers
-      run: docker-compose exec web pytest backend
+    - name: Lint JavaScript Code
+      run: |
+        npm install eslint
+        eslint static/js/
+
+    - name: Shutdown Docker Compose
+      run: docker-compose down
