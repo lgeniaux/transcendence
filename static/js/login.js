@@ -17,6 +17,7 @@ function loginUser() {
 
     fetch('/api/login-user/', {
         method: 'POST',
+        credentials: 'same-origin',
         headers: {
             'Content-Type': 'application/json',
             'X-CSRFToken': getCookie('csrftoken')
