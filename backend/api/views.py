@@ -55,3 +55,10 @@ class UserLogin(APIView):
             return Response({"detail": "Invalid credentials"}, status=status.HTTP_401_UNAUTHORIZED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         
+class UserLogout(APIView):
+    authentication_classes = [TokenAuthentication]
+    def post(self, request, *args, **kwargs):
+        if request.user.is_authenticated:
+            request.user.auth_token.delete()
+            return Response({"detail": "You have successfuly been logged out"}, status=status.HTTP_200_OK)
+        return Response({"detail": "You are not logged in"}, status=status.HTTP_401_UNAUTHORIZED)
