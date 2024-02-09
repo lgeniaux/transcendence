@@ -16,14 +16,19 @@ function loginUser() {
     var password = document.querySelector('[name="password"]').value;
     const auth_token = localStorage.getItem('authToken');
 
+    const headers = {
+        'Content-Type': 'application/json',
+        'X-CSRFToken': getCookie('csrftoken')
+    };2
+
+    if (auth_token && auth_token !== 'undefined' && auth_token !== 'null') {
+        headers['Authorization'] = 'Token ' + auth_token;
+    }
+
     fetch('/api/login-user/', {
         method: 'POST',
-        credentials: 'same-origin',
-        headers: {
-            'Content-Type': 'application/json',
-            'X-CSRFToken': getCookie('csrftoken'),
-            'Authorization': 'Token ' + auth_token
-        },
+
+        headers: headers,
         body: JSON.stringify({ username: username, password: password })
     })
     .then(response => response.json())
