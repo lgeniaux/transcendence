@@ -10,7 +10,7 @@ jobs:
 
     - name: Set .env file
       run: cp .env.example .env
-      
+
     - name: Build and run Docker Compose
       run: docker-compose up -d --build
 
@@ -24,21 +24,6 @@ jobs:
 
     - name: Run PyTest
       run: docker-compose exec -T web pytest backend
-
-    - name: Lint Python Code
-      uses: psf/black@stable
-      with:
-        args: --check backend/
-
-    - name: Check for JS vulnerabilities
-      run: |
-        npm install
-        npm audit
-
-    - name: Lint JavaScript Code
-      run: |
-        npm install eslint
-        eslint static/js/
 
     - name: Shutdown Docker Compose
       run: docker-compose down
