@@ -5,16 +5,17 @@ on: [push, pull_request]
 jobs:
   build-and-test:
     runs-on: ubuntu-latest
-    env:
-      POSTGRES_DB: postgresdb
-      POSTGRES_USER: postgresuser
-      POSTGRES_PASSWORD: postgrespass
     steps:
     - uses: actions/checkout@v2
 
     - name: Build and run Docker Compose
       run: docker-compose up -d --build
 
+    - name: Generate django secret key
+      run: |
+        SECRET_KEY=$(docker-compose exec -T web python -c "from django.core.management.utils import get_random_secret_key; print(get_random_secret_key())")
+        echo "SECRET_KEY=$SECRET_KEY" >> .env
+        
     - name: Run Django migrations
       run: docker-compose exec -T web python backend/manage.py migrate
 
