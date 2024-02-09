@@ -31,6 +31,7 @@ function registerUser() {
 
     fetch('/api/register-user/', {
         method: 'POST',
+        credentials: 'same-origin',
         headers: {
             'Content-Type': 'application/json',
             'X-CSRFToken': getCookie('csrftoken')
