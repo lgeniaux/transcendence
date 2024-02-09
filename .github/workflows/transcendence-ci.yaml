@@ -5,7 +5,10 @@ on: [push, pull_request]
 jobs:
   build-and-test:
     runs-on: ubuntu-latest
-
+    env:
+      POSTGRES_DB: postgresdb
+      POSTGRES_USER: postgresuser
+      POSTGRES_PASSWORD: postgrespass
     steps:
     - uses: actions/checkout@v2
 
