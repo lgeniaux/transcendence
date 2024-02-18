@@ -1,15 +1,44 @@
+{% load static %}
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login</title>
+    <title>Se connecter</title>
 </head>
+
 <body>
-    <form id="loginForm">
-        <input type="text" name="username" placeholder="Username">
-        <input type="password" name="password" placeholder="Password">
-        <button type="submit">Login</button>
-    </form>
+    <form id="loginForm" class="authForm" action="" method="post">
+		{% csrf_token %}
+		<div class="row">
+			<h1>Se connecter</h1>
+		</div>
+	
+		<div class="row">
+			<div class="col-auto">
+				<label for="email">Adresse e-mail</label>
+				<input type="email" name="email" class="form-control" placeholder="Adresse e-mail">
+			</div>
+		</div>
+	
+		<div class="row">
+			<div class="col-auto">
+				<label for="password">Mot de passe</label>
+				<input type="password" name="password" class="form-control" placeholder="Mot de passe">
+			</div>
+		</div>
+	
+		<div class="row"></div>
+	
+		<div class="row justify-content-around">
+			<button class="secondaryBtn btn btn-secondary" id="registerBtn" data-content="{% url 'register' %}" data-script="{% static 'js/auth/register.js' %}">Pas encore de compte ?</button>
+			<button class="primaryBtn btn btn-primary" id="loginBtn" type="submit">Se connecter</button>
+		</div>
+	</form>
+	
+
+	<script src="{% static 'js/auth/login.js' %}"></script>
+
 </body>
+
 </html>
