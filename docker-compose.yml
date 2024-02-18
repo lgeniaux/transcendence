@@ -12,13 +12,14 @@ services:
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
     ports:
       - "5432:5432"
+      
 
   web:
     build: .
     user: django
     stdin_open: true # docker run -i
     tty: true        # docker run -t
-    command: python backend/manage.py runserver 0.0.0.0:8000
+    command: ["./entrypoint.sh", "db", "python", "backend/manage.py", "runserver", "0.0.0.0:8000"]
     volumes:
       - .:/usr/src/app
       - avatars:/usr/src/app/avatars

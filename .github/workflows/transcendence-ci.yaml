@@ -1,0 +1,29 @@
+name: Transcendence CI
+
+on: [push, pull_request]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Set .env file
+      run: cp .env.example .env
+
+    - name: Build and run Docker Compose
+      run: docker-compose up -d --build
+
+    - name: Generate django secret key
+      run: |
+        SECRET_KEY=$(docker-compose exec -T web python -c "from django.core.management.utils import get_random_secret_key; print(get_random_secret_key())")
+        echo "SECRET_KEY=$SECRET_KEY" >> .env
+
+    - name: Run Django migrations
+      run: docker-compose exec -T web python backend/manage.py migrate
+
+    - name: Run PyTest
+      run: docker-compose exec -T web pytest backend
+
+    - name: Shutdown Docker Compose
+      run: docker-compose down

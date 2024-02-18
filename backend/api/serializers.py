@@ -22,25 +22,23 @@ class LiveChatSerializer(serializers.ModelSerializer):
         fields = ['chat_id', 'user', 'message', 'time']
     
 class UserLoginSerializer(serializers.Serializer):
-    username = serializers.CharField(max_length=100)
-    password = serializers.CharField(max_length=100)
-    
+    username = serializers.CharField()
+    password = serializers.CharField(style={'input_type': 'password'}, write_only=True)
+
     def validate(self, data):
-        username = data.get('username')
-        password = data.get('password')
-        if username and password:
-            user = authenticate(username=username, password=password)
-            if user:
-                data['user'] = user
-            else:
-                raise serializers.ValidationError("Unable to log in with provided credentials.")
+        username = data.get("username")
+        password = data.get("password")
+
+        if username is None:
+            raise serializers.ValidationError("A username is required to log in.")
+        if password is None:
+            raise serializers.ValidationError("A password is required to log in.")
         else:
-            raise serializers.ValidationError("Must provide username and password.")
+            data = {
+                'username': username,
+                'password': password
+            }
         return data
-    
-    def create(self, validated_data):
-        token, created = Token.objects.get_or_create(user=validated_data['user'])
-        return {'token': token.key, 'user': validated_data['user']}
     
 class UserRegistrationSerializer(serializers.ModelSerializer):
     class Meta:

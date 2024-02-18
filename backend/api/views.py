@@ -10,6 +10,7 @@ from django.db import IntegrityError
 from rest_framework.permissions import IsAuthenticated
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_protect, csrf_exempt
+from rest_framework.authtoken.models import Token
 # LIST OF ALL API ENDPOINTS
 
 class GameList(APIView):
@@ -37,15 +38,18 @@ class UserRegistrationView(APIView):
             
     
 class UserLogin(APIView):
-    """
-    Login a user
-    """
-    def post(self, request, format=None):
+    def post(self, request, *args, **kwargs):
         serializer = UserLoginSerializer(data=request.data)
         if serializer.is_valid():
-            user = serializer.validated_data['user']
-            token = serializer.create(serializer.validated_data)
-            return Response({"message": "User successfully logged in", "token": token}, status=status.HTTP_200_OK)
-        else:
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            user = authenticate(
+                username=serializer.validated_data['username'],
+                password=serializer.validated_data['password']
+            )
+            if user:
+                token, created = Token.objects.get_or_create(user=user)
+                response = Response({"detail": "Success"})
+                response.set_cookie(key='auth_token', value=token.key, httponly=True)
+                return response
+            return Response({"detail": "Invalid credentials"}, status=status.HTTP_401_UNAUTHORIZED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         

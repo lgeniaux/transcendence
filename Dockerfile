@@ -17,11 +17,7 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Copy project
 COPY . /usr/src/app/
 
-# Change the ownership of the work directory to the 'django' user
-RUN chown -R django:django /usr/src/app
 
-# Switch to the 'django' user
-USER django
 
 # Add the frontend directory as an environment variable
 ENV FRONTEND_FOLDER=/usr/src/app/frontend
