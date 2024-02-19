@@ -11,6 +11,7 @@ from rest_framework.permissions import IsAuthenticated
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_protect, csrf_exempt
 from rest_framework.authtoken.models import Token
+from rest_framework.authentication import TokenAuthentication
 # LIST OF ALL API ENDPOINTS
 
 class GameList(APIView):
@@ -33,12 +34,14 @@ class UserRegistrationView(APIView):
             user = serializer.save()
             return Response({"message": "User successfully registered"}, status=status.HTTP_201_CREATED)
         else:
-            print(f"Error: {serializer.errors}")
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
             
     
 class UserLogin(APIView):
+    authentication_classes = [TokenAuthentication]
     def post(self, request, *args, **kwargs):
+        if request.user.is_authenticated:
+            return Response({"detail": "You are already authenticated"}, status=status.HTTP_200_OK)
         serializer = UserLoginSerializer(data=request.data)
         if serializer.is_valid():
             user = authenticate(
@@ -47,9 +50,15 @@ class UserLogin(APIView):
             )
             if user:
                 token, created = Token.objects.get_or_create(user=user)
-                response = Response({"detail": "Success"})
-                response.set_cookie(key='auth_token', value=token.key, httponly=True)
+                response = Response({"detail": "Success", "auth_token": token.key}, status=status.HTTP_200_OK)
                 return response
             return Response({"detail": "Invalid credentials"}, status=status.HTTP_401_UNAUTHORIZED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         
+class UserLogout(APIView):
+    authentication_classes = [TokenAuthentication]
+    def post(self, request, *args, **kwargs):
+        if request.user.is_authenticated:
+            request.user.auth_token.delete()
+            return Response({"detail": "You have successfuly been logged out"}, status=status.HTTP_200_OK)
+        return Response({"detail": "You are not logged in"}, status=status.HTTP_401_UNAUTHORIZED)

@@ -52,7 +52,7 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
             password=make_password(validated_data['password'])
         )
         return user
-    
+
     def validate_email(self, value):
         if User.objects.filter(email=value).exists():
             raise serializers.ValidationError("A user with that email already exists.")
@@ -85,3 +85,5 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
         if not any(not char.isalnum() for char in value):
             raise serializers.ValidationError("Password must contain at least one special character.")
         return value
+    
+

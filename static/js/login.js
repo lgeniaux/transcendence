@@ -14,18 +14,27 @@ function initLoginForm() {
 function loginUser() {
     var username = document.querySelector('[name="username"]').value;
     var password = document.querySelector('[name="password"]').value;
+    const auth_token = localStorage.getItem('authToken');
+
+    const headers = {
+        'Content-Type': 'application/json',
+        'X-CSRFToken': getCookie('csrftoken')
+    };2
+
+    if (auth_token && auth_token !== 'undefined' && auth_token !== 'null') {
+        headers['Authorization'] = 'Token ' + auth_token;
+    }
 
     fetch('/api/login-user/', {
         method: 'POST',
-        credentials: 'same-origin',
-        headers: {
-            'Content-Type': 'application/json',
-            'X-CSRFToken': getCookie('csrftoken')
-        },
+
+        headers: headers,
         body: JSON.stringify({ username: username, password: password })
     })
     .then(response => response.json())
     .then(data => {
+        const auth_token = data.auth_token;
+        localStorage.setItem('authToken', auth_token);
         console.log(data.message);
         // Note de Louis: Gerer le cas ou le login est bon ou pas
     })
