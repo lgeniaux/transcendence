@@ -41,7 +41,10 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
     'api',
     'authentication',
+	'livechat',
 ]
+
+ASGI_APPLICATION = 'transcendence.asgi.application'
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [

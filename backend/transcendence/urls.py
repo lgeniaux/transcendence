@@ -25,4 +25,5 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', include(('api.urls', 'api'), namespace='api')),
     path('auth/', include(('authentication.urls', 'authentication'), namespace='authentication')),
+    path('chat/', include(('livechat.urls', 'livechat'), namespace='livechat')),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
