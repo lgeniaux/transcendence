@@ -6,41 +6,39 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>Live Chat</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+	<link rel="stylesheet" href="{% static 'css/chat/chat.css' %}">
 </head>
+
 <body>
-    <h1>Live Chat</h1>
-    
-    <form id="form">
-        <input type="text" id="message" name="message">
-        <button type="submit">Send</button>
-    </form>
 
-	<div id="messages"></div>
+	<div class="chatbox">
 
-    <script type="text/javascript">
-        let url = "ws://" + window.location.host + "/ws/chat/testroom/";
-        const chatSocket = new WebSocket(url);
-        
-        chatSocket.onmessage = function(e) {
-            const data = JSON.parse(e.data);
-            console.log(data);
+		<div class="btn-group-vertical" role="group">
 
-			if (data.type === 'chat_message') {
-				let messages = document.getElementById('messages');
-				messages.insertAdjacentHTML('beforeend', '<p>' + data.message + '</p>');
-            };
-	    };
-		
-        let form = document.getElementById('form');
-        form.addEventListener('submit', function(e) {
-            e.preventDefault();
-            let messageInput = document.getElementById('message');
-            let message = messageInput.value;
-            chatSocket.send(JSON.stringify({
-                'message': message
-            }));
-            form.reset();
-        });
-    </script>
+			<button class="btn btn-primary" data-bs-toggle="collapse" data-bs-target="#chatboxCollapse">
+				Messages
+			</button>
+
+			<div class="collapse" id="chatboxCollapse">
+
+				<div class="messageBox" id="messages">
+					<!-- Les messages sont affichés ici -->
+				</div>
+
+				<form id="form" class="btn-group">
+					<input class="form-control" placeholder="Exprimez votre amour..." ="text" id="message" name="message" autocomplete="off">
+					<button class="btn btn-secondary sendBtn" type="submit">Envoyer</button>
+				</form>
+
+			</div>
+
+		</div>
+
+	</div>
+
+	<script src="{% static 'js/bootstrap.min.js' %}"></script>
+    <script src="{% static 'js/chat/chat.js' %}"></script>
+
 </body>
 </html>
