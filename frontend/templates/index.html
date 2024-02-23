@@ -1,16 +1,37 @@
 {% load static %}
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <title>Transcendence PONG</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Born2Pong</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap.min.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/main.css' %}">
+	<link rel="stylesheet" type="text/css" href="{% static 'css/auth/auth.css' %}">
 </head>
 <body>
-    <button id="loginBtn" data-content="/auth/login/" data-script="{% static 'js/login.js' %}">Login</button>
-    <button id="registerBtn" data-content="/auth/register/" data-script="{% static 'js/register.js' %}">Register</button>
-    
-    <div id="content"></div>
-    
+
+    <!-- Container principal -->
+    <div class="background-container">
+
+        <!-- Header -->
+        <header class="header">
+            <h1>Born2Pong</h1>
+        </header>
+
+        <!-- Contenu principal -->
+        <div class="content">
+            <div id="content"><!-- Contenu injecté dynamiquement --></div>
+        </div>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <p>&copy; 2024 - Born2Pong</p>
+        </footer>
+
+    </div>
+
+    <!-- Scripts -->
     <script src="{% static 'js/main.js' %}"></script>
 
 </body>

@@ -1,0 +1,53 @@
+body
+{
+	overflow-x: hidden;
+}
+
+.background-container
+{
+    min-width: 100vw;
+    min-height: 100vh;
+    background: linear-gradient(to top, black, #383838);
+    overflow: hidden;
+}
+
+.header
+{
+    display: flex;
+    height: 100px; /* Ajustez la hauteur selon vos besoins */
+	width: 100%;
+    background-color: #FFB800;
+    align-items: center;
+    justify-content: center;
+}
+
+.header h1
+{
+    color: black;
+    font-family: 'Brandish', sans-serif;
+    font-size: 50px; /* Utilisez des unités relatives pour une meilleure adaptabilité */
+}
+
+.footer
+{
+    display: flex;
+    width: 100%;
+    height: 50px; /* Ajustez la hauteur selon vos besoins */
+    justify-content: center;
+    align-items: center; /* Centrez le texte verticalement */
+}
+
+.footer p
+{
+    color: white;
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 20px; /* Utilisez des unités relatives pour une meilleure adaptabilité */
+}
+
+.content
+{
+    width: 100%;
+    height: 100%;
+    overflow-y: auto;
+	overflow-x: hidden;
+}
