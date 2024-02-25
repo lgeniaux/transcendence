@@ -32,8 +32,22 @@ services:
       - POSTGRES_USER=${POSTGRES_USER}
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
       - DJANGO_SECRET_KEY=${DJANGO_SECRET_KEY}
+      
+  nginx:
+    image: nginx:latest
+    volumes:
+      - ./nginx:/etc/nginx/conf.d
+      - ./nginx/ssl:/etc/nginx/ssl
+      - ./static:/usr/share/nginx/html/static
+      - ./media:/usr/share/nginx/html/media
+    ports:
+      - "443:443"
+    depends_on:
+      - web
 
   
 volumes:
   postgres_data:
   avatars:
+  static:
+  media:
