@@ -1,38 +1,69 @@
-document.addEventListener('DOMContentLoaded', function() {
-    document.getElementById('loginBtn').addEventListener('click', loadContentAndScript);
-    document.getElementById('registerBtn').addEventListener('click', loadContentAndScript);
-});
+// main.js
 
-function loadContentAndScript(event) {
-    var button = event.target;
-    var contentUrl = button.getAttribute('data-content');
-    var scriptUrl = button.getAttribute('data-script');
-
-    fetch(contentUrl)
-        .then(response => response.text())
-        .then(html => {
-            document.getElementById('content').innerHTML = html;
-            loadScript(scriptUrl);
-        })
-        .catch(error => {
-            console.error('Error loading the content:', error);
-        });
-}
-
-function loadScript(scriptUrl) {
-    var existingScript = document.querySelector(`script[src="${scriptUrl}"]`);
-    if (existingScript) {
-        existingScript.remove();
-    }
-    var script = document.createElement('script');
-    script.src = scriptUrl;
-    document.body.appendChild(script);
-}
-
-window.initializeForm = function(formId, initFunction) {
-    if (document.getElementById(formId)) {
-        initFunction();
-    } else {
-        document.addEventListener('DOMContentLoaded', initFunction);
+const routes = {
+    '/': {
+        html: '/static/html/home.html',
+    },
+    '/login': {
+        html: '/static/html/login.html',
+        js: '/static/js/login.js'
     }
 };
+
+// navigate to the page if a button is clicked, the location of the navigation is stored in the data-spa. example: <button data-spa="/login">Login</button>
+document.addEventListener('click', function(event) {
+    if (event.target.dataset.spa) {
+        event.preventDefault();
+        navigate(event.target.dataset.spa);
+        window.history.pushState(null, null, event.target.dataset.spa);
+    }
+}
+);
+
+document.addEventListener('DOMContentLoaded', function() {
+    navigate(window.location.pathname);
+
+    window.addEventListener('popstate', function() {
+        navigate(window.location.pathname);
+    });
+});
+
+function navigate(path) {
+    const route = routes[path];
+    if (!route) {
+        console.error('Route not found');
+        return;
+    }
+
+    loadHTML(route.html);
+    if (route.css)
+        loadCSS(route.css);
+    if (route.js)
+        loadJS(route.js);
+}
+
+function loadHTML(url) {
+    fetch(url)
+        .then(response => response.text())
+        .then(html => {
+            document.querySelector('#app').innerHTML = html;
+        })
+        .catch(error => console.error('Error loading the HTML file:', error));
+}
+
+function loadCSS(url) {
+    const head = document.getElementsByTagName('head')[0];
+    const link = document.createElement('link');
+    link.rel = 'stylesheet';
+    link.type = 'text/css';
+    link.href = url;
+    head.appendChild(link);
+}
+
+function loadJS(url) {
+    const script = document.createElement('script');
+    script.src = url;
+    script.type = 'text/javascript';
+    script.async = false; // This ensures the script is executed in the order it was called
+    document.body.appendChild(script);
+}
