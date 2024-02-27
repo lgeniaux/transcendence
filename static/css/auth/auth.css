@@ -50,6 +50,8 @@
 .primaryBtn
 {
 	background-color: #FFB800;
+	width: 200px;
+	height: auto;
 	border: none;
 	border-radius: 8px;
 	font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
@@ -62,6 +64,8 @@
 .secondaryBtn
 {
 	background: none;
+	width: 200px;
+	height: auto;
 	border: none;
 	color: white;
 	text-decoration: underline;
