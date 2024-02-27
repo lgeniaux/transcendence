@@ -6,7 +6,13 @@ const routes = {
     },
     '/login': {
         html: '/static/html/login.html',
+        css: '/static/css/auth/auth.css',
         js: '/static/js/login.js'
+    },
+    '/register': {
+        html: '/static/html/register.html',
+        css: '/static/css/auth/auth.css',
+        js: '/static/js/register.js'
     }
 };
 
