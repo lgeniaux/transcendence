@@ -12,6 +12,7 @@ function checkPassword() {
 }
 
 function initRegisterForm() {
+    console.log("Initializing register form");
     var registerForm = document.getElementById('registerForm');
     if (registerForm) {
         registerForm.addEventListener('submit', function(event) {
@@ -31,35 +32,33 @@ function registerUser() {
 
     fetch('/api/register-user/', {
         method: 'POST',
-        credentials: 'same-origin',
+        credentials: 'include', // Ensure credentials are included for CSRF
         headers: {
             'Content-Type': 'application/json',
-            'X-CSRFToken': getCookie('csrftoken')
+            'X-CSRFToken': getCSRFToken()
         },
         body: JSON.stringify({ username: username, email: email, password: password })
     })
     .then(response => response.json())
     .then(data => {
-        console.log(data); // for the moment just log in the console
-        
+        console.log(data); // For now, just log in the console
     })
     .catch(error => console.error('Error:', error));
 }
 
-// CSRF token from cookies
-function getCookie(name) {
-    let cookieValue = null;
+function getCSRFToken() {
+    let csrfToken = null;
     if (document.cookie && document.cookie !== '') {
         const cookies = document.cookie.split(';');
         for (let i = 0; i < cookies.length; i++) {
             const cookie = cookies[i].trim();
-            if (cookie.substring(0, name.length + 1) === (name + '=')) {
-                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+            if (cookie.substring(0, 'csrftoken='.length) === 'csrftoken=') {
+                csrfToken = decodeURIComponent(cookie.substring('csrftoken='.length));
                 break;
             }
         }
     }
-    return cookieValue;
+    return csrfToken;
 }
 
-window.initializeForm('registerForm', initRegisterForm);
+window.initPage = initRegisterForm;

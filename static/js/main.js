@@ -17,15 +17,6 @@ const routes = {
     }
 };
 
-// navigate to the page if a button is clicked, the location of the navigation is stored in the data-spa. example: <button data-spa="/login">Login</button>
-document.addEventListener('click', function(event) {
-    if (event.target.dataset.spa) {
-        event.preventDefault();
-        navigate(event.target.dataset.spa);
-        window.history.pushState(null, null, event.target.dataset.spa);
-    }
-}
-);
 
 document.addEventListener('DOMContentLoaded', function() {
     navigate(window.location.pathname);
@@ -35,27 +26,50 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 
+
+function getRedirectPath(path) {
+    if ((path === '/login' || path === '/register') && isAuthenticated()) {
+        console.log('Authenticated user. Redirecting to home...');
+        return '/'; // Return the home path for redirection
+    }
+    return path;
+}
+
+// navigate to the page if a button is clicked, the location of the navigation is stored in the data-spa. example: <button data-spa="/login">Login</button>
+document.addEventListener('click', function(event) {
+    if (event.target.dataset.spa) {
+        event.preventDefault();
+        
+        let originalPath = event.target.dataset.spa;
+        let finalPath = getRedirectPath(originalPath);
+
+        navigate(finalPath);
+        window.history.pushState({}, '', finalPath);
+    }
+});
+
 function navigate(path) {
-    const route = routes[path];
+    // Louis: On  redirecte l'utilisateur vers la page d'accueil si il est déjà connecté
+    let finalPath = getRedirectPath(path);
+
+    const route = routes[finalPath];
     if (!route) {
         console.error('Route not found');
         return;
     }
 
     loadHTML(route.html);
-    if (route.css) {
+    if (route.css)
         loadCSS(route.css);
-    }
-    if (route.js) {
-        // Assuming each JS file defines an init function globally
+    if (route.js)
         loadJS(route.js, function() {
-            // Check if the init function is defined and call it
             if (typeof window.initPage === 'function') {
                 window.initPage();
             }
         });
-    }
+    window.history.pushState({}, '', finalPath);
 }
+
 function loadHTML(url) {
     fetch(url)
         .then(response => response.text())
@@ -78,7 +92,14 @@ function loadJS(url, callback) {
     const script = document.createElement('script');
     script.src = url;
     script.type = 'text/javascript';
-    script.async = false; // This ensures the script is executed in the order it was called
-    script.onload = callback; // Call the callback function once the script is loaded
+    script.async = false;
+    script.onload = callback;
     document.body.appendChild(script);
 }
+
+function isAuthenticated() {
+    const authToken = localStorage.getItem('authToken');
+    return authToken && authToken !== 'undefined' && authToken !== 'null';
+}
+
+
