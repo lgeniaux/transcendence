@@ -3,6 +3,7 @@
 const routes = {
     '/': {
         html: '/static/html/home.html',
+		css: '/static/css/home.css',
     },
     '/login': {
         html: '/static/html/login.html',
