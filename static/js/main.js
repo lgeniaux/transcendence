@@ -42,12 +42,19 @@ function navigate(path) {
     }
 
     loadHTML(route.html);
-    if (route.css)
+    if (route.css) {
         loadCSS(route.css);
-    if (route.js)
-        loadJS(route.js);
+    }
+    if (route.js) {
+        // Assuming each JS file defines an init function globally
+        loadJS(route.js, function() {
+            // Check if the init function is defined and call it
+            if (typeof window.initPage === 'function') {
+                window.initPage();
+            }
+        });
+    }
 }
-
 function loadHTML(url) {
     fetch(url)
         .then(response => response.text())
@@ -66,10 +73,11 @@ function loadCSS(url) {
     head.appendChild(link);
 }
 
-function loadJS(url) {
+function loadJS(url, callback) {
     const script = document.createElement('script');
     script.src = url;
     script.type = 'text/javascript';
     script.async = false; // This ensures the script is executed in the order it was called
+    script.onload = callback; // Call the callback function once the script is loaded
     document.body.appendChild(script);
 }

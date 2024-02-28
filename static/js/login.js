@@ -36,10 +36,12 @@
         })
             .then(response => response.json())
             .then(data => {
-                const auth_token = data.auth_token;
-                localStorage.setItem('authToken', auth_token);
-                console.log(data.message);
-                // Handle login success or failure here
+                if(data.detail === "Success") {
+                    const auth_token = data.auth_token;
+                    localStorage.setItem('authToken', auth_token);
+                    console.log(data.message);
+                    // Handle login success or failure here
+                }
             })
             .catch(error => console.error('Error:', error));
     }
@@ -61,8 +63,4 @@
 
 
 
-// Use DOMContentLoaded to call initLoginForm
-document.addEventListener('DOMContentLoaded', function() {
-    console.log("DOMContentLoaded triggered");
-    initLoginForm(); // Call initLoginForm here
-});
+window.initPage = initLoginForm;

@@ -4,7 +4,7 @@ from rest_framework.response import Response
 from rest_framework import status
 from .models import Game
 from .serializers import GameSerializer, UserRegistrationSerializer, UserLoginSerializer
-from django.contrib.auth import authenticate
+from django.contrib.auth import get_user_model
 from django.contrib.auth.models import User
 from django.db import IntegrityError
 from rest_framework.permissions import IsAuthenticated
@@ -12,6 +12,7 @@ from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_protect, csrf_exempt
 from rest_framework.authtoken.models import Token
 from rest_framework.authentication import TokenAuthentication
+
 # LIST OF ALL API ENDPOINTS
 
 class GameList(APIView):
@@ -39,22 +40,30 @@ class UserRegistrationView(APIView):
     
 class UserLogin(APIView):
     authentication_classes = [TokenAuthentication]
+    
     def post(self, request, *args, **kwargs):
         if request.user.is_authenticated:
             return Response({"detail": "You are already authenticated"}, status=status.HTTP_200_OK)
+        
         serializer = UserLoginSerializer(data=request.data)
         if serializer.is_valid():
-            user = authenticate(
-                username=serializer.validated_data['username'],
-                password=serializer.validated_data['password']
-            )
-            if user:
+            email = serializer.validated_data['email']
+            password = serializer.validated_data['password']
+            
+            try:
+                user = get_user_model().objects.get(email=email)  # Note de Louis: j'ai viré la fonction authenticate() car elle demande un username au lieu d'un email
+            except User.DoesNotExist:
+                return Response({"detail": "Invalid credentials"}, status=status.HTTP_401_UNAUTHORIZED)
+            
+            # Check if the password is correct
+            if user.check_password(password):
                 token, created = Token.objects.get_or_create(user=user)
-                response = Response({"detail": "Success", "auth_token": token.key}, status=status.HTTP_200_OK)
-                return response
-            return Response({"detail": "Invalid credentials"}, status=status.HTTP_401_UNAUTHORIZED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+                return Response({"detail": "Success", "auth_token": token.key}, status=status.HTTP_200_OK)
+            else:
+                return Response({"detail": "Invalid credentials"}, status=status.HTTP_401_UNAUTHORIZED)
         
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
 class UserLogout(APIView):
     authentication_classes = [TokenAuthentication]
     def post(self, request, *args, **kwargs):
