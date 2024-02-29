@@ -17,17 +17,23 @@
     function loginUser() {
         var email = document.querySelector('[name="email"]').value;
         var password = document.querySelector('[name="password"]').value;
-        
+        var auth_token = localStorage.getItem('authToken');
+        const headers = {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': getCSRFToken()
+        };
+    
+        if (auth_token && auth_token !== 'undefined' && auth_token !== 'null') {
+            headers['Authorization'] = 'Token ' + auth_token;
+        }
+
         // Remove
         document.getElementById('loginAlert').innerHTML = '';
     
         fetch('/api/login-user/', {
             method: 'POST',
             credentials: 'include',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-CSRFToken': getCSRFToken()
-            },
+            headers: headers,
             body: JSON.stringify({ email: email, password: password })
         })
         .then(response => response.json())
