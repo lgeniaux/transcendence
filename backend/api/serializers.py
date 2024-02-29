@@ -1,15 +1,16 @@
 from rest_framework import serializers
 from .models import User, Game, LiveChat
 from django.contrib.auth.hashers import make_password
-from django.contrib.auth import authenticate
+from django.contrib.auth import get_user_model
 import re
 from rest_framework.authtoken.models import Token
 
+User = get_user_model()
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ['user_id', 'username', 'email', 'avatar', 'online_status']
+        fields = ['id', 'username', 'email', 'avatar', 'online_status']
 
 class GameSerializer(serializers.ModelSerializer):
     class Meta:
@@ -22,20 +23,20 @@ class LiveChatSerializer(serializers.ModelSerializer):
         fields = ['chat_id', 'user', 'message', 'time']
     
 class UserLoginSerializer(serializers.Serializer):
-    username = serializers.CharField()
+    email = serializers.CharField()
     password = serializers.CharField(style={'input_type': 'password'}, write_only=True)
 
     def validate(self, data):
-        username = data.get("username")
+        email = data.get("email")
         password = data.get("password")
 
-        if username is None:
-            raise serializers.ValidationError("A username is required to log in.")
+        if email is None:
+            raise serializers.ValidationError("An email is required to log in.")
         if password is None:
             raise serializers.ValidationError("A password is required to log in.")
         else:
             data = {
-                'username': username,
+                'email': email,
                 'password': password
             }
         return data

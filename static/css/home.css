@@ -1,0 +1,22 @@
+.auth-btn
+{
+    background-color: #FFB800;
+	font-size: xxx-large;
+	font-family: 'Courier New', Courier, monospace;
+    border-radius: 20px;
+    transition: background-color 0.3s ease, border-radius 0.3s ease;
+	margin: 350px;
+	padding: 20px;
+}
+
+.auth-btn:hover
+{
+    background-color: #ffc226;
+    border-radius: 5px;
+}
+
+.auth-btn:active
+{
+	background-color: #7e5a00;
+	border-radius: 5px;
+}

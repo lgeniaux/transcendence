@@ -1,0 +1,83 @@
+.authForm
+{
+    width: 600px;
+    border-radius: 15px;
+    background-color: rgb(24, 24, 24);
+    margin: 50px auto;
+    padding: 20px;
+	max-width: 100%;
+}
+
+.authForm .row
+{
+	justify-content: center;
+	margin: 20px;
+}
+
+.authForm .form-control
+{
+	width: 400px;
+	height: 50px;
+	border-radius: 8px;
+	box-sizing: border-box;
+	max-width: 100%
+}
+
+.authForm h1
+{
+	color: white;
+	font-size: 46px;
+	font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+	font-weight: bold;
+	margin-bottom: 30px;
+}
+
+.authForm input
+{
+	min-width: 50px;
+	height: 50px;
+	border-radius: 8px;
+}
+
+.authForm label
+{
+	color: white;
+	font-size: 20px;
+	font-family: 'Courier New', Courier, monospace;
+	font-weight: bold;
+}
+
+.primaryBtn
+{
+	background-color: #FFB800;
+	width: 200px;
+	height: auto;
+	border: none;
+	border-radius: 8px;
+	font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+	font-size: 20px;
+	font-weight: bold;
+	color: black;
+	/* margin: 40px; */
+}
+
+.secondaryBtn
+{
+	background: none;
+	width: 200px;
+	height: auto;
+	border: none;
+	color: white;
+	text-decoration: underline;
+	font-size: 20px;
+	/* margin: 40px; */
+}
+
+::placeholder
+{
+	color: white;
+	font-family: 'Courier New', Courier, monospace;
+	font-size: 20px;
+	font-weight: bold;
+	text-overflow: ellipsis;
+}

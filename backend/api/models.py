@@ -4,8 +4,8 @@ from django.db import models
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 
+# Louis: j'ai remove les attributs en doublons avec la classe de base de django
 class User(AbstractUser):
-    user_id = models.AutoField(primary_key=True)
     username = models.CharField(max_length=50, unique=True)
     email = models.EmailField(max_length=254, unique=True)
     avatar = models.ImageField(upload_to='avatars/', null=True, blank=True)

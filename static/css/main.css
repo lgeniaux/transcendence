@@ -3,6 +3,12 @@ body
 	overflow-x: hidden;
 }
 
+@font-face
+{
+    font-family: 'Brandish';
+    src: url('/static/fonts/brandish.ttf') format('truetype');
+}
+
 .background-container
 {
     min-width: 100vw;

@@ -1,15 +1,7 @@
-{% load static %}
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Créer un compte</title>
-</head>
+<html>
 
-<body>
     <form id="registerForm" class="authForm">
-
+        <div id="registerAlert" class="mb-3"></div>
 		<div class="row">
 			<h1>Créer un compte</h1>
 		</div>
@@ -41,14 +33,9 @@
 		<div class="row"></div>
 
         <div class="row justify-content-around">
-			<button class="secondaryBtn" id="loginBtn" data-content="{% url 'login' %}" data-script="{% static 'js/auth/login.js' %}" class="btn btn-secondary">Déjà un compte ?</button>
+			<button class="secondaryBtn" id="loginBtn" class="btn btn-secondary" data-spa="/login" type="button">Déjà un compte ?</button>
             <button class="primaryBtn" id="registerBtn" type="submit" class="btn btn-primary">Créer le compte</button>
         </div>
 
     </form>
-
-	<script src="{% static 'js/register.js' %}"></script>
-
-</body>
-
 </html>
