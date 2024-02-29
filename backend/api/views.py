@@ -40,8 +40,9 @@ class UserRegistrationView(APIView):
     
 class UserLogin(APIView):
     authentication_classes = [TokenAuthentication]
-    
+
     def post(self, request, *args, **kwargs):
+        User = get_user_model()
         if request.user.is_authenticated:
             return Response({"detail": "You are already authenticated"}, status=status.HTTP_200_OK)
         
@@ -51,7 +52,7 @@ class UserLogin(APIView):
             password = serializer.validated_data['password']
             
             try:
-                user = get_user_model().objects.get(email=email)  # Note de Louis: j'ai viré la fonction authenticate() car elle demande un username au lieu d'un email
+                user = User.objects.get(email=email)  # Note de Louis: j'ai viré la fonction authenticate() car elle demande un username au lieu d'un email
             except User.DoesNotExist:
                 return Response({"detail": "Invalid credentials"}, status=status.HTTP_401_UNAUTHORIZED)
             

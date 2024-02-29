@@ -67,7 +67,6 @@ function navigate(path) {
                 window.initPage();
             }
         });
-    window.history.pushState({}, '', finalPath);
 }
 
 function loadHTML(url) {

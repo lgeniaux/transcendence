@@ -17,33 +17,35 @@
     function loginUser() {
         var email = document.querySelector('[name="email"]').value;
         var password = document.querySelector('[name="password"]').value;
-        const auth_token = localStorage.getItem('authToken');
-
-        const headers = {
-            'Content-Type': 'application/json',
-            'X-CSRFToken': getCSRFToken()
-        };
-
-        if (auth_token && auth_token !== 'undefined' && auth_token !== 'null') {
-            headers['Authorization'] = 'Token ' + auth_token;
-        }
-
+        
+        // Remove
+        document.getElementById('loginAlert').innerHTML = '';
+    
         fetch('/api/login-user/', {
             method: 'POST',
-            credentials: 'include', // Needed for cookies to be sent with the request
-            headers: headers,
+            credentials: 'include',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': getCSRFToken()
+            },
             body: JSON.stringify({ email: email, password: password })
         })
-            .then(response => response.json())
-            .then(data => {
-                if(data.detail === "Success") {
-                    const auth_token = data.auth_token;
-                    localStorage.setItem('authToken', auth_token);
-                    console.log(data.message);
-                    // Handle login success or failure here
-                }
-            })
-            .catch(error => console.error('Error:', error));
+        .then(response => response.json())
+        .then(data => {
+            if(data.detail === "Success") {
+                const auth_token = data.auth_token;
+                localStorage.setItem('authToken', auth_token);
+            }
+            else {
+                showLoginError(data.detail);
+            }
+        })
+        .catch(error => console.error('Error:', error));
+    }
+    
+    function showLoginError(message) {
+        const alertHTML = `<div class="alert alert-danger" role="alert">${message}</div>`;
+        document.getElementById('loginAlert').innerHTML = alertHTML;
     }
 
     function getCSRFToken() {

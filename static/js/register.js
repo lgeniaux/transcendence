@@ -15,7 +15,7 @@ function initRegisterForm() {
     console.log("Initializing register form");
     var registerForm = document.getElementById('registerForm');
     if (registerForm) {
-        registerForm.addEventListener('submit', function(event) {
+        registerForm.addEventListener('submit', function (event) {
             event.preventDefault(); // Prevent default form submission
             if (!checkPassword()) {
                 return;
@@ -39,11 +39,22 @@ function registerUser() {
         },
         body: JSON.stringify({ username: username, email: email, password: password })
     })
-    .then(response => response.json())
-    .then(data => {
-        console.log(data); // For now, just log in the console
-    })
-    .catch(error => console.error('Error:', error));
+        .then(response => response.json())
+        .then(data => {
+            if (data.detail === "Success") {
+            }
+            else {
+                for (const [key, value] of Object.entries(data)) {
+                    showRegisterError(`${key}: ${value}`);
+                }
+            }
+        })
+        .catch(error => console.error('Error:', error));
+}
+
+function showRegisterError(message) {
+    const alertHTML = `<div class="alert alert-danger" role="alert">${message}</div>`;
+    document.getElementById('registerAlert').innerHTML = alertHTML;
 }
 
 function getCSRFToken() {

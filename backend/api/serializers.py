@@ -1,15 +1,16 @@
 from rest_framework import serializers
 from .models import User, Game, LiveChat
 from django.contrib.auth.hashers import make_password
-from django.contrib.auth import authenticate
+from django.contrib.auth import get_user_model
 import re
 from rest_framework.authtoken.models import Token
 
+User = get_user_model()
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ['user_id', 'username', 'email', 'avatar', 'online_status']
+        fields = ['id', 'username', 'email', 'avatar', 'online_status']
 
 class GameSerializer(serializers.ModelSerializer):
     class Meta:
