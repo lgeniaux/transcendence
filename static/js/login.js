@@ -13,7 +13,7 @@
             });
         }
     }
-
+    
     function loginUser() {
         var email = document.querySelector('[name="email"]').value;
         var password = document.querySelector('[name="password"]').value;
