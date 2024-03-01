@@ -18,7 +18,11 @@ const routes = {
     '/oauth_callback': {
         html: '/static/html/oauth_callback.html',
         js: '/static/js/oauth.js'
-    }
+    },
+    '/profile': {
+        html: '/static/html/profile.html',
+        js: '/static/js/profile.js'
+    },
 };
 
 

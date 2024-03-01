@@ -7,11 +7,21 @@ from rest_framework.authtoken.models import Token
 
 User = get_user_model()
 
+
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ['id', 'username', 'email', 'avatar', 'online_status']
 
+class UserChangeSerializer(serializers.ModelSerializer):
+    email = serializers.EmailField(required=False)
+    username = serializers.CharField(required=False)
+    avatar = serializers.ImageField(required=False)
+
+    class Meta:
+        model = User
+        fields = ['username', 'email', 'avatar']
+        
 class GameSerializer(serializers.ModelSerializer):
     class Meta:
         model = Game
@@ -88,3 +98,30 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
         return value
     
 
+class ChangePasswordSerializer(serializers.Serializer):
+    old_password = serializers.CharField(style={'input_type': 'password'}, write_only=True)
+    new_password = serializers.CharField(style={'input_type': 'password'}, write_only=True)
+    confirm_new_password = serializers.CharField(style={'input_type': 'password'}, write_only=True)
+
+    def validate_confirm(self, data):
+        new_password = data.get("new_password")
+        confirm_new_password = data.get("confirm_new_password")
+
+        if new_password != confirm_new_password:
+            raise serializers.ValidationError("The new passwords do not match.")
+        return data
+    
+    def validate_password(self, data):
+        # password must be at least 8 characters long, and contain at least one uppercase letter, one lowercase letter, one digit, and one special character
+        if len(data) < 8:
+            raise serializers.ValidationError("Password must be at least 8 characters long.")
+        if not any(char.isupper() for char in data):
+            raise serializers.ValidationError("Password must contain at least one uppercase letter.")
+        if not any(char.islower() for char in data):
+            raise serializers.ValidationError("Password must contain at least one lowercase letter.")
+        if not any(char.isdigit() for char in data):
+            raise serializers.ValidationError("Password must contain at least one digit.")
+        if not any(not char.isalnum() for char in data):
+            raise serializers.ValidationError("Password must contain at least one special character.")
+        return data
+    
