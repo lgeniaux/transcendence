@@ -1,0 +1,28 @@
+.container
+{
+	width: 1600px;
+	color: white;
+	background: linear-gradient(to right, rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0));
+	margin-top: 50px;
+	margin-bottom: 50px;
+	border-radius: 20px;
+	padding: 1px;
+}
+
+.container h2
+{
+	color: white;
+	font-size: 40px;
+	font-weight: bold;
+	margin-bottom: 30px;
+}
+
+.container .form-control
+{
+	margin: 6px;
+}
+
+.row
+{
+	margin: 80px;
+}

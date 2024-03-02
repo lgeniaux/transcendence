@@ -21,6 +21,7 @@ const routes = {
     },
     '/profile': {
         html: '/static/html/profile.html',
+		css: '/static/css/profile.css',
         js: '/static/js/profile.js'
     },
 };
