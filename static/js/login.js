@@ -18,7 +18,7 @@
         var email = document.querySelector('[name="email"]').value;
         var password = document.querySelector('[name="password"]').value;
         var auth_token = localStorage.getItem('authToken');
-        const headers = {
+        var headers = {
             'Content-Type': 'application/json',
             'X-CSRFToken': getCSRFToken()
         };

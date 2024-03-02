@@ -8,7 +8,7 @@ const routes = {
     '/login': {
         html: '/static/html/login.html',
         css: '/static/css/auth/auth.css',
-        js: ['/static/js/login.js', '/static/js/oauth.js']
+        js: ['/static/js/login.js']
     },
     '/register': {
         html: '/static/html/register.html',
@@ -122,3 +122,4 @@ function isAuthenticated() {
 }
 
 
+window.initPage = initLoginForm;
