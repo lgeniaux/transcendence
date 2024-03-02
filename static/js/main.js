@@ -24,6 +24,12 @@ const routes = {
 		css: '/static/css/profile.css',
         js: '/static/js/profile.js'
     },
+    '/game': {
+        html: '/static/game/import.html',
+        module: '/static/js/game.js',
+        importmap: true,
+        css: '/static/css/game.css'
+    },
 };
 
 
@@ -79,6 +85,10 @@ function navigate(path) {
             }
         });
     }
+    if (route.importmap)
+        loadImportmap(route.importmap);
+    if (route.module)
+        loadModule(route.module);
 }
 
 function loadHTML(url) {
@@ -121,5 +131,26 @@ function isAuthenticated() {
     return authToken && authToken !== 'undefined' && authToken !== 'null';
 }
 
+
+function loadModule(url) {
+    const module = document.createElement('script');
+    module.src = url;
+    module.type = 'module';
+    module.async = false;
+    document.body.appendChild(module);
+}    
+
+function loadImportmap() {
+    const importmap = document.createElement('script');
+    importmap.type = 'importmap';
+    importmap.innerHTML = JSON.stringify({
+        imports: {
+            'three': 'https://unpkg.com/three@0.160.1/build/three.module.js',
+            'three/addons/': 'https://unpkg.com/three@0.160.1/examples/jsm/',
+        },
+    });
+    importmap.async = false;
+    document.head.appendChild(importmap);
+}
 
 window.initPage = initLoginForm;

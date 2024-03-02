@@ -1,0 +1,53 @@
+
+body {
+	margin: 0;
+}
+
+@font-face {
+	font-family: 'Pong Font';
+	src: url(../game/fonts/PONG-Regular.otf);
+  }
+
+.score {
+	position: absolute;
+	top: 5vh;
+	font-size: calc(10vh + 10vw);
+	font-family: 'Pong Font', sans-serif;
+	color: #FFFFFFFF;
+	z-index: 100;
+	display:block;
+}
+
+#canvas, #filter {
+	position: absolute;
+	top: 15vh;
+	left: 5vw;
+	width: 90vw;
+	height: 80vh;
+	border-radius: 40px;
+}
+
+#filter {
+	background-color: rgba(255, 255, 255, 0.5);
+    pointer-events: none;
+}
+
+#filter, #endScreen {
+	transition: opacity .6s ease-in-out;
+	opacity: 0;
+}
+
+#endScreen {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	background-color: #000000FF;
+	border-radius: 20px;
+	padding: 5%;
+	font-size: calc(2vh + 2vw);
+	color: #FFFFFFFF;
+	font-family: 'Brandish', sans-serif;
+	text-align: center;
+	justify-content: center;
+}

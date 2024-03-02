@@ -1,0 +1,3 @@
+[submodule "static/game"]
+	path = static/game
+	url = https://github.com/error7404/PONG.git
