@@ -1,0 +1,76 @@
+@font-face
+{
+    font-family: 'Micro 5';
+    src: url('/static/fonts/Micro5-Regular.ttf') format('truetype');
+}
+
+@font-face
+{
+	font-family: 'Silkscreen';
+	src: url('/static/fonts/Silkscreen-Regular.ttf') format('truetype');
+}
+
+.header
+{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #FFB800;
+    height: 100px; /* Ajustez la hauteur selon vos besoins */
+	width: 100%;
+}
+
+.header h1
+{
+    color: black;
+    font-family: 'Brandish', sans-serif;
+    font-size: 50px; /* Utilisez des unités relatives pour une meilleure adaptabilité */
+}
+
+.header .homeBtn
+{
+	display: flex;
+	justify-content: flex-start;
+	margin: 0 auto;
+}
+
+.sidePanel .offcanvas
+{
+	transition: transform 0.3s ease; /* Ajoute une transition de 0.3s pour la transformation */
+	transform: translateX(-100%); /* Déplace le offcanvas complètement hors de l'écran par défaut */
+}
+
+.offcanvas.show
+{
+	transform: translateX(0); /* Déplace le offcanvas vers la droite pour le faire apparaître à l'écran */
+}
+
+.sidePanel .navbar-toggler
+{
+	margin-left: 10px;
+	background: transparent;
+	border: none;
+	transition: transform 0.1 ease; /* Ajoute une transition de 0.3s pour la transformation */
+}
+
+.sidePanel .navbar-toggler:hover
+{
+    transform: scale(1.1); /* Augmente légèrement la taille du bouton au survol */
+}
+
+.sidePanel .offcanvas-title
+{
+	color: #ffB800;
+	font-family: 'Micro 5';
+	font-size: 80px;
+	margin-left: auto;
+}
+
+.sidePanel .btn
+{
+	font-family: 'Silkscreen';
+	font-size: 20px;
+	color: white;
+	background: none;
+	margin: 10px 0;
+}

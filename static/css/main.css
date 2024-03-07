@@ -17,23 +17,6 @@ body
     overflow: hidden;
 }
 
-.header
-{
-    display: flex;
-    height: 100px; /* Ajustez la hauteur selon vos besoins */
-	width: 100%;
-    background-color: #FFB800;
-    align-items: center;
-    justify-content: center;
-}
-
-.header h1
-{
-    color: black;
-    font-family: 'Brandish', sans-serif;
-    font-size: 50px; /* Utilisez des unités relatives pour une meilleure adaptabilité */
-}
-
 .footer
 {
     display: flex;

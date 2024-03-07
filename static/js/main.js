@@ -33,6 +33,14 @@ document.addEventListener('DOMContentLoaded', function () {
     window.addEventListener('popstate', function () {
         navigate(window.location.pathname);
     });
+
+	// Vincent: Pour charger la barre de navigation
+	loadNavbar();
+	loadChatbox();
+
+	// Vincent: Variables pour les popovers
+	const popoverTriggerList = document.querySelectorAll('[data-bs-toggle="popover"]')
+	const popoverList = [...popoverTriggerList].map(popoverTriggerEl => new bootstrap.Popover(popoverTriggerEl))
 });
 
 
@@ -121,5 +129,45 @@ function isAuthenticated() {
     return authToken && authToken !== 'undefined' && authToken !== 'null';
 }
 
+// Vincent: Fonctions pour charger la barre de navigation et la chatbox, à modifier pour qu'elle soient affichées en fonction du token
+function loadNavbar()
+{
+    const sidePanelUrl = '/static/html/navbar/sidepanel.html';
+    const notificationsUrl = '/static/html/navbar/notifications.html';
+    const profileBtnUrl = '/static/html/navbar/profilebtn.html';
+
+    fetch(sidePanelUrl)
+        .then(response => response.text())
+        .then(html => {
+            document.querySelector('#sidePanel').innerHTML = html;
+        })
+        .catch(error => console.error('Erreur lors du chargement de la barre de navigation :', error));
+
+    fetch(notificationsUrl)
+        .then(response => response.text())
+        .then(html => {
+            document.querySelector('#notifications').innerHTML = html;
+        })
+        .catch(error => console.error('Erreur lors du chargement des notifications :', error));
+
+    fetch(profileBtnUrl)
+        .then(response => response.text())
+        .then(html => {
+            document.querySelector('#profileBtn').innerHTML = html;
+        })
+        .catch(error => console.error('Erreur lors du chargement du bouton de profil :', error));
+}
+
+function loadChatbox()
+{
+    const chatboxUrl = '/static/html/chatbox.html';
+
+    fetch(chatboxUrl)
+        .then(response => response.text())
+        .then(html => {
+            document.querySelector('#chatbox').innerHTML = html;
+        })
+        .catch(error => console.error('Erreur lors du chargement de la chatbox :', error));
+}
 
 window.initPage = initLoginForm;

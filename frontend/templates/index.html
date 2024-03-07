@@ -7,6 +7,9 @@
 
     <link rel="stylesheet" type="text/css" href="static/css/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="static/css/main.css">
+	<link rel="stylesheet" type="text/css" href="static/css/navbar/sidepanel.css">
+	<link rel="stylesheet" type="text/css" href="static/css/navbar/notifications.css">
+	<link rel="stylesheet" type="text/css" href="static/css/chatbox.css">
 
 </head>
 <body>
@@ -15,13 +18,17 @@
     <div class="background-container">
 
         <!-- Header -->
-        <header class="header">
-            <h1 data-spa="/" type="button">Born2Pong</h1>
+        <header class="header navbar">
+			<div id="sidePanel"></div>
+            <h1 data-spa="/" type="button" class="homeBtn">Born2Pong</h1>
+			<!-- <div id="notifications"></div> -->
+			<!-- <div id="profileBtn"></div> -->
         </header>
 
         <!-- Contenu principal -->
         <div class="content">
-            <div id="app"><!-- Contenu injecté dynamiquement --></div>
+            <div id="app"></div>
+			<div id="chatbox"></div>
         </div>
 
         <!-- Footer -->
@@ -31,8 +38,9 @@
 
     </div>
 
-
+	<script src="/static/js/bootstrap.bundle.min.js"></script>
     <script src="/static/js/main.js"></script>
+	<script src="/static/js/chatbox.js"></script>
 
 </body>
 </html>

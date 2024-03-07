@@ -1,5 +1,12 @@
+.home
+{
+	max-width: 100%;
+	margin: 300px 100px;
+}
+
 .auth-btn
 {
+	/* margin: auto auto; */
     background-color: #FFB800;
 	font-size: xxx-large;
 	font-family: 'Courier New', Courier, monospace;
