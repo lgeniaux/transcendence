@@ -1,32 +1,39 @@
-let url = "ws://" + window.location.host + "/ws/chat/testroom/";
-const chatSocket = new WebSocket(url);
+let chatSocket = new WebSocket("ws://" + window.location.host + "/ws/chat/");
 
+//print message
 chatSocket.onmessage = function(e) {
     const data = JSON.parse(e.data);
     console.log(data);
 
     if (data.type === 'chat_message') {
         let messages = document.getElementById('messages');
-        messages.insertAdjacentHTML('beforeend', '<p>' + data.message + '</p>');
-
-        // Faire défiler automatiquement vers le bas
-        messages.scrollTop = messages.scrollHeight;
+        messages.insertAdjacentHTML('beforeend', `<p>${data.sender}: ${data.message}</p>`);
     };
 };
+
+// Send message
 
 let form = document.getElementById('form');
 form.addEventListener('submit', function(e) {
     e.preventDefault();
     let messageInput = document.getElementById('message');
-    let message = messageInput.value;
-    chatSocket.send(JSON.stringify({
-        'message': message
-    }));
+    let messageText = messageInput.value;
 
-    // Réinitialiser le formulaire
+    if (messageText.startsWith("/msg")) {
+        let messageParts = messageText.split(" ");
+        if (messageParts.length >= 3) {
+            let nickname = messageParts[1];
+            let message = messageParts.slice(2).join(" ");
+            chatSocket.send(JSON.stringify({
+                'command': 'send_private_message',
+                'message': message,
+                'nickname': nickname
+            }));
+        }
+    } else {
+        chatSocket.send(JSON.stringify({
+            'message': messageText
+        }));
+    }
     form.reset();
-    
-    // Faire défiler automatiquement vers le bas après l'envoi du message
-    let messages = document.getElementById('messages');
-    messages.scrollTop = messages.scrollHeight;
 });
