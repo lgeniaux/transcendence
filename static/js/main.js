@@ -6,14 +6,14 @@ const routes = {
         css: '/static/css/home.css',
     },
     '/login': {
-        html: '/static/html/login.html',
+        html: '/static/html/auth/login.html',
         css: '/static/css/auth/auth.css',
-        js: ['/static/js/login.js']
+        js: '/static/js/login.js'
     },
     '/register': {
-        html: '/static/html/register.html',
+        html: '/static/html/auth/register.html',
         css: '/static/css/auth/auth.css',
-        js: ['/static/js/register.js']
+        js: '/static/js/register.js'
     },
     '/oauth_callback': {
         html: '/static/html/oauth_callback.html',
@@ -24,6 +24,11 @@ const routes = {
 		css: '/static/css/profile.css',
         js: '/static/js/profile.js'
     },
+	'/dashboard': {
+		html: '/static/html/dashboard.html',
+		css: '/static/css/dashboard.css',
+		js: '/static/js/dashboard.js'
+	},
 };
 
 
@@ -36,11 +41,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
 	// Vincent: Pour charger la barre de navigation
 	loadNavbar();
-	loadChatbox();
-
-	// Vincent: Variables pour les popovers
-	const popoverTriggerList = document.querySelectorAll('[data-bs-toggle="popover"]')
-	const popoverList = [...popoverTriggerList].map(popoverTriggerEl => new bootstrap.Popover(popoverTriggerEl))
 });
 
 
@@ -133,7 +133,6 @@ function isAuthenticated() {
 function loadNavbar()
 {
     const sidePanelUrl = '/static/html/navbar/sidepanel.html';
-    const notificationsUrl = '/static/html/navbar/notifications.html';
     const profileBtnUrl = '/static/html/navbar/profilebtn.html';
 
     fetch(sidePanelUrl)
@@ -143,13 +142,6 @@ function loadNavbar()
         })
         .catch(error => console.error('Erreur lors du chargement de la barre de navigation :', error));
 
-    fetch(notificationsUrl)
-        .then(response => response.text())
-        .then(html => {
-            document.querySelector('#notifications').innerHTML = html;
-        })
-        .catch(error => console.error('Erreur lors du chargement des notifications :', error));
-
     fetch(profileBtnUrl)
         .then(response => response.text())
         .then(html => {
@@ -158,16 +150,4 @@ function loadNavbar()
         .catch(error => console.error('Erreur lors du chargement du bouton de profil :', error));
 }
 
-function loadChatbox()
-{
-    const chatboxUrl = '/static/html/chatbox.html';
-
-    fetch(chatboxUrl)
-        .then(response => response.text())
-        .then(html => {
-            document.querySelector('#chatbox').innerHTML = html;
-        })
-        .catch(error => console.error('Erreur lors du chargement de la chatbox :', error));
-}
-
-window.initPage = initLoginForm;
+window.initPage = initOauthHandling;

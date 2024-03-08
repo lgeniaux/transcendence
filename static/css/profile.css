@@ -1,4 +1,4 @@
-.container
+.profile-container
 {
 	width: 1600px;
 	color: white;
@@ -9,7 +9,7 @@
 	padding: 1px;
 }
 
-.container h2
+.profile-container h2
 {
 	color: white;
 	font-size: 40px;
@@ -18,19 +18,19 @@
 	font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
 }
 
-.container p
+.profile-container p
 {
 	font-size: 20px;
 	font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
 	margin-left: 6px;
 }
 
-.container .form-control
+.profile-container .form-control
 {
 	margin: 6px;
 }
 
-.row
+.profile-container .row
 {
 	margin: 80px;
 }

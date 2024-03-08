@@ -1,0 +1,62 @@
+@font-face
+{
+	font-family: 'Fugaz One';
+	src: url('/static/fonts/FugazOne-Regular.ttf') format('truetype');
+}
+
+.tournament-bracket
+{
+	background-color: #FFB800;
+	min-width: 1200px;
+	border: none;
+	border-radius: 16px;
+	margin-top: 40px;
+	margin-bottom: 40px;
+}
+
+.tournament-bracket h2
+{
+	font-family: 'Fugaz One';
+	font-size: 40px;
+	color: #5a2b00;
+	text-align: center;
+	margin: 20px;
+}
+
+.tournament-bracket .match
+{
+    display: flex;
+    flex-direction: column;
+	background-color: #5a2b00;
+	border: 6px solid #432100;
+	font-family: 'Fugaz One';
+	color: white;
+    align-items: center;
+	justify-content: space-around;
+	height: 150px;
+	min-width: 200px;
+    margin: 20px;
+	border-radius: 8px;
+	box-shadow: 0 15px 20px black;
+}
+
+.tournament-bracket .vertical-line
+{
+    border-left: 2px solid black;
+    height: 100px;
+	margin-bottom: 10px;
+}
+
+.tournament-bracket hr
+{
+	border: 2px solid black;
+	width: 100%;
+}
+
+.tournament-info
+{
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	background-color: #FFB800;
+}

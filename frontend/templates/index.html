@@ -7,28 +7,44 @@
 
     <link rel="stylesheet" type="text/css" href="static/css/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="static/css/main.css">
-	<link rel="stylesheet" type="text/css" href="static/css/navbar/sidepanel.css">
-	<link rel="stylesheet" type="text/css" href="static/css/navbar/notifications.css">
-	<link rel="stylesheet" type="text/css" href="static/css/chatbox.css">
+    <link rel="stylesheet" type="text/css" href="static/css/navbar/sidepanel.css">
+    <link rel="stylesheet" type="text/css" href="static/css/navbar/notifications.css">
+    <link rel="stylesheet" type="text/css" href="static/css/chatbox.css">
 
 </head>
 <body>
 
-    <!-- Container principal -->
-    <div class="background-container">
+    <!-- Header -->
+    <header class="header navbar">
+        <div id="sidePanel"></div>
+        <h1 data-spa="/" type="button" class="homeBtn">Born2Pong</h1>
+		<div id="profileBtn"></div>
+    </header>
 
-        <!-- Header -->
-        <header class="header navbar">
-			<div id="sidePanel"></div>
-            <h1 data-spa="/" type="button" class="homeBtn">Born2Pong</h1>
-			<!-- <div id="notifications"></div> -->
-			<!-- <div id="profileBtn"></div> -->
-        </header>
+    <!-- Container principal -->
+    <div class="container-fluid background-container">
 
         <!-- Contenu principal -->
-        <div class="content">
-            <div id="app"></div>
-			<div id="chatbox"></div>
+        <div class="row">
+            <div class="col-4">
+                <!-- Conteneur en haut à gauche -->
+            </div>
+            <div class="col-4">
+                <!-- Conteneur au milieu -->
+            </div>
+            <div class="col-4">
+                <!-- Conteneur en bas à droite -->
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-12">
+                <!-- Contenu de la partie principale -->
+                <div class="content">
+                    <div id="app"></div>
+                    <div id="chatbox"></div>
+                </div>
+            </div>
         </div>
 
         <!-- Footer -->
@@ -38,9 +54,9 @@
 
     </div>
 
-	<script src="/static/js/bootstrap.bundle.min.js"></script>
+    <script src="/static/js/bootstrap.bundle.min.js"></script>
     <script src="/static/js/main.js"></script>
-	<script src="/static/js/chatbox.js"></script>
+    <script src="/static/js/chatbox.js"></script>
 
 </body>
 </html>
