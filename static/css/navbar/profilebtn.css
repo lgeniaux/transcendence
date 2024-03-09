@@ -55,9 +55,10 @@
 
 .profileBtn .dropdown-menu
 {
-	background-color: #d69a00;
+	background-color: #5a2b00;
+	border: 8px solid #5a2b00;
 	border-radius: 16px;
-	margin-top: 10px;
+	margin-top: 30px;
 	padding: 8px;
 }
 
@@ -73,11 +74,12 @@
 
 .profileBtn .dropdown-item:hover
 {
-	background-color: #2b1500;
+	background-color: #1a1a1a;
 }
 
 .profileBtn .disconnectBtn
 {
+	color: white;
 	background-color: #ff0000;
 }
 
