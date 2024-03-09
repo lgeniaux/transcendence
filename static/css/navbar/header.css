@@ -1,0 +1,27 @@
+.navbar
+{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: #FFB800;
+    height: 100px; /* Ajustez la hauteur selon vos besoins */
+    width: 100%;
+    text-align: center; /* Pour centrer le texte horizontalement */
+}
+
+.navbar h1
+{
+    color: black;
+    font-family: 'Brandish', sans-serif;
+    font-size: 50px; /* Utilisez des unités relatives pour une meilleure adaptabilité */
+}
+
+.navbar .homeBtn
+{
+	display: flex;
+    justify-content: center; /* Pour aligner le texte à gauche */
+    position: absolute; /* Pour positionner de façon absolue */
+    left: 50%; /* Pour centrer horizontalement */
+    transform: translateX(-50%); /* Pour ramener le bouton à gauche de 50% de sa largeur */
+    margin: 0 auto; /* Réinitialise la marge pour annuler les marges par défaut */
+}

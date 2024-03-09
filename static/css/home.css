@@ -1,8 +1,22 @@
+@font-face
+{
+	font-family: 'Fugaz One';
+	src: url('/static/fonts/FugazOne-Regular.ttf') format('truetype');
+}
+
+.home
+{
+	max-width: 100%;
+	margin: 300px 100px;
+}
+
 .auth-btn
 {
+	/* margin: auto auto; */
     background-color: #FFB800;
 	font-size: xxx-large;
-	font-family: 'Courier New', Courier, monospace;
+	font-family: 'Fugaz One';
+	border: 8px solid black;
     border-radius: 20px;
     transition: background-color 0.3s ease, border-radius 0.3s ease;
 	padding: 20px;

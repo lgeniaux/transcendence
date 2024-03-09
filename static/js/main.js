@@ -6,14 +6,14 @@ const routes = {
         css: '/static/css/home.css',
     },
     '/login': {
-        html: '/static/html/login.html',
+        html: '/static/html/auth/login.html',
         css: '/static/css/auth/auth.css',
-        js: ['/static/js/login.js']
+        js: '/static/js/login.js'
     },
     '/register': {
-        html: '/static/html/register.html',
+        html: '/static/html/auth/register.html',
         css: '/static/css/auth/auth.css',
-        js: ['/static/js/register.js']
+        js: '/static/js/register.js'
     },
     '/oauth_callback': {
         html: '/static/html/oauth_callback.html',
@@ -30,6 +30,11 @@ const routes = {
         importmap: true,
         css: '/static/css/game.css'
     },
+	'/dashboard': {
+		html: '/static/html/dashboard.html',
+		css: '/static/css/dashboard.css',
+		js: '/static/js/dashboard.js'
+	}
 };
 
 
@@ -39,6 +44,9 @@ document.addEventListener('DOMContentLoaded', function () {
     window.addEventListener('popstate', function () {
         navigate(window.location.pathname);
     });
+
+	// Vincent: Pour charger la barre de navigation
+	loadNavbar();
 });
 
 
@@ -131,7 +139,6 @@ function isAuthenticated() {
     return authToken && authToken !== 'undefined' && authToken !== 'null';
 }
 
-
 function loadModule(url) {
     const module = document.createElement('script');
     module.src = url;
@@ -153,4 +160,26 @@ function loadImportmap() {
     document.head.appendChild(importmap);
 }
 
-window.initPage = initLoginForm;
+// Vincent: Fonctions pour charger la barre de navigation et la chatbox, à modifier pour qu'elle soient affichées en fonction du token
+function loadNavbar()
+{
+    const sidePanelUrl = '/static/html/navbar/sidepanel.html';
+    const profileBtnUrl = '/static/html/navbar/profilebtn.html';
+
+
+    fetch(sidePanelUrl)
+        .then(response => response.text())
+        .then(html => {
+            document.querySelector('#sidePanel').innerHTML = html;
+        })
+        .catch(error => console.error('Erreur lors du chargement de la barre de navigation :', error));
+
+    fetch(profileBtnUrl)
+        .then(response => response.text())
+        .then(html => {
+            document.querySelector('#profileBtn').innerHTML = html;
+        })
+        .catch(error => console.error('Erreur lors du chargement du bouton de profil :', error));
+}
+
+window.initPage = initOauthHandling;

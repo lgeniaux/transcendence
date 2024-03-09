@@ -1,0 +1,66 @@
+@font-face
+{
+    font-family: 'Micro 5';
+    src: url('/static/fonts/Micro5-Regular.ttf') format('truetype');
+}
+
+@font-face
+{
+	font-family: 'Silkscreen';
+	src: url('/static/fonts/Silkscreen-Regular.ttf') format('truetype');
+}
+
+.sidePanel .navbar-toggler
+{
+    margin-left: 10px;
+    background: transparent;
+    border: none;
+    transition: background-color 0.3s; /* Ajoute une transition sur la couleur de fond */
+}
+
+.sidePanel .navbar-toggler:hover
+{
+    background-color: #3333333c; /* Change la couleur de fond au survol */
+}
+
+.sidePanel .offcanvas
+{
+	transition: transform 0.3s ease; /* Ajoute une transition de 0.3s pour la transformation */
+	transform: translateX(-100%); /* Déplace le offcanvas complètement hors de l'écran par défaut */
+}
+
+.sidePanel .offcanvas.show
+{
+	transform: translateX(0); /* Déplace le offcanvas vers la droite pour le faire apparaître à l'écran */
+}
+
+.sidePanel .offcanvas-title
+{
+	color: #ffB800;
+	font-family: 'Micro 5';
+	font-size: 80px;
+	margin-left: auto;
+}
+
+.sidePanel .btn
+{
+	font-family: 'Silkscreen';
+	font-size: 20px;
+	color: white;
+	background: none;
+	margin: 10px 0;
+}
+
+.sidePanel .navIcon
+{
+	height: 30px;
+	margin: 10px;
+}
+
+.sidePanel .nav-item
+{
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	justify-content: flex-start;
+}
