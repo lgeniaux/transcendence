@@ -52,11 +52,3 @@
 	border: 2px solid black;
 	width: 100%;
 }
-
-.tournament-info
-{
-	display: flex;
-	flex-direction: column;
-	align-items: center;
-	background-color: #FFB800;
-}

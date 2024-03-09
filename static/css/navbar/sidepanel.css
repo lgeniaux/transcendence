@@ -10,28 +10,17 @@
 	src: url('/static/fonts/Silkscreen-Regular.ttf') format('truetype');
 }
 
-.header
+.sidePanel .navbar-toggler
 {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background-color: #FFB800;
-    height: 100px; /* Ajustez la hauteur selon vos besoins */
-	width: 100%;
+    margin-left: 10px;
+    background: transparent;
+    border: none;
+    transition: background-color 0.3s; /* Ajoute une transition sur la couleur de fond */
 }
 
-.header h1
+.sidePanel .navbar-toggler:hover
 {
-    color: black;
-    font-family: 'Brandish', sans-serif;
-    font-size: 50px; /* Utilisez des unités relatives pour une meilleure adaptabilité */
-}
-
-.header .homeBtn
-{
-	display: flex;
-	justify-content: flex-start;
-	margin: 0 auto;
+    background-color: #3333333c; /* Change la couleur de fond au survol */
 }
 
 .sidePanel .offcanvas
@@ -40,22 +29,9 @@
 	transform: translateX(-100%); /* Déplace le offcanvas complètement hors de l'écran par défaut */
 }
 
-.offcanvas.show
+.sidePanel .offcanvas.show
 {
 	transform: translateX(0); /* Déplace le offcanvas vers la droite pour le faire apparaître à l'écran */
-}
-
-.sidePanel .navbar-toggler
-{
-	margin-left: 10px;
-	background: transparent;
-	border: none;
-	transition: transform 0.1 ease; /* Ajoute une transition de 0.3s pour la transformation */
-}
-
-.sidePanel .navbar-toggler:hover
-{
-    transform: scale(1.1); /* Augmente légèrement la taille du bouton au survol */
 }
 
 .sidePanel .offcanvas-title
@@ -79,4 +55,12 @@
 {
 	height: 30px;
 	margin: 10px;
+}
+
+.sidePanel .nav-item
+{
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	justify-content: flex-start;
 }

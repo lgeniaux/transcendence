@@ -1,0 +1,92 @@
+@font-face
+{
+	font-family: 'Silkscreen Bold';
+	src: url('/static/fonts/Silkscreen-Bold.ttf') format('truetype');
+}
+
+@font-face
+{
+	font-family: 'Fugaz One';
+	src: url('/static/fonts/FugazOne-Regular.ttf') format('truetype');
+}
+
+.profileBtn
+{
+	margin-right: 10px;
+}
+
+.profileBtn .user
+{
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	font-family: 'Silkscreen Bold';
+	font-size: large;
+	margin: 10px;
+}
+
+.profileBtn .user img
+{
+	width: 32px;
+	height: 32px;
+	border-radius: 50%;
+	margin-right: 10px;
+}
+
+.profileBtn .dropdown-toggle
+{
+    color: #fff;
+    background-color: #00000025;
+    border: none;
+    transition: background-color 0.3s, color 0.3s; /* Ajoute une transition sur la couleur de fond et la couleur du texte */
+}
+
+.profileBtn .dropdown-toggle:hover
+{
+    color: #fff;
+    background-color: #0000009a;
+}
+
+
+.profileBtn .dropdown-toggle::after
+{
+    display: none;
+}
+
+.profileBtn .dropdown-menu
+{
+	background-color: #d69a00;
+	border-radius: 16px;
+	margin-top: 10px;
+	padding: 8px;
+}
+
+.profileBtn .dropdown-item
+{
+	color: white;
+	border: none;
+	font-family: 'Fugaz One';
+	font-size: large;
+	border-radius: 8px;
+	cursor: pointer;
+}
+
+.profileBtn .dropdown-item:hover
+{
+	background-color: #2b1500;
+}
+
+.profileBtn .disconnectBtn
+{
+	background-color: #ff0000;
+}
+
+.profileBtn .disconnectBtn:hover
+{
+	background-color: #c30000;
+}
+
+.profileBtn .dropdown-divider
+{
+	border-top: 1px solid black;
+}
