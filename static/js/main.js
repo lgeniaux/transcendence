@@ -24,7 +24,7 @@ const routes = {
 		css: '/static/css/profile.css',
         js: '/static/js/profile.js'
     },
-    '/game': {
+    '/duel': {
         html: '/static/game/import.html',
         module: '/static/js/game.js',
         importmap: true,
@@ -148,6 +148,8 @@ function loadModule(url) {
 }    
 
 function loadImportmap() {
+    if (document.querySelector('script[type="importmap"]'))
+        return;
     const importmap = document.createElement('script');
     importmap.type = 'importmap';
     importmap.innerHTML = JSON.stringify({

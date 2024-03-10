@@ -1,4 +1,4 @@
-import { launchGame } from "/static/game/js/main.js";
+import { launchGame, createGame } from "/static/game/js/main.js";
 import { getCSRFToken } from "/static/js/profile.js";
 
 async function getUserInfos(auth_token = null) {
@@ -25,8 +25,12 @@ async function getUserInfos(auth_token = null) {
 
 const userInfos = await getUserInfos(localStorage.getItem('authToken')).catch(error => console.error('Error:', error));
 if (userInfos && userInfos.username) {
-	console.log(await launchGame(userInfos.username, "Guest"));
+    let properties = await createGame();
+    // TODO: wait for user to press the start button
+	console.log(await launchGame(userInfos.username, "Guest", properties));
 }
 else {
-	console.log(await launchGame("Left player", "Right player"));
+    let properties = await createGame();
+    // TODO: wait for user to press the start button
+	console.log(await launchGame("Left player", "Right player", properties));
 }
