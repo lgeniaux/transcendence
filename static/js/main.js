@@ -24,11 +24,17 @@ const routes = {
 		css: '/static/css/profile.css',
         js: '/static/js/profile.js'
     },
+    '/duel': {
+        html: '/static/game/import.html',
+        module: '/static/js/game.js',
+        importmap: true,
+        css: '/static/css/game.css'
+    },
 	'/dashboard': {
 		html: '/static/html/dashboard.html',
 		css: '/static/css/dashboard.css',
 		js: '/static/js/dashboard.js'
-	},
+	}
 };
 
 
@@ -87,6 +93,10 @@ function navigate(path) {
             }
         });
     }
+    if (route.importmap)
+        loadImportmap(route.importmap);
+    if (route.module)
+        loadModule(route.module);
 }
 
 function loadHTML(url) {
@@ -129,11 +139,35 @@ function isAuthenticated() {
     return authToken && authToken !== 'undefined' && authToken !== 'null';
 }
 
+function loadModule(url) {
+    const module = document.createElement('script');
+    module.src = url;
+    module.type = 'module';
+    module.async = false;
+    document.body.appendChild(module);
+}    
+
+function loadImportmap() {
+    if (document.querySelector('script[type="importmap"]'))
+        return;
+    const importmap = document.createElement('script');
+    importmap.type = 'importmap';
+    importmap.innerHTML = JSON.stringify({
+        imports: {
+            'three': 'https://unpkg.com/three@0.160.1/build/three.module.js',
+            'three/addons/': 'https://unpkg.com/three@0.160.1/examples/jsm/',
+        },
+    });
+    importmap.async = false;
+    document.head.appendChild(importmap);
+}
+
 // Vincent: Fonctions pour charger la barre de navigation et la chatbox, à modifier pour qu'elle soient affichées en fonction du token
 function loadNavbar()
 {
     const sidePanelUrl = '/static/html/navbar/sidepanel.html';
     const profileBtnUrl = '/static/html/navbar/profilebtn.html';
+
 
     fetch(sidePanelUrl)
         .then(response => response.text())
