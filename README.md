@@ -9,9 +9,11 @@ Before you start, ensure you have the following installed:
 ## Getting Started
 
 ### 1. Clone the Repository
-First, clone the repository to your local machine using Git:
-```git clone [your-repository-url]
-cd [your-repository-name]
+First, clone the repository recurcively to your local machine using Git:
+```shell
+git clone --recurse-submodules https://github.com/lgeniaux/ft_transcendence.git
+cd ft_transcendence
+git submodule update --init --recursive
 ```
 
 ### 2. Environment Setup
