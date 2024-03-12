@@ -92,4 +92,5 @@ function getCSRFToken() {
     return csrfToken;
 }
 
-window.initPage = initOauthHandling;
+window.initPageFunctions = window.initPageFunctions || [];
+window.initPageFunctions.push(initOauthHandling);

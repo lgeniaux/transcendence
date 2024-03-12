@@ -8,7 +8,7 @@ const routes = {
     '/login': {
         html: '/static/html/auth/login.html',
         css: '/static/css/auth/auth.css',
-        js: '/static/js/login.js'
+        js: ['/static/js/oauth.js', '/static/js/login.js']
     },
     '/register': {
         html: '/static/html/auth/register.html',
@@ -21,7 +21,7 @@ const routes = {
     },
     '/profile': {
         html: '/static/html/profile.html',
-		css: '/static/css/profile.css',
+        css: '/static/css/profile.css',
         js: '/static/js/profile.js'
     },
     '/duel': {
@@ -30,11 +30,11 @@ const routes = {
         importmap: true,
         css: '/static/css/game.css'
     },
-	'/dashboard': {
-		html: '/static/html/dashboard.html',
-		css: '/static/css/dashboard.css',
-		js: '/static/js/dashboard.js'
-	}
+    '/dashboard': {
+        html: '/static/html/dashboard.html',
+        css: '/static/css/dashboard.css',
+        js: '/static/js/dashboard.js'
+    }
 };
 
 
@@ -45,8 +45,8 @@ document.addEventListener('DOMContentLoaded', function () {
         navigate(window.location.pathname);
     });
 
-	// Vincent: Pour charger la barre de navigation
-	loadNavbar();
+    // Vincent: Pour charger la barre de navigation
+    loadNavbar();
 });
 
 
@@ -72,6 +72,7 @@ document.addEventListener('click', function (event) {
 });
 
 function navigate(path) {
+    window.initPageFunctions = [];
     // Louis: On  redirecte l'utilisateur vers la page d'accueil si il est déjà connecté
     let finalPath = getRedirectPath(path);
 
@@ -88,11 +89,17 @@ function navigate(path) {
     if (route.js) {
         const scripts = Array.isArray(route.js) ? route.js : [route.js];
         loadJS(scripts, function () {
-            if (typeof window.initPage === 'function') {
-                window.initPage();
+            // Execute all init functions
+            if (Array.isArray(window.initPageFunctions)) {
+                window.initPageFunctions.forEach(function (initFunction) {
+                    if (typeof initFunction === 'function') {
+                        initFunction();
+                    }
+                });
             }
         });
     }
+
     if (route.importmap)
         loadImportmap(route.importmap);
     if (route.module)
@@ -145,7 +152,7 @@ function loadModule(url) {
     module.type = 'module';
     module.async = false;
     document.body.appendChild(module);
-}    
+}
 
 function loadImportmap() {
     if (document.querySelector('script[type="importmap"]'))
@@ -163,8 +170,7 @@ function loadImportmap() {
 }
 
 // Vincent: Fonctions pour charger la barre de navigation et la chatbox, à modifier pour qu'elle soient affichées en fonction du token
-function loadNavbar()
-{
+function loadNavbar() {
     const sidePanelUrl = '/static/html/navbar/sidepanel.html';
     const profileBtnUrl = '/static/html/navbar/profilebtn.html';
 
@@ -184,4 +190,3 @@ function loadNavbar()
         .catch(error => console.error('Erreur lors du chargement du bouton de profil :', error));
 }
 
-window.initPage = initOauthHandling;

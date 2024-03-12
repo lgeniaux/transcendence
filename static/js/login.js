@@ -69,6 +69,6 @@
         return csrfToken;
     }
 
-
-
-window.initPage = initLoginForm;
+window.initPageFunctions = window.initPageFunctions || [];
+window.initPageFunctions.push(initLoginForm);
+    
