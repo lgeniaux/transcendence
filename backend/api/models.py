@@ -10,8 +10,11 @@ class User(AbstractUser):
     email = models.EmailField(max_length=254, unique=True)
     avatar = models.ImageField(upload_to='avatars/', null=True, blank=True)
     online_status = models.BooleanField(default=False)
+    friendlist = models.ManyToManyField('self', blank=True)
+    blocklist = models.ManyToManyField('self', blank=True)
+    tournaments = models.ManyToManyField('Tournament', blank=True)
     # Note de Louis: I didn't add a password field because it is already included in AbstractUser
-    
+
 class Game(models.Model):
     def __str__(self):
         return f"{self.player1} vs {self.player2}"
@@ -25,6 +28,10 @@ class Game(models.Model):
     start_time = models.DateTimeField(auto_now_add=True)
     end_time = models.DateTimeField(null=True, blank=True)
 
+class Tournament(models.Model):
+    def __str__(self):
+        return f"{self.tournament_id}"
+    
 class LiveChat(models.Model):
     def __str__(self):
         return f"{self.user} : {self.message}"

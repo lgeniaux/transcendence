@@ -44,21 +44,12 @@
     
     <div class="dashboard-section search-users col">
         <h2>Find Friends</h2>
-        <input type="text" id="userSearch" placeholder="Search for users...">
-        <div class="search-results">
-            <!-- Fake friends list -->
-            <div class="friend">
-                <p><strong>User456</strong></p>
-                <button class="btn add-friend">Add Friend</button>
-            </div>
-            <div class="friend">
-                <p><strong>Player789</strong></p>
-                <button class="btn add-friend">Add Friend</button>
-            </div>
-            <div class="friend">
-                <p><strong>PongMaster</strong></p>
-                <button class="btn add-friend">Add Friend</button>
-            </div>
+        <div class="search-bar d-flex flex-row">
+            <input type="text" id="userSearch" placeholder="Search for users...">
+            <button class="btn search" id="userSearchButton">Search</button>
+        </div>
+        <div id="users-list" class="search-results">
+            <p>Loading FriendList . . . </p>
         </div>
     </div>
 </div>
