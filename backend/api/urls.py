@@ -2,7 +2,7 @@ from django.urls import path
 from .views import GameList, UserRegistrationView, UserLogin, UserLogout
 from .oauth import CodeForToken
 from .profile import UserProfile, ChangePassword
-from .social import AddOrDeleteFriend, GetUsersList
+from .social import AddOrDeleteFriend, GetUsersList, BlockOrUnblockUser
 
 app_name = 'api'
 
@@ -18,5 +18,7 @@ urlpatterns = [
    #SOCIAL
    path('add-friend/', AddOrDeleteFriend.as_view(), name='add-friend'),
    path('delete-friend/', AddOrDeleteFriend.as_view(), name='delete-friend'),
+   path('block-user/', BlockOrUnblockUser.as_view(), name='block-user'),
+   path('unblock-user/', BlockOrUnblockUser.as_view(), name='unblock-user'),
    path('get-users/', GetUsersList.as_view(), name='get-users'),
 ]
