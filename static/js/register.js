@@ -72,4 +72,5 @@ function getCSRFToken() {
     return csrfToken;
 }
 
-window.initPage = initRegisterForm;
+window.initPageFunctions = window.initPageFunctions || [];
+window.initPageFunctions.push(initRegisterForm);

@@ -105,4 +105,7 @@ function logout()
     .catch(error => console.error('Error:', error));
 }
 
+window.initPageFunctions = window.initPageFunctions || [];
+window.initPageFunctions.push(initLoginForm);
+
 window.initPage = initLoginForm;

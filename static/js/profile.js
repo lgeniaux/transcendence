@@ -99,6 +99,8 @@ function updateProfile(event) {
 function changePassword(event) {
 }
 
-window.initPage = initProfilePage;
+window.initPageFunctions = window.initPageFunctions || [];
+window.initPageFunctions.push(initProfilePage);
+
 
 export { getCSRFToken };
