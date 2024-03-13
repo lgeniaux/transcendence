@@ -34,6 +34,11 @@ const routes = {
         html: '/static/html/dashboard.html',
         css: '/static/css/dashboard.css',
         js: '/static/js/dashboard.js'
+    },
+    '/tournament': {
+        html: '/static/html/tournament.html',
+        css: '/static/css/tournament.css',
+        js: '/static/js/tournament.js'
     }
 };
 
