@@ -12,13 +12,14 @@
 	border-radius: 16px;
 	margin-top: 40px;
 	margin-bottom: 40px;
+	border: 8px solid black;
 }
 
 .tournament-bracket h2
 {
 	font-family: 'Fugaz One';
 	font-size: 40px;
-	color: #5a2b00;
+	color: black;
 	text-align: center;
 	margin: 20px;
 }

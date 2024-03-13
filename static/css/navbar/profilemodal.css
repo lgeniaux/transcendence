@@ -55,16 +55,16 @@
 
 .profileBtn .dropdown-menu
 {
-	background-color: #5a2b00;
-	border: 8px solid #5a2b00;
-	border-radius: 16px;
+	background-color: #FFB800;
+	border: 8px solid black;
+	border-radius: 20px;
 	margin-top: 30px;
 	padding: 8px;
 }
 
 .profileBtn .dropdown-item
 {
-	color: white;
+	color: rgb(0, 0, 0);
 	border: none;
 	font-family: 'Fugaz One';
 	font-size: large;
@@ -74,7 +74,7 @@
 
 .profileBtn .dropdown-item:hover
 {
-	background-color: #1a1a1a;
+	background-color: #cb9100;
 }
 
 .profileBtn .disconnectBtn
