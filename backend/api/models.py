@@ -24,6 +24,9 @@ class Game(models.Model):
     winner = models.ForeignKey(User, on_delete=models.CASCADE, related_name='winner')
     start_time = models.DateTimeField(auto_now_add=True)
     end_time = models.DateTimeField(null=True, blank=True)
+    status = models.CharField(max_length=20)
+    type = models.CharField(max_length=20)
+    tournament_id = models.IntegerField(null=True, blank=True)
 
 class LiveChat(models.Model):
     def __str__(self):
