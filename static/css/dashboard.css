@@ -1,6 +1,6 @@
 .dashboard-container {
     width: 100%;
-    height: calc(100vh - 50px);
+    height: auto;
     padding: 20px;
     display: flex; 
     flex-direction: row;
@@ -9,7 +9,8 @@
     gap: 20px
 }
 
-.dashboard-section {
+.dashboard-section
+{
     background-color: #432100;
     border: 2px solid #FFB800;
     border-radius: 16px;
@@ -20,7 +21,7 @@
     flex-direction: column;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     overflow-y: auto;
-    height: calc(100vh - 120px); 
+    height: 600px; 
     margin-bottom: 20px;
 }
 

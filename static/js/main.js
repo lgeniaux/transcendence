@@ -45,18 +45,8 @@ const routes = {
 
 document.addEventListener('DOMContentLoaded', function ()
 {
-	const logoutButton = document.getElementById('logoutButton');
-
     navigate(window.location.pathname);
     window.addEventListener('popstate', function () {navigate(window.location.pathname);});
-
-
-    // Ajoutez un gestionnaire d'événements au clic sur le bouton
-    logoutButton.addEventListener('click', function(event)
-	{
-        event.preventDefault();
-        logout();
-    });
 });
 
 
@@ -67,7 +57,7 @@ function getRedirectPath(path)
 		console.log('Unauthenticated user. Redirecting to login...');
 		return '/'; // Redirect to login if not authenticated
 	}
-	
+
     if ((path === '/login' || path === '/register' || path === '/') && isAuthenticated())
 	{
         console.log('Authenticated user. Redirecting to home...');
@@ -84,16 +74,29 @@ document.addEventListener('click', function (event)
 	{
         event.preventDefault();
 
-        let originalPath = event.target.dataset.spa;
-        let finalPath = getRedirectPath(originalPath);
+        // Exécuter une fonction donnée à un ID si l'élément cliqué a cet ID
+        executeFunctionForId(event.target.id);
 
-        navigate(finalPath);
-        window.history.pushState({}, '', finalPath);
-
-		if (isAuthenticated())
-			loadNavbar();
+        navigate(event.target.dataset.spa);
+        window.history.pushState({}, '', event.target.dataset.spa);
     }
 });
+
+// Sous-fonction pour exécuter une fonction donnée à un ID
+function executeFunctionForId(id)
+{
+    // Définir les fonctions pour chaque ID
+    const functionMap = {
+        'logoutButton': logout,
+		'loginBtn': loginUser,
+        // Ajoutez d'autres ID avec leurs fonctions associées ici
+    };
+
+    // Vérifier si l'ID a une fonction associée et l'exécuter
+    if (id in functionMap)
+        functionMap[id](); // Exécuter la fonction associée à l'ID
+}
+
 
 function navigate(path)
 {
@@ -131,6 +134,9 @@ function navigate(path)
         loadImportmap(route.importmap);
     if (route.module)
         loadModule(route.module);
+
+	if (isAuthenticated())
+		loadNavbar();
 }
 
 function loadContent(id, url)
@@ -214,4 +220,3 @@ function loadNavbar()
 	loadContent('profileModal', '/static/html/navbar/profilemodal.html');
 	// loadContent('chatbox', '/static/html/chatbox.html');
 }
-

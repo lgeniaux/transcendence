@@ -1,6 +1,9 @@
 body
 {
-	overflow: hidden auto;
+	min-height: 100vh;
+    min-width: 100vw;
+	overflow: hidden;
+    background: linear-gradient(to top, black, #383838);
 }
 
 @font-face
@@ -11,9 +14,7 @@ body
 
 .background-container
 {
-    min-width: 100vw;
-    min-height: 100vh;
-    background: linear-gradient(to top, black, #383838);
+	min-width: 80vh;
     overflow: hidden;
 }
 

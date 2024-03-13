@@ -3,7 +3,6 @@
 // Function to initialize the login form
 function initLoginForm()
 {
-    
     console.log("Before attempting to find loginForm");
     var loginForm = document.getElementById('loginForm');
     console.log("After attempting to find loginForm:", loginForm);
@@ -60,52 +59,7 @@ function showLoginError(message)
     document.getElementById('loginAlert').innerHTML = alertHTML;
 }
 
-function getCSRFToken()
-{
-    let csrfToken = null;
-    if (document.cookie && document.cookie !== '')
-	{
-        const cookies = document.cookie.split(';');
+// window.initPageFunctions = window.initPageFunctions || [];
+// window.initPageFunctions.push(initLoginForm);
 
-        for (let i = 0; i < cookies.length; i++)
-		{
-            const cookie = cookies[i].trim();
-
-            if (cookie.substring(0, 'csrftoken='.length) === 'csrftoken=')
-			{
-                csrfToken = decodeURIComponent(cookie.substring('csrftoken='.length));
-                break;
-            }
-        }
-    }
-
-    return csrfToken;
-}
-
-function logout()
-{
-    fetch('/api/logout-user/',
-	{
-        method: 'POST',
-        credentials: 'include',
-        headers:
-		{
-            'Content-Type': 'application/json',
-            'X-CSRFToken': getCSRFToken(),
-            'Authorization': 'Token ' + localStorage.getItem('authToken')
-        }
-    })
-    .then(response =>
-	{
-        if (response.ok)
-            localStorage.removeItem('authToken'); // Supprimer le token de connexion
-        else
-            console.error('Erreur lors de la déconnexion');
-    })
-    .catch(error => console.error('Error:', error));
-}
-
-window.initPageFunctions = window.initPageFunctions || [];
-window.initPageFunctions.push(initLoginForm);
-
-window.initPage = initLoginForm;
+// window.initPage = initLoginForm;
