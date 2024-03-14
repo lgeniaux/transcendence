@@ -43,80 +43,55 @@ const routes = {
 };
 
 
-document.addEventListener('DOMContentLoaded', function ()
-{
+document.addEventListener('DOMContentLoaded', function () {
     navigate(window.location.pathname);
-    window.addEventListener('popstate', function () {navigate(window.location.pathname);});
+
+    window.addEventListener('popstate', function () {
+        navigate(window.location.pathname);
+    });
+
+    // Vincent: Pour charger la barre de navigation
+    loadNavbar();
 });
 
 
-function getRedirectPath(path)
-{
-	if (!isAuthenticated() && path !== '/login' && path !== '/register' && path !== '/')
-	{
-		console.log('Unauthenticated user. Redirecting to login...');
-		return '/'; // Redirect to login if not authenticated
-	}
-
-    if ((path === '/login' || path === '/register' || path === '/') && isAuthenticated())
-	{
+function getRedirectPath(path) {
+    if ((path === '/login' || path === '/register') && isAuthenticated()) {
         console.log('Authenticated user. Redirecting to home...');
-        return '/dashboard'; // Return the home path for redirection
+        return '/'; // Return the home path for redirection
     }
-
     return path;
 }
 
 // navigate to the page if a button is clicked, the location of the navigation is stored in the data-spa. example: <button data-spa="/login">Login</button>
-document.addEventListener('click', function (event)
-{
-    if (event.target.dataset.spa)
-	{
+document.addEventListener('click', function (event) {
+    if (event.target.dataset.spa) {
         event.preventDefault();
 
-        // Exécuter une fonction donnée à un ID si l'élément cliqué a cet ID
-        executeFunctionForId(event.target.id);
+        let originalPath = event.target.dataset.spa;
+        let finalPath = getRedirectPath(originalPath);
 
-        navigate(event.target.dataset.spa);
-        window.history.pushState({}, '', event.target.dataset.spa);
+        navigate(finalPath);
+        window.history.pushState({}, '', finalPath);
     }
 });
 
-// Sous-fonction pour exécuter une fonction donnée à un ID
-function executeFunctionForId(id)
-{
-    // Définir les fonctions pour chaque ID
-    const functionMap = {
-        'logoutButton': logout,
-		'loginBtn': loginUser,
-        // Ajoutez d'autres ID avec leurs fonctions associées ici
-    };
-
-    // Vérifier si l'ID a une fonction associée et l'exécuter
-    if (id in functionMap)
-        functionMap[id](); // Exécuter la fonction associée à l'ID
-}
-
-
-function navigate(path)
-{
+function navigate(path) {
     window.initPageFunctions = [];
     // Louis: On  redirecte l'utilisateur vers la page d'accueil si il est déjà connecté
     let finalPath = getRedirectPath(path);
 
     const route = routes[finalPath];
+    if (!route) {
+        console.error('Route not found');
+        return;
+    }
 
-    if (!route)
-	{
-		console.error('Route not found');
-		return;
-	}
     if (route.html)
         loadHTML(route.html);
     if (route.css)
         loadCSS(route.css);
-    if (route.js)
-	{
+    if (route.js) {
         const scripts = Array.isArray(route.js) ? route.js : [route.js];
         loadJS(scripts, function () {
             // Execute all init functions
@@ -134,21 +109,7 @@ function navigate(path)
         loadImportmap(route.importmap);
     if (route.module)
         loadModule(route.module);
-
-	if (isAuthenticated())
-		loadNavbar();
 }
-
-function loadContent(id, url)
-{
-    fetch(url)
-        .then(response => response.text())
-        .then(html => {
-            document.querySelector(`#${id}`).innerHTML = html;
-        })
-        .catch(error => console.error(`Error loading content for ID ${id}:`, error));
-}
-
 
 function loadHTML(url) {
     fetch(url)
@@ -214,9 +175,23 @@ function loadImportmap() {
 }
 
 // Vincent: Fonctions pour charger la barre de navigation et la chatbox, à modifier pour qu'elle soient affichées en fonction du token
-function loadNavbar()
-{
-	loadContent('sidePanel', '/static/html/navbar/sidepanel.html');
-	loadContent('profileModal', '/static/html/navbar/profilemodal.html');
-	// loadContent('chatbox', '/static/html/chatbox.html');
+function loadNavbar() {
+    const sidePanelUrl = '/static/html/navbar/sidepanel.html';
+    const profileBtnUrl = '/static/html/navbar/profilebtn.html';
+
+
+    fetch(sidePanelUrl)
+        .then(response => response.text())
+        .then(html => {
+            document.querySelector('#sidePanel').innerHTML = html;
+        })
+        .catch(error => console.error('Erreur lors du chargement de la barre de navigation :', error));
+
+    fetch(profileBtnUrl)
+        .then(response => response.text())
+        .then(html => {
+            document.querySelector('#profileBtn').innerHTML = html;
+        })
+        .catch(error => console.error('Erreur lors du chargement du bouton de profil :', error));
 }
+
