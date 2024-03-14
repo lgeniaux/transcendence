@@ -9,7 +9,7 @@
     <link rel="stylesheet" type="text/css" href="static/css/main.css">
 	<link rel="stylesheet" type="text/css" href="static/css/navbar/header.css">
     <link rel="stylesheet" type="text/css" href="static/css/navbar/sidepanel.css">
-    <link rel="stylesheet" type="text/css" href="static/css/navbar/profilebtn.css">
+    <link rel="stylesheet" type="text/css" href="static/css/navbar/profilemodal.css">
     <link rel="stylesheet" type="text/css" href="static/css/chatbox.css">
 
 </head>
@@ -19,45 +19,33 @@
     <header class="header navbar">
 		<div id="sidePanel"></div>
 		<h1 data-spa="/dashboard" type="button" class="homeBtn">Born2Pong</h1>
-		<div id="profileBtn"></div>
+		<div id="profileModal"></div>
     </header>
 
     <!-- Container principal -->
     <div class="container-fluid background-container">
-
-        <!-- Contenu principal -->
-        <div class="row">
-            <div class="col-4">
-                <!-- Conteneur en haut à gauche -->
-            </div>
-            <div class="col-4">
-                <!-- Conteneur au milieu -->
-            </div>
-            <div class="col-4">
-                <!-- Conteneur en bas à droite -->
-            </div>
-        </div>
 
         <div class="row">
             <div class="col-12">
                 <!-- Contenu de la partie principale -->
                 <div class="content">
                     <div id="app"></div>
-                    <div id="chatbox"></div>
+                    <!-- <div id="chatbox"></div> -->
                 </div>
             </div>
         </div>
 
-        <!-- Footer -->
-        <footer class="footer">
-            <p>&copy; 2024 - Born2Pong</p>
-        </footer>
-
     </div>
 
+    <!-- Footer -->
+    <footer class="footer">
+        <p>&copy; 2024 - Born2Pong</p>
+    </footer>
+
     <script src="/static/js/bootstrap.bundle.min.js"></script>
-    <script src="/static/js/main.js"></script>
+	<script src="/static/js/utils.js"></script>
     <script src="/static/js/chatbox.js"></script>
+    <script src="/static/js/main.js"></script>
 
 </body>
 </html>
