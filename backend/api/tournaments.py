@@ -18,7 +18,7 @@ def invite_participants_to_tournament(tournament, participants_usernames, sender
     for username in participants_usernames:
         try:
             participant = User.objects.get(username=username)
-            extra_data = {
+            data = {
                 'sender_username': sender_username,
                 'tournament_name': tournament.name,
                 'tournament_id': tournament.id,
@@ -27,7 +27,7 @@ def invite_participants_to_tournament(tournament, participants_usernames, sender
                 recipient=participant, 
                 message="You have been invited to participate in a tournament.", 
                 notification_type="tournament-invite", 
-                data=extra_data
+                data=data
             )
         except User.DoesNotExist:
             continue

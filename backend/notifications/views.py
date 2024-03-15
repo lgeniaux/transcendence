@@ -4,6 +4,7 @@ from .models import Notification
 from asgiref.sync import async_to_sync
 from channels.layers import get_channel_layer
 
+
 def send_notification(recipient, message, notification_type, data=None):
     if data is None:
         data = {}
@@ -28,7 +29,7 @@ def send_notification_to_user(notification):
                 'message': notification.message,
                 'notification_type': notification.notification_type,
                 'created_at': notification.created_at.strftime('%Y-%m-%d %H:%M:%S'),
-                'extra_data': notification.data,
+                'data': notification.data,
             }
         }
     )
