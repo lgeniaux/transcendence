@@ -2,7 +2,10 @@
 let allUsers = [];
 
 function initFriendsSearch() {
-    document.getElementById('userSearch').addEventListener('input', filterUsersByUsername);
+    var input = document.getElementById('userSearch');
+    if(input)
+        input.addEventListener('input', filterUsersByUsername);
+
     fetchAllUsers();
 }
 
