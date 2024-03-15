@@ -22,23 +22,27 @@ const routes = {
     '/profile': {
         html: '/static/html/profile.html',
         css: '/static/css/profile.css',
-        js: '/static/js/profile.js'
+        js: '/static/js/profile.js',
+        requires_auth: true
     },
     '/duel': {
         html: '/static/game/import.html',
         module: '/static/js/game.js',
         importmap: true,
-        css: '/static/css/game.css'
+        css: '/static/css/game.css',
+        requires_auth: true
     },
     '/dashboard': {
         html: '/static/html/dashboard.html',
         css: '/static/css/dashboard.css',
-        js: '/static/js/dashboard.js'
+        js: '/static/js/dashboard.js',
+        requires_auth: true
     },
     '/tournament': {
         html: '/static/html/tournament.html',
         css: '/static/css/tournament.css',
-        js: '/static/js/tournament.js'
+        js: '/static/js/tournament.js',
+        requires_auth: true
     }
 };
 
@@ -60,6 +64,10 @@ function getRedirectPath(path) {
         console.log('Authenticated user. Redirecting to home...');
         return '/'; // Return the home path for redirection
     }
+    if (routes[path].requires_auth && !isAuthenticated()) {
+        console.log('Redirecting to login due to authentication requirement');
+        return '/'; // Redirect to home
+    }
     return path;
 }
 
@@ -75,6 +83,11 @@ document.addEventListener('click', function (event) {
         window.history.pushState({}, '', finalPath);
     }
 });
+
+function isAuthenticated() {
+    const authToken = localStorage.getItem('authToken');
+    return authToken && authToken !== 'undefined' && authToken !== 'null';
+}
 
 function navigate(path) {
     window.initPageFunctions = [];
@@ -146,11 +159,6 @@ function loadJS(urls, finalCallback) {
         };
         document.body.appendChild(script);
     });
-}
-
-function isAuthenticated() {
-    const authToken = localStorage.getItem('authToken');
-    return authToken && authToken !== 'undefined' && authToken !== 'null';
 }
 
 function loadModule(url) {
