@@ -93,6 +93,8 @@ function navigate(path) {
         loadCSS(route.css);
     if (route.js) {
         const scripts = Array.isArray(route.js) ? route.js : [route.js];
+        // on delete toutes les balises script avec le type: text/javascript
+        document.querySelectorAll('script[type="text/javascript"]').forEach(script => script.remove());
         loadJS(scripts, function () {
             // Execute all init functions
             if (Array.isArray(window.initPageFunctions)) {

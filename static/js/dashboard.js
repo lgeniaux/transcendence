@@ -1,5 +1,7 @@
 
-let allUsers = [];
+if (!window.allUsers) {
+    window.allUsers = [];
+}
 
 function initFriendsSearch() {
     var input = document.getElementById('userSearch');
