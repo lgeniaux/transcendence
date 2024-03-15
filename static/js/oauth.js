@@ -1,18 +1,24 @@
 // oauth.js
 
+document.addEventListener('DOMContentLoaded', function () {
+    initOauthHandling();
+});
+
 function initOauthHandling() {
     if (window.location.pathname === '/login') {
-        document.getElementById('oauthLoginBtn').addEventListener('click', function (event) {
-            event.preventDefault();
-            redirectTo42OAuth();
-        });
+        const oauthLoginBtn = document.getElementById('oauthLoginBtn');
+        if (oauthLoginBtn) {
+            oauthLoginBtn.addEventListener('click', function (event) {
+                event.preventDefault();
+                redirectTo42OAuth();
+            });
+        }
     }
     
     if (window.location.pathname === '/oauth_callback') {
         handle42OAuthCallback();
     }
 }
-
 
 function redirectTo42OAuth() {
     const clientId = 'u-s4t2ud-4c5c2185a70974ac0cfdefacbe289d7ec81936940b6980d71e752c16ec1c5d17'; // Louis: c'est normal que le user ai acces a cette information car il est public
