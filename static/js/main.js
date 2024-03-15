@@ -187,7 +187,7 @@ function loadImportmap() {
 // Vincent: Fonctions pour charger la barre de navigation et la chatbox, à modifier pour qu'elle soient affichées en fonction du token
 function loadNavbar() {
     const sidePanelUrl = '/static/html/navbar/sidepanel.html';
-    const profileBtnUrl = '/static/html/navbar/profilebtn.html';
+    const profileModalUrl = '/static/html/navbar/profilemodal.html';
 
 
     fetch(sidePanelUrl)
@@ -197,11 +197,10 @@ function loadNavbar() {
         })
         .catch(error => console.error('Erreur lors du chargement de la barre de navigation :', error));
 
-    fetch(profileBtnUrl)
+    fetch(profileModalUrl)
         .then(response => response.text())
         .then(html => {
-            document.querySelector('#profileBtn').innerHTML = html;
+            document.querySelector('#profileModal').innerHTML = html;
         })
         .catch(error => console.error('Erreur lors du chargement du bouton de profil :', error));
 }
-

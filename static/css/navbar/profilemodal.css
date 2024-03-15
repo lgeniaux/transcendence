@@ -10,12 +10,12 @@
 	src: url('/static/fonts/FugazOne-Regular.ttf') format('truetype');
 }
 
-.profileBtn
+.profileModal
 {
 	margin-right: 10px;
 }
 
-.profileBtn .user
+.profileModal .user
 {
 	display: flex;
 	flex-direction: row;
@@ -25,7 +25,7 @@
 	margin: 10px;
 }
 
-.profileBtn .user img
+.profileModal .user img
 {
 	width: 32px;
 	height: 32px;
@@ -33,7 +33,7 @@
 	margin-right: 10px;
 }
 
-.profileBtn .dropdown-toggle
+.profileModal .dropdown-toggle
 {
     color: #fff;
     background-color: #00000025;
@@ -41,30 +41,30 @@
     transition: background-color 0.3s, color 0.3s; /* Ajoute une transition sur la couleur de fond et la couleur du texte */
 }
 
-.profileBtn .dropdown-toggle:hover
+.profileModal .dropdown-toggle:hover
 {
     color: #fff;
     background-color: #0000009a;
 }
 
 
-.profileBtn .dropdown-toggle::after
+.profileModal .dropdown-toggle::after
 {
     display: none;
 }
 
-.profileBtn .dropdown-menu
+.profileModal .dropdown-menu
 {
-	background-color: #5a2b00;
-	border: 8px solid #5a2b00;
-	border-radius: 16px;
+	background-color: #FFB800;
+	border: 8px solid black;
+	border-radius: 20px;
 	margin-top: 30px;
 	padding: 8px;
 }
 
-.profileBtn .dropdown-item
+.profileModal .dropdown-item
 {
-	color: white;
+	color: rgb(0, 0, 0);
 	border: none;
 	font-family: 'Fugaz One';
 	font-size: large;
@@ -72,23 +72,23 @@
 	cursor: pointer;
 }
 
-.profileBtn .dropdown-item:hover
+.profileModal .dropdown-item:hover
 {
-	background-color: #1a1a1a;
+	background-color: #cb9100;
 }
 
-.profileBtn .disconnectBtn
+.profileModal .disconnectBtn
 {
 	color: white;
 	background-color: #ff0000;
 }
 
-.profileBtn .disconnectBtn:hover
+.profileModal .disconnectBtn:hover
 {
 	background-color: #c30000;
 }
 
-.profileBtn .dropdown-divider
+.profileModal .dropdown-divider
 {
 	border-top: 1px solid black;
 }
