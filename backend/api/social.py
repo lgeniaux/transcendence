@@ -136,3 +136,4 @@ class GetUsersList(APIView):
         context = {'request': request}
         serializer = GetUsersListSerializer(users, many=True, context=context)
         return Response(serializer.data, status=status.HTTP_200_OK)
+
