@@ -29,11 +29,28 @@ def invite_participants_to_tournament(tournament, participants_usernames, sender
                 notification_type="tournament-invite", 
                 data=data
             )
+            tournament.invitations_sent.add(participant)
         except User.DoesNotExist:
             continue
 
 
-
+def invite_participant_to_tournament(tournament, participant_username, sender_username):
+    try:
+        participant = User.objects.get(username=participant_username)
+        data = {
+            'sender_username': sender_username,
+            'tournament_name': tournament.name,
+            'tournament_id': tournament.id,
+        }
+        notification = send_notification(
+            recipient=participant, 
+            message="You have been invited to participate in a tournament.", 
+            notification_type="tournament-invite", 
+            data=data
+        )
+        tournament.invitations_sent.add(participant)
+    except User.DoesNotExist:
+        pass
 
 
 class TournamentSerializer(serializers.ModelSerializer):
@@ -96,3 +113,27 @@ class CreateTournament(APIView):
             return Response({'tournament_id': tournament.id}, status=status.HTTP_201_CREATED)
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+#the user will pass the tournament id and his decision to accept or decline the invite
+class AcceptOrDeclineTournamentInviteSerializer(serializers.Serializer):
+    tournament_id = serializers.IntegerField()
+    accept = serializers.BooleanField()
+
+    def validate_tournament_id(self, tournament_id):
+        try:
+            tournament = Tournament.objects.get(id=tournament_id)
+            if self.context['request'].user not in tournament.participants.all():
+                raise serializers.ValidationError("You are not a participant in this tournament.")
+            return tournament
+        except Tournament.DoesNotExist:
+            raise serializers.ValidationError("Tournament does not exist.")
+
+    def validate_accept(self, accept):
+        if accept:
+            if self.context['request'].user in self.context['tournament'].participants.all():
+                raise serializers.ValidationError("You are already a participant in this tournament.")
+        return accept
+    
+
+
