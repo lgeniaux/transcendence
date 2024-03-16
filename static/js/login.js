@@ -6,6 +6,7 @@
         console.log("Before attempting to find loginForm");
         var loginForm = document.getElementById('loginForm');
         console.log("After attempting to find loginForm:", loginForm);
+
         if (loginForm) {
             loginForm.addEventListener('submit', function (event) {
                 event.preventDefault();
