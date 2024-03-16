@@ -41,6 +41,7 @@
             if(data.detail === "Success") {
                 const auth_token = data.auth_token;
                 localStorage.setItem('authToken', auth_token);
+                window.location.href = '/dashboard';
             }
             else {
                 showLoginError(data.detail);
