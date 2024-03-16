@@ -1,18 +1,11 @@
 // oauth.js
 
-document.addEventListener('DOMContentLoaded', function () {
-    initOauthHandling();
-});
-
 function initOauthHandling() {
     if (window.location.pathname === '/login') {
-        const oauthLoginBtn = document.getElementById('oauthLoginBtn');
-        if (oauthLoginBtn) {
-            oauthLoginBtn.addEventListener('click', function (event) {
-                event.preventDefault();
-                redirectTo42OAuth();
-            });
-        }
+        document.getElementById('oauthLoginBtn').addEventListener('click', function (event) {
+            event.preventDefault();
+            redirectTo42OAuth();
+        });
     }
     
     if (window.location.pathname === '/oauth_callback') {
