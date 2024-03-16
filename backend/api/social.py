@@ -10,6 +10,7 @@ from rest_framework.authtoken.models import Token
 from rest_framework.authentication import TokenAuthentication
 from rest_framework import serializers
 from .serializers import UserSerializer
+from notifications.models import Notification
 
 User = get_user_model()
 class BlockOrUnblockUserSerializer(serializers.Serializer):
@@ -135,4 +136,24 @@ class GetUsersList(APIView):
         users = User.objects.all().exclude(id=request.user.id)
         context = {'request': request}
         serializer = GetUsersListSerializer(users, many=True, context=context)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+# Notifications
+    
+class NotificationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Notification
+        fields = ['id', 'message', 'notification_type', 'created_at', 'data']
+    
+
+class GetUserNotifications(APIView):
+    """
+    Get a list of all notifications for the user
+    """
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request, *args, **kwargs):
+        notifications = request.user.notifications.all()
+        serializer = NotificationSerializer(notifications, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)

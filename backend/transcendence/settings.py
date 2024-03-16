@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'api',
     'authentication',
 	'livechat',
+    'notifications',
 ]
 
 ASGI_APPLICATION = 'transcendence.asgi.application'
@@ -50,8 +51,11 @@ ASGI_APPLICATION = 'transcendence.asgi.application'
 # Channels
 CHANNEL_LAYERS = {
     'default': {
-        'BACKEND': 'channels.layers.InMemoryChannelLayer',
-    }
+        'BACKEND': 'channels_redis.core.RedisChannelLayer',
+        'CONFIG': {
+            "hosts": [('redis', 6379)],
+        },
+    },
 }
 
 REST_FRAMEWORK = {

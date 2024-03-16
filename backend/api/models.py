@@ -3,6 +3,7 @@ from django.db import models
 # Create your models here.
 from django.db import models
 from django.contrib.auth.models import AbstractUser
+from django.contrib.postgres.fields import ArrayField 
 
 # Louis: j'ai remove les attributs en doublons avec la classe de base de django
 class User(AbstractUser):
@@ -27,11 +28,31 @@ class Game(models.Model):
     winner = models.ForeignKey(User, on_delete=models.CASCADE, related_name='winner')
     start_time = models.DateTimeField(auto_now_add=True)
     end_time = models.DateTimeField(null=True, blank=True)
+    tournament = models.ForeignKey('Tournament', on_delete=models.CASCADE, null=True, blank=True)
+    round_name = models.CharField(max_length=50, null=True, blank=True)
+
 
 class Tournament(models.Model):
-    def __str__(self):
-        return f"{self.tournament_id}"
+    id = models.AutoField(primary_key=True)
+    name = models.CharField(max_length=50, unique=True)
+    creator = models.ForeignKey(User, on_delete=models.CASCADE, related_name='creator')
+    participants = models.ManyToManyField(User, related_name='participants')
+    start_time = models.DateTimeField(auto_now_add=True)
+    state = models.JSONField(default=dict)
     
+    def initialize_state(self):
+        # we know the number of participants can only be 4, 6 or 8, so we can initialize the state accordingly (quarter-finals, semi-finals, finals etc )
+        participants = self.participants.all()
+        state = {}
+        state['quarter-finals'] = []
+        state['semi-finals'] = []
+        state['finals'] = []
+        state['winner'] = None
+        for i in range(0, len(participants), 2):
+            state['quarter-finals'].append({'player1': participants[i].username, 'player2': participants[i+1].username, 'winner': None})
+        self.state = state
+        self.save()
+
 class LiveChat(models.Model):
     def __str__(self):
         return f"{self.user} : {self.message}"
@@ -40,3 +61,8 @@ class LiveChat(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     message = models.CharField(max_length=100)
     time = models.DateTimeField(auto_now_add=True)
+
+
+
+        
+    

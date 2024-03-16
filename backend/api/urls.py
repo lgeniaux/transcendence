@@ -2,7 +2,10 @@ from django.urls import path
 from .views import GameList, UserRegistrationView, UserLogin, UserLogout
 from .oauth import CodeForToken
 from .profile import UserProfile, ChangePassword
-from .social import AddOrDeleteFriend, GetUsersList, BlockOrUnblockUser
+from .social import AddOrDeleteFriend, GetUsersList, BlockOrUnblockUser, GetUserNotifications
+# import notifications.consumers
+from notifications import consumers 
+from .tournaments import CreateTournament
 
 app_name = 'api'
 
@@ -21,4 +24,9 @@ urlpatterns = [
    path('block-user/', BlockOrUnblockUser.as_view(), name='block-user'),
    path('unblock-user/', BlockOrUnblockUser.as_view(), name='unblock-user'),
    path('get-users/', GetUsersList.as_view(), name='get-users'),
+
+   path('ws/notifications/<str:token>/', consumers.NotificationConsumer.as_asgi()),
+   path('tournament/create-tournament/', CreateTournament.as_view(), name='create-tournament'),
+
+   path('get-notifications/',  GetUserNotifications.as_view(), name='get-notifications'),
 ]
