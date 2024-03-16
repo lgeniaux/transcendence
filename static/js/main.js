@@ -56,10 +56,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Vincent: Pour charger la barre de navigation
 	if (isAuthenticated())
-	{
-		loadNavbar();
-		loadChatbox();
-	}
+		loadNavbarAndChatbox();
 });
 
 
@@ -195,7 +192,13 @@ function loadNavbarAndChatbox()
     const profileModalUrl = '/static/html/navbar/profilemodal.html';
     const chatboxUrl = '/static/html/chatbox.html';
 
-    loadContentWithToken(sidePanelUrl, '#sidePanel', 'barre de navigation');
-    loadContentWithToken(profileModalUrl, '#profileModal', 'bouton de profil');
-    loadContentWithToken(chatboxUrl, '#chatBox', 'chatbox');
+    loadContent(sidePanelUrl, '#sidePanel', 'barre de navigation');
+    loadContent(profileModalUrl, '#profileModal', 'bouton de profil');
+    loadContent(chatboxUrl, '#chatBox', 'chatbox');
+
+	const chatboxContainer = document.getElementById('chatboxContainer');
+    const friendlistUrl = '/static/html/chatbox/friendlist.html';
+
+    loadContent(friendlistUrl, '#chatboxContainer', 'friendlist');
+    loadCSS('static/css/chat/friendlist.css');
 }

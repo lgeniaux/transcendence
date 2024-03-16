@@ -1,20 +1,16 @@
-<html>
+<div class="chatbox">
 
-	<div class="chatbox">
+	<div class="btn-group-vertical" role="group">
 
-		<div class="btn-group-vertical" role="group">
+		<button class="btn btn-primary" data-bs-toggle="collapse" data-bs-target="#chatboxCollapse">
+			<img src="static/img/chat-left-text.svg" alt="Chat" class="chatIcon">
+			Messages
+		</button>
 
-			<button class="btn btn-primary" data-bs-toggle="collapse" data-bs-target="#chatboxCollapse">
-				<img src="static/img/chat-left-text.svg" alt="Chat" class="chatIcon">
-				Messages
-			</button>
-
-			<div class="collapse" id="chatboxCollapse">
-				<div id="chatboxContainer" class="container"><!-- le contenu du chat est injecté ici. --></div>
-			</div>
-
+		<div class="collapse" id="chatboxCollapse">
+			<div id="chatboxContainer"><!-- le contenu du chat est injecté ici. --></div>
 		</div>
 
 	</div>
 
-</html>
+</div>

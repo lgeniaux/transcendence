@@ -17,66 +17,38 @@
     font-family: 'Fugaz One';
     font-size: 25px;
     text-align: left;
-    background-color: #432100;
-    border: none;
+    background-color: #202020;
+	color: white;
     box-shadow: none;
     transition: background-color 0.3s; /* Ajoute une transition sur la couleur de fond */
+	border: none;
+	outline: none;
 }
 
 .chatbox .btn-primary:hover
 {
     background-color: #333;
+	border: none;
+	outline: none;
 }
 
 .chatbox .btn-primary:hover:active
 {
-    background-color: #6a6a6a;
-}
-
-
-.chatbox .messageBox
-{
-	background-color: rgb(32, 32, 32);
-	color: white;
-	width: 100%;
-	height: 300px;
-	overflow: auto;
-	overflow-wrap: break-word;
-}
-
-.chatbox .messageBox p
-{
-	margin: 5px;
-	margin-left: 10px;
-	padding: 0;
-}
-
-.chatbox .form-control
-{
-	width: 70%;
-	background-color: rgb(225, 225, 225);
 	border: none;
-	border-radius: 0px;
-	box-shadow: none;
+	outline: none;
 }
 
-.chatbox .sendBtn
+.chatbox .btn-primary:focus
 {
-	width: 30%;
-	color: black;
-	font-family: 'Courier New', Courier, monospace;
-	font-weight: bold;
-	background-color: #FFB800;
 	border: none;
-	box-shadow: none;
-	border-radius: 0px;
-	margin: 0;
-	padding: 15px;
+	outline: none;
 }
 
 .chatbox .collapse
 {
 	width: 100%;
+	background-color: #202020;
+	padding: 10px;
 }
 
 .chatbox .chatIcon

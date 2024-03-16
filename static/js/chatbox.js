@@ -1,3 +1,5 @@
+// ----------------- backend ----------------- //
+
 let chatSocket = new WebSocket("ws://" + window.location.host + "/ws/chat/");
 
 //print message
@@ -37,3 +39,7 @@ form.addEventListener('submit', function(e) {
     }
     form.reset();
 });
+
+
+// ----------------- frontend ----------------- //
+
