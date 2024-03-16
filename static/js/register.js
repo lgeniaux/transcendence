@@ -42,6 +42,7 @@ function registerUser() {
         .then(response => response.json())
         .then(data => {
             if (data.detail === "Success") {
+                window.location.href = '/login';
             }
             else {
                 for (const [key, value] of Object.entries(data)) {
