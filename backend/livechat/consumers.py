@@ -2,7 +2,6 @@
 import json
 from channels.generic.websocket import AsyncWebsocketConsumer
 from channels.db import database_sync_to_async
-from django.contrib.auth.models import User
 from rest_framework.authtoken.models import Token
 from urllib.parse import parse_qs
 import logging
