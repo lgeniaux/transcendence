@@ -1,31 +1,16 @@
-<html>
+<div class="chatbox">
 
-	<div class="chatbox">
+	<div class="btn-group-vertical" role="group">
 
-		<div class="btn-group-vertical" role="group">
+		<button class="btn btn-primary" data-bs-toggle="collapse" data-bs-target="#chatboxCollapse">
+			<img src="static/img/chat-left-text.svg" alt="Chat" class="chatIcon">
+			Messages
+		</button>
 
-			<button class="btn btn-primary" data-bs-toggle="collapse" data-bs-target="#chatboxCollapse">
-				<img src="static/img/chat-left-text.svg" alt="Chat" class="chatIcon">
-				Messages
-			</button>
-
-			<div class="collapse" id="chatboxCollapse">
-
-				<div class="messageBox" id="messages">
-					<!-- Les messages sont affichés ici -->
-				</div>
-
-				<form id="form" class="btn-group">
-					<input class="form-control" placeholder="Exprimez votre amour..." input="text" id="message" name="message" autocomplete="off">
-					<button class="btn btn-secondary sendBtn" type="submit">Envoyer</button>
-				</form>
-
-			</div>
-
+		<div class="collapse" id="chatboxCollapse">
+			<div id="chatboxContainer"><!-- le contenu du chat est injecté ici. --></div>
 		</div>
 
 	</div>
 
-    <script src='static/js/chat/chat.js'></script>
-
-</html>
+</div>

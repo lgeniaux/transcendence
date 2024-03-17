@@ -55,14 +55,15 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
     // Vincent: Pour charger la barre de navigation
-    loadNavbar();
+	if (isAuthenticated())
+		loadNavbarAndChatbox();
 });
 
 
 function getRedirectPath(path) {
     if ((path === '/login' || path === '/register') && isAuthenticated()) {
-        console.log('Authenticated user. Redirecting to home...');
-        return '/'; // Return the home path for redirection
+        console.log('Authenticated user. Redirecting to dashboard...');
+        return '/dashboard'; // Return the home path for redirection
     }
     if (routes[path].requires_auth && !isAuthenticated()) {
         console.log('Redirecting to login due to authentication requirement');
@@ -198,20 +199,20 @@ function loadImportmap() {
     document.head.appendChild(importmap);
 }
 
-function loadContent(url, targetSelector, contentName) {
-    fetch(url)
-        .then(response => response.text())
-        .then(html => {
-            document.querySelector(targetSelector).innerHTML = html;
-        })
-        .catch(error => console.error(`Erreur lors du chargement de ${contentName} :`, error));
-}
-
 // Vincent: Fonctions pour charger la barre de navigation et la chatbox, à modifier pour qu'elle soient affichées en fonction du token
-function loadNavbar() {
+function loadNavbarAndChatbox()
+{
     const sidePanelUrl = '/static/html/navbar/sidepanel.html';
     const profileModalUrl = '/static/html/navbar/profilemodal.html';
+    const chatboxUrl = '/static/html/chatbox.html';
 
     loadContent(sidePanelUrl, '#sidePanel', 'barre de navigation');
     loadContent(profileModalUrl, '#profileModal', 'bouton de profil');
+    loadContent(chatboxUrl, '#chatBox', 'chatbox');
+
+	const chatboxContainer = document.getElementById('chatboxContainer');
+    const friendlistUrl = '/static/html/chatbox/friendlist.html';
+
+    loadContent(friendlistUrl, '#chatboxContainer', 'friendlist');
+    loadCSS('static/css/chat/friendlist.css');
 }
