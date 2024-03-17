@@ -7,7 +7,8 @@ class Notification(models.Model):
     message = models.TextField()
     notification_type = models.CharField(max_length=50)
     created_at = models.DateTimeField(auto_now_add=True)
-    data = models.JSONField(default=dict) 
+    data = models.JSONField(default=dict)
+    
 
 class GameInvitation(models.Model):
     INVITE_CHOICES = (

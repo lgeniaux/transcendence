@@ -1,7 +1,7 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
-from .models import Game
+from .models import Game, Tournament, TournamentInvitation
 from .serializers import GameSerializer, UserRegistrationSerializer, UserLoginSerializer
 from django.contrib.auth import get_user_model
 from django.db import IntegrityError
@@ -11,6 +11,9 @@ from rest_framework.authentication import TokenAuthentication
 from rest_framework import serializers
 from .serializers import UserSerializer
 from notifications.models import Notification
+from notifications.views import send_notification
+from . import views
+
 
 User = get_user_model()
 class BlockOrUnblockUserSerializer(serializers.Serializer):
@@ -157,3 +160,75 @@ class GetUserNotifications(APIView):
         notifications = request.user.notifications.all()
         serializer = NotificationSerializer(notifications, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
+    
+
+class ManageInvitationNotificationSerializer(serializers.Serializer):
+    notification_id = serializers.IntegerField()
+    action = serializers.ChoiceField(choices=["accept", "deny"])
+
+    def validate(self, data):
+        notification_id = data['notification_id']
+        action = data['action']
+        request_user = self.context['request'].user
+        notification = self.validate_notification(notification_id, request_user)
+        data['notification'] = notification
+        return data
+
+    def validate_notification(self, notification_id, request_user):
+        try:
+            notification = Notification.objects.get(id=notification_id, recipient=request_user)
+        except Notification.DoesNotExist:
+            raise serializers.ValidationError({"detail": "Notification does not exist"})
+        if notification.notification_type not in ["tournament_invite", "game_invite"]:
+            raise serializers.ValidationError({"detail": "Invalid notification type"})
+        
+        if notification.notification_type == "tournament_invite":
+            tournament_invitation = self.validate_tournament_invite(notification, request_user)
+            if tournament_invitation.status != "pending":
+                raise serializers.ValidationError({"detail": "Invitation is not in a pending state"})
+            return notification
+        elif notification.notification_type == "game_invite":
+            # to do
+            pass
+
+    def validate_tournament_invite(self, notification, user):
+        tournament_id = notification.data['tournament_id']
+        try:
+            tournament_invitation = TournamentInvitation.objects.get(tournament_id=tournament_id, user=user)
+            return tournament_invitation
+        except TournamentInvitation.DoesNotExist:
+            raise serializers.ValidationError({"detail": "Tournament invitation does not exist"})
+
+
+
+class ManageInvitationNotification(views.APIView):
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request, *args, **kwargs):
+        serializer = ManageInvitationNotificationSerializer(data=request.data, context={'request': request})
+        if serializer.is_valid():
+            notification = serializer.validated_data['notification']
+            action = serializer.validated_data['action']
+            request_user = request.user
+
+            if notification.notification_type == "tournament_invite":
+                tournament_invitation = serializer.validate_tournament_invite(notification, request_user)
+                if action == "accept":
+                    tournament_invitation.status = "accepted"
+                    tournament_invitation.save()
+                    notification.data['invite_status'] = "accepted"
+                    notification.save()
+                    return Response({"detail": "Tournament invitation successfully accepted"}, status=status.HTTP_200_OK)
+                elif action == "deny":
+                    tournament_invitation.status = "denied"
+                    tournament_invitation.save()
+                    notification.data['invite_status'] = "denied"
+                    notification.save()
+                    return Response({"detail": "Tournament invitation successfully denied"}, status=status.HTTP_200_OK)
+            elif notification.notification_type == "game_invite":
+                # to do
+                pass
+            return Response({"detail": "Action completed successfully"}, status=status.HTTP_200_OK)
+        else:
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

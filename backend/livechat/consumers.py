@@ -1,8 +1,6 @@
 from channels.generic.websocket import AsyncWebsocketConsumer
 import json
 from channels.db import database_sync_to_async
-from .models import Message
-from django.contrib.auth.models import User
 from rest_framework.authtoken.models import Token
 
 class LiveChatConsumer(AsyncWebsocketConsumer):

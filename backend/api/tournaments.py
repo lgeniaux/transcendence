@@ -22,6 +22,7 @@ def invite_participants_to_tournament(tournament, participants_usernames, sender
                 'sender_username': sender_username,
                 'tournament_name': tournament.name,
                 'tournament_id': tournament.id,
+                'invite_status': 'pending',
             }
             notification = send_notification(
                 recipient=participant, 
@@ -115,25 +116,5 @@ class CreateTournament(APIView):
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-#the user will pass the tournament id and his decision to accept or decline the invite
-class AcceptOrDeclineTournamentInviteSerializer(serializers.Serializer):
-    tournament_id = serializers.IntegerField()
-    accept = serializers.BooleanField()
-
-    def validate_tournament_id(self, tournament_id):
-        try:
-            tournament = Tournament.objects.get(id=tournament_id)
-            if self.context['request'].user not in tournament.participants.all():
-                raise serializers.ValidationError("You are not a participant in this tournament.")
-            return tournament
-        except Tournament.DoesNotExist:
-            raise serializers.ValidationError("Tournament does not exist.")
-
-    def validate_accept(self, accept):
-        if accept:
-            if self.context['request'].user in self.context['tournament'].participants.all():
-                raise serializers.ValidationError("You are already a participant in this tournament.")
-        return accept
-    
 
 
