@@ -2,7 +2,7 @@ from django.urls import path
 from .views import GameList, UserRegistrationView, UserLogin, UserLogout
 from .oauth import CodeForToken
 from .profile import UserProfile, ChangePassword
-from .social import AddOrDeleteFriend, GetUsersList, BlockOrUnblockUser, GetUserNotifications
+from .social import AddOrDeleteFriend, GetUsersList, BlockOrUnblockUser, GetUserNotifications, ManageInvitationNotification
 # import notifications.consumers
 from notifications import consumers 
 from .tournaments import CreateTournament
@@ -29,4 +29,6 @@ urlpatterns = [
    path('tournament/create-tournament/', CreateTournament.as_view(), name='create-tournament'),
 
    path('get-notifications/',  GetUserNotifications.as_view(), name='get-notifications'),
+   path('respond-to-invitation/', ManageInvitationNotification.as_view(), name='respond-to-invitation'),
+
 ]

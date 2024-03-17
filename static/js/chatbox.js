@@ -1,39 +1,41 @@
-let chatSocket = new WebSocket("ws://" + window.location.host + "/ws/chat/");
-
-//print message
-chatSocket.onmessage = function(e) {
-    const data = JSON.parse(e.data);
-    console.log(data);
-
-    if (data.type === 'chat_message') {
-        let messages = document.getElementById('messages');
-        messages.insertAdjacentHTML('beforeend', `<p>${data.sender}: ${data.message}</p>`);
+function initChatbox() {
+    const auth_token = localStorage.getItem('authToken');
+    const wsUrl = `ws://${window.location.host}/ws/chat/${auth_token}/`;
+    const webSocket = new WebSocket(wsUrl);
+    
+    webSocket.onmessage = function(event) {
+        const message = JSON.parse(event.data);
+        console.log('Live message:', message);
     };
-};
+    
+    webSocket.onopen = function() {
+        console.log('WebSocket opened');
+        attachFormSubmitListener(webSocket);
+    };
 
-// Send message
+    webSocket.onclose = function() {
+        console.log('WebSocket closed');
+    };
 
-let form = document.getElementById('form');
-form.addEventListener('submit', function(e) {
-    e.preventDefault();
-    let messageInput = document.getElementById('message');
-    let messageText = messageInput.value;
+    webSocket.onerror = function(event) {
+        console.error('WebSocket error:', event);
+    };
+}
 
-    if (messageText.startsWith("/msg")) {
-        let messageParts = messageText.split(" ");
-        if (messageParts.length >= 3) {
-            let nickname = messageParts[1];
-            let message = messageParts.slice(2).join(" ");
-            chatSocket.send(JSON.stringify({
-                'command': 'send_private_message',
-                'message': message,
-                'nickname': nickname
-            }));
+function attachFormSubmitListener(webSocket) {
+    const form = document.getElementById('form');
+    form.addEventListener('submit', function(event) {
+        event.preventDefault();
+        const messageInput = document.getElementById('message');
+        const message = messageInput.value.trim();
+        if (message && webSocket.readyState === WebSocket.OPEN) {
+            webSocket.send(JSON.stringify({ message: message }));
+            messageInput.value = ''; // Clear the input after sending
         }
-    } else {
-        chatSocket.send(JSON.stringify({
-            'message': messageText
-        }));
-    }
-    form.reset();
-});
+    });
+}
+
+// Add initChatbox to window.initPageFunctions to ensure it's called at the right time
+window.initPageFunctions = window.initPageFunctions || [];
+window.initPageFunctions.push(initChatbox);
+

@@ -13,7 +13,7 @@ def send_notification(recipient, message, notification_type, data=None):
         message=message,
         notification_type=notification_type,
         created_at=timezone.now(),
-        data=data 
+        data=data
     )
     send_notification_to_user(notification)
 

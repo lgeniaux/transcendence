@@ -4,6 +4,7 @@ from django.db import models
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.contrib.postgres.fields import ArrayField 
+from notifications.models import Notification
 
 # Louis: j'ai remove les attributs en doublons avec la classe de base de django
 class User(AbstractUser):
@@ -14,6 +15,7 @@ class User(AbstractUser):
     friendlist = models.ManyToManyField('self', blank=True)
     blocklist = models.ManyToManyField('self', blank=True)
     tournaments = models.ManyToManyField('Tournament', blank=True)
+    
     # Note de Louis: I didn't add a password field because it is already included in AbstractUser
 
 class Game(models.Model):
@@ -35,8 +37,8 @@ class Game(models.Model):
 class Tournament(models.Model):
     id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=50, unique=True)
-    creator = models.ForeignKey(User, on_delete=models.CASCADE, related_name='creator')
-    participants = models.ManyToManyField(User, related_name='participants')
+    creator = models.ForeignKey(User, on_delete=models.CASCADE, related_name='created_tournaments')
+    participants = models.ManyToManyField(User, through='TournamentInvitation', related_name='participating_tournaments')
     start_time = models.DateTimeField(auto_now_add=True)
     state = models.JSONField(default=dict)
     
@@ -48,11 +50,27 @@ class Tournament(models.Model):
         state['semi-finals'] = []
         state['finals'] = []
         state['winner'] = None
+        state['status'] = 'waiting for all participants to join'
         for i in range(0, len(participants), 2):
             state['quarter-finals'].append({'player1': participants[i].username, 'player2': participants[i+1].username, 'winner': None})
         self.state = state
         self.save()
 
+class TournamentInvitation(models.Model):
+    INVITATION_STATUS_CHOICES = [
+        ('pending', 'Pending'),
+        ('accepted', 'Accepted'),
+        ('declined', 'Declined'),
+    ]
+    
+    tournament = models.ForeignKey(Tournament, on_delete=models.CASCADE, related_name='invitations')
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='tournament_invitations')
+    status = models.CharField(max_length=20, choices=INVITATION_STATUS_CHOICES, default='pending')
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = ['tournament', 'user']
+        
 class LiveChat(models.Model):
     def __str__(self):
         return f"{self.user} : {self.message}"
@@ -61,8 +79,3 @@ class LiveChat(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     message = models.CharField(max_length=100)
     time = models.DateTimeField(auto_now_add=True)
-
-
-
-        
-    
