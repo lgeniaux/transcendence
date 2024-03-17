@@ -35,7 +35,7 @@ function attachFormSubmitListener(webSocket) {
     });
 }
 
+
 // Add initChatbox to window.initPageFunctions to ensure it's called at the right time
 window.initPageFunctions = window.initPageFunctions || [];
 window.initPageFunctions.push(initChatbox);
-

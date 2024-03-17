@@ -41,7 +41,7 @@ const routes = {
     '/tournament': {
         html: '/static/html/tournament.html',
         css: '/static/css/tournament.css',
-        js: '/static/js/tournament.js',
+        js: '/static/js/chatbox.js',
         requires_auth: true
     }
 };
@@ -161,19 +161,6 @@ function loadJS(urls, finalCallback) {
         };
         document.body.appendChild(script);
     });
-
-    // Load chatbox.js
-    const chatboxScript = document.createElement('script');
-    chatboxScript.src = '/static/js/chatbox.js';
-    chatboxScript.type = 'text/javascript';
-    chatboxScript.async = false;
-    chatboxScript.onload = () => {
-        loadedScripts++;
-        if (loadedScripts === urls.length + 1 && finalCallback) {
-            finalCallback(); // All scripts loaded
-        }
-    };
-    document.body.appendChild(chatboxScript);
 }
 
 function loadModule(url) {
