@@ -190,15 +190,16 @@ function loadNavbarAndChatbox()
 {
     const sidePanelUrl = '/static/html/navbar/sidepanel.html';
     const profileModalUrl = '/static/html/navbar/profilemodal.html';
-    const chatboxUrl = '/static/html/chatbox.html';
-
     loadContent(sidePanelUrl, '#sidePanel', 'barre de navigation');
     loadContent(profileModalUrl, '#profileModal', 'bouton de profil');
-    loadContent(chatboxUrl, '#chatBox', 'chatbox');
 
 	const chatboxContainer = document.getElementById('chatboxContainer');
+    const chatboxUrl = '/static/html/chatbox.html';
     const friendlistUrl = '/static/html/chatbox/friendlist.html';
 
+    loadContent(chatboxUrl, '#chatBox', 'chatbox');
     loadContent(friendlistUrl, '#chatboxContainer', 'friendlist');
     loadCSS('static/css/chat/friendlist.css');
+
+	fetchAllFriends();
 }
