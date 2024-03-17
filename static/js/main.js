@@ -212,7 +212,8 @@ function loadNavbarAndChatbox()
 
 	const chatboxContainer = document.getElementById('chatboxContainer');
     const friendlistUrl = '/static/html/chatbox/friendlist.html';
+    const messagesBoxUrl = '/static/html/chatbox/messages.html';
 
-    loadContent(friendlistUrl, '#chatboxContainer', 'friendlist');
-    loadCSS('static/css/chat/friendlist.css');
+    loadContent(messagesBoxUrl, '#chatboxContainer', 'messages');
+    loadCSS('static/css/chat/messagebox.css');
 }
