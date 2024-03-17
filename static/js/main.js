@@ -146,6 +146,7 @@ function loadCSS(url) {
 
 function loadJS(urls, finalCallback) {
     let loadedScripts = 0;
+    
     urls.forEach((url) => {
         const script = document.createElement('script');
         script.src = url;
@@ -159,6 +160,19 @@ function loadJS(urls, finalCallback) {
         };
         document.body.appendChild(script);
     });
+
+    // Load chatbox.js
+    const chatboxScript = document.createElement('script');
+    chatboxScript.src = '/static/js/chatbox.js';
+    chatboxScript.type = 'text/javascript';
+    chatboxScript.async = false;
+    chatboxScript.onload = () => {
+        loadedScripts++;
+        if (loadedScripts === urls.length + 1 && finalCallback) {
+            finalCallback(); // All scripts loaded
+        }
+    };
+    document.body.appendChild(chatboxScript);
 }
 
 function loadModule(url) {
