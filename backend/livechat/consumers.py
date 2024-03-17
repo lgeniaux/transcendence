@@ -11,9 +11,8 @@ class LiveChatConsumer(AsyncWebsocketConsumer):
         token_key = self.scope['url_route']['kwargs']['token']
         self.user = await self.get_user(token_key)
         if self.user:
-            group_name = f'user_{self.user.id}'
             await self.channel_layer.group_add(
-                group_name,
+                "global_chat",
                 self.channel_name
             )
             await self.accept()
@@ -29,35 +28,42 @@ class LiveChatConsumer(AsyncWebsocketConsumer):
             return None
     async def disconnect(self, close_code):
         # Votre logique de déconnexion
-        if self.user:
-            group_name = f'user_{self.user.id}'
-            await self.channel_layer.group_discard(
-                group_name,
-                self.channel_name
-            )
+        await self.channel_layer.group_discard(
+            "global_chat",
+            self.channel_name
+        )
     async def receive(self, text_data):
         # Votre logique de réception
         data = json.loads(text_data)
         message = data['message']
         await self.save_message(message)
-        await self.send_message(message)
-    
-    async def send_message(self, message):
-        # Votre logique d'envoi
+        print("%s: %s" % (self.user.username, message))
+        if (not message.startswith('/')):
+            await self.sendGlobalMessage({
+                "message": message,
+                "sender": self.user.username  # Add the sender username to the message data
+            })
+
+    async def sendGlobalMessage(self, event):
+        message = event['message']
+        sender = event['sender']  # Get the sender username from the event data
         await self.channel_layer.group_send(
-            f'user_{self.user.id}',
+            "global_chat",
             {
-                'type': 'chat_message',
-                'message': message
+                "type": "chat.message",
+                "message": message,
+                "sender": sender  # Pass the sender username to the chat.message event
             }
         )
+
     async def chat_message(self, event):
-        # Votre logique de réception
         message = event['message']
+        sender = event['sender']  # Get the sender username from the event data
         await self.send(text_data=json.dumps({
+            'sender': sender,  # Use the sender username in the response
             'message': message
         }))
-    
+
     @database_sync_to_async
     def save_message(self, message):
         Message.objects.create(

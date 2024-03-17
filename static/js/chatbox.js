@@ -6,6 +6,7 @@ function initChatbox() {
     webSocket.onmessage = function(event) {
         const message = JSON.parse(event.data);
         console.log('Live message:', message);
+        displayMessage(message.message);
     };
     
     webSocket.onopen = function() {
@@ -35,6 +36,11 @@ function attachFormSubmitListener(webSocket) {
     });
 }
 
+function displayMessage(message) {
+    const messageElement = document.createElement('div');
+    messageElement.innerText = message;
+    document.getElementById('messages').appendChild(messageElement);
+}
 
 // Add initChatbox to window.initPageFunctions to ensure it's called at the right time
 window.initPageFunctions = window.initPageFunctions || [];
