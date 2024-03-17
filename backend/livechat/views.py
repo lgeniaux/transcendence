@@ -28,14 +28,14 @@ class GetConversationMessages(APIView):
 	permission_classes = [IsAuthenticated]
 	authentication_classes = [TokenAuthentication]
 
-	def get(self, request, *args, **kwargs):
-		serializer = GetConversationMessagesSerializer(data=request.query_params, context={'request': request})
-		serializer.is_valid(raise_exception=True)
-		other_user = get_user_model().objects.get(username=serializer.validated_data['username'])
-		messages = PrivateMessage.objects.filter(sender=request.user, recipient=other_user) | PrivateMessage.objects.filter(sender=other_user, recipient=request.user)
-		if serializer.validated_data.get('message_max_count'):
-			messages = messages.order_by('-timestamp')[:serializer.validated_data['message_max_count']]
+	def post(self, request):
+		serializer = GetConversationMessagesSerializer(data=request.data, context={'request': request})
+		if serializer.is_valid():
+			other_user = get_user_model().objects.get(username=serializer.validated_data['username'])
+			messages = PrivateMessage.objects.filter(sender=request.user, recipient=other_user) | PrivateMessage.objects.filter(sender=other_user, recipient=request.user)
+			messages = messages.order_by('timestamp')
+			if 'message_max_count' in serializer.validated_data:
+				messages = messages[:serializer.validated_data['message_max_count']]
+			return Response([{'sender': message.sender.username, 'recipient': message.recipient.username, 'content': message.content, 'timestamp': message.timestamp} for message in messages])
 		else:
-			messages = messages.order_by('-timestamp')
-		serialized_messages = [{'sender': message.sender.username, 'recipient': message.recipient.username, 'content': message.content, 'timestamp': message.timestamp} for message in messages]
-		return Response(serialized_messages, status=status.HTTP_200_OK)
+			return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
