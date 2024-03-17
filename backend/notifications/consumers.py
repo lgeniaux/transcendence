@@ -3,7 +3,6 @@ import json
 from .models import Notification
 from channels.db import database_sync_to_async
 from rest_framework.authtoken.models import Token
-from django.contrib.auth import get_user_model
 from django.core.serializers.json import DjangoJSONEncoder
 
 class NotificationConsumer(AsyncWebsocketConsumer):

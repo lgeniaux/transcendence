@@ -31,7 +31,7 @@ class UserRegistrationView(APIView):
         serializer = UserRegistrationSerializer(data=request.data)
         if serializer.is_valid(): #Note de Louis: is_valid will check all functions that starts with validate_*
             user = serializer.save()
-            return Response({"message": "User successfully registered"}, status=status.HTTP_201_CREATED)
+            return Response({"detail": "Success", "message": "User successfully registered"}, status=status.HTTP_201_CREATED)
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
             

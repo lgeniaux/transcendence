@@ -1,7 +1,7 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
-from .models import Game
+from .models import Game, Tournament
 from .serializers import GameSerializer, UserRegistrationSerializer, UserLoginSerializer
 from django.contrib.auth import get_user_model
 from django.db import IntegrityError
