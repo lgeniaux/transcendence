@@ -41,7 +41,7 @@ const routes = {
     '/tournament': {
         html: '/static/html/tournament.html',
         css: '/static/css/tournament.css',
-        js: '/static/js/tournament.js',
+        js: '/static/js/chatbox.js',
         requires_auth: true
     }
 };
@@ -147,6 +147,7 @@ function loadCSS(url) {
 
 function loadJS(urls, finalCallback) {
     let loadedScripts = 0;
+    
     urls.forEach((url) => {
         const script = document.createElement('script');
         script.src = url;
@@ -196,10 +197,8 @@ function loadNavbarAndChatbox()
 	const chatboxContainer = document.getElementById('chatboxContainer');
     const chatboxUrl = '/static/html/chatbox.html';
     const friendlistUrl = '/static/html/chatbox/friendlist.html';
+    const messagesBoxUrl = '/static/html/chatbox/messages.html';
 
-    loadContent(chatboxUrl, '#chatBox', 'chatbox');
-    loadContent(friendlistUrl, '#chatboxContainer', 'friendlist');
-    loadCSS('static/css/chat/friendlist.css');
-
-	fetchAllFriends();
+    loadContent(messagesBoxUrl, '#chatboxContainer', 'messages');
+    loadCSS('static/css/chat/messagebox.css');
 }
