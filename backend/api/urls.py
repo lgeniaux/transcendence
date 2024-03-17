@@ -6,6 +6,8 @@ from .social import AddOrDeleteFriend, GetUsersList, BlockOrUnblockUser, GetUser
 # import notifications.consumers
 from notifications import consumers 
 from .tournaments import CreateTournament
+from livechat.views import GetConversationMessages
+
 
 app_name = 'api'
 
@@ -30,5 +32,10 @@ urlpatterns = [
 
    path('get-notifications/',  GetUserNotifications.as_view(), name='get-notifications'),
    path('respond-to-invitation/', ManageInvitationNotification.as_view(), name='respond-to-invitation'),
+
+   path('get-messages/', GetConversationMessages.as_view(), name='get-conversation-messages'),
+
+
+
 
 ]
