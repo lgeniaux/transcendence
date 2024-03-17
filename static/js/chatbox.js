@@ -44,57 +44,80 @@ window.initPageFunctions.push(initChatbox);
 
 
 // ----------- frontend ----------- //
-function fetchAllFriends() {
-    var auth_token = localStorage.getItem('authToken');
-    const headers = {
-        'Content-Type': 'application/json',
-        'X-CSRFToken': getCSRFToken()
-    };
-    if (auth_token && auth_token !== 'undefined' && auth_token !== 'null') {
-        headers['Authorization'] = 'Token ' + auth_token;
+async function loadFriendList()
+{
+    try
+	{
+        const users = await fetchAllFriends();
+        displayFriends(users);
     }
+	catch (error)
+	{
+        console.error('Une erreur s\'est produite lors du chargement des amis :', error);
+    }
+}
 
-    fetch('/api/get-users/', {
-        method: 'GET',
-        credentials: 'include',
-        headers: headers
-    })
-        .then(response => response.json())
-        .then(data => {
-            allUsers = data;
-            displayFriends(allUsers);
-        }).catch(error => console.error('Error:', error));
+function fetchAllFriends() {
+    return new Promise((resolve, reject) => {
+        var auth_token = localStorage.getItem('authToken');
+        const headers = {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': getCSRFToken()
+        };
+
+        if (auth_token && auth_token !== 'undefined' && auth_token !== 'null')
+            headers['Authorization'] = 'Token ' + auth_token;
+
+        fetch('/api/get-users/', {
+            method: 'GET',
+            credentials: 'include',
+            headers: headers
+        })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Erreur lors de la récupération des utilisateurs');
+                }
+                return response.json();
+            })
+            .then(data => {
+                resolve(data);
+            })
+            .catch(error => {
+                reject(error);
+            });
+    });
 }
 
 async function displayFriends(users)
 {
     try
 	{
-        // Récupération du contenu du fichier HTML contenant le modèle userTemplate
         const templateContent = await getFileContent('static/html/chatbox/friendlist.html');
         var usersList = document.getElementById('chatboxContainer');
 
         usersList.innerHTML = '';
 
-        // Vérification si le contenu du fichier template a été correctement chargé
         if (templateContent)
 		{
-            users.forEach(user => {
-                var actionContainerId = `actions-${user.username}`;
-                var avatar = user.avatar ? user.avatar : 'static/img/person-fill.svg'; // Avatar par défaut
-                var userHTML = templateContent
-                    .replace('{{avatar}}', avatar)
-                    .replace('{{username}}', user.username)
-                    .replace('{{actionButtons}}', getActionButtonsHtml(user))
-					.replace('{{actionContainerId}}', actionContainerId);
+            if (users.length === 0)
+                usersList.innerHTML = "<p>Aucun ami pour le moment</p>";
+            else
+			{
+                users.forEach(user => {
+                    var actionContainerId = `actions-${user.username}`;
+                    var avatar = user.avatar ? user.avatar : 'static/img/person-fill.svg';
+                    var userHTML = templateContent
+                        .replace('{{avatar}}', avatar)
+                        .replace('{{username}}', user.username)
+                        .replace('{{actionButtons}}', getChatboxActionButtonsHtml(user))
+                        .replace('{{actionContainerId}}', actionContainerId);
 
-                usersList.innerHTML += userHTML;
-            });
+                    usersList.innerHTML += userHTML;
+                });
+            }
         }
 		else
-		{
             console.error('Le chargement du fichier de modèle a échoué.');
-        }
     }
 	catch (error)
 	{
@@ -102,11 +125,10 @@ async function displayFriends(users)
     }
 }
 
-function getActionButtonsHtml(user)
+function getChatboxActionButtonsHtml(user)
 {
     let buttonsHtml = '';
 
-    // Génère les boutons en fonction de l'état de l'utilisateur
     if (user.status !== 'blocked')
 	{
         buttonsHtml += `
@@ -120,13 +142,17 @@ function getActionButtonsHtml(user)
         }
     }
 	else
-	{
         buttonsHtml += `<a class="dropdown-item warningBtn" onclick="unblockUser('{{username}}')">Débloquer</a>`;
-    }
 
-    // Afficher l'état de l'utilisateur dans la console
     console.log(`État de l'utilisateur ${user.username} : ${user.status}`);
 
     return buttonsHtml;
 }
 
+function sendMessage()
+{
+	const messagesUrl = '/static/html/chatbox/messages.html';
+    loadContent(messagesUrl, '#chatboxContainer', messages);
+
+	// To do...
+}

@@ -41,7 +41,7 @@ const routes = {
     '/tournament': {
         html: '/static/html/tournament.html',
         css: '/static/css/tournament.css',
-        js: '/static/js/chatbox.js',
+        js: '/static/js/tournament.js',
         requires_auth: true
     }
 };
@@ -189,16 +189,15 @@ function loadImportmap() {
 // Vincent: Fonctions pour charger la barre de navigation et la chatbox, à modifier pour qu'elle soient affichées en fonction du token
 function loadNavbarAndChatbox()
 {
+	// navbar
     const sidePanelUrl = '/static/html/navbar/sidepanel.html';
     const profileModalUrl = '/static/html/navbar/profilemodal.html';
     loadContent(sidePanelUrl, '#sidePanel', 'barre de navigation');
     loadContent(profileModalUrl, '#profileModal', 'bouton de profil');
 
+	// chatbox
 	const chatboxContainer = document.getElementById('chatboxContainer');
-    const chatboxUrl = '/static/html/chatbox.html';
-    const friendlistUrl = '/static/html/chatbox/friendlist.html';
-    const messagesBoxUrl = '/static/html/chatbox/messages.html';
-
-    loadContent(messagesBoxUrl, '#chatboxContainer', 'messages');
-    loadCSS('static/css/chat/messagebox.css');
+    const chatboxUrl = '/static/html/chatbox/chatbox.html';
+	loadContent(chatboxUrl, '#chatBox', 'chatbox');
+	loadFriendList();
 }

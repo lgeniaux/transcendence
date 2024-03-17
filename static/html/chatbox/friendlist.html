@@ -1,13 +1,14 @@
 <!-- User template -->
 
-<button class="user dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-    <div id="profilePicture"><img src="{{avatar}}" alt="pp" class="avatar"></div>
-    <div id="username">{{username}}</div>
-    <div class="dropdown-menu dropdown-menu-end action-buttons-container" id="{{actionContainerId}}">
-        <a class="dropdown-item" id="messages" onclick="sendMessage('{{username}}')">Envoyer un message</a>
-        <a class="dropdown-item" id="seeProfile" onclick="viewProfile('{{username}}')">Voir le profil</a>
-        <hr>
-		{{actionButtons}}
-    </div>
-</button>
-
+<div class="friendList">
+	<button class="user dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+		<div id="profilePicture"><img src="{{avatar}}" alt="pp" class="avatar"></div>
+		<div id="username">{{username}}</div>
+		<div class="dropdown-menu dropdown-menu-end action-buttons-container" id="{{actionContainerId}}">
+			<a class="dropdown-item" id="messages" onclick="sendMessage('{{username}}')">Envoyer un message</a>
+			<a class="dropdown-item" id="seeProfile" onclick="viewProfile('{{username}}')">Voir le profil</a>
+			<hr>
+			{{actionButtons}}
+		</div>
+	</button>
+</div>
