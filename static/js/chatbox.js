@@ -157,7 +157,7 @@ function getChatboxActionButtonsHtml(user)
 
 function sendMessage()
 {
-	const messagesUrl = '/static/html/chatbox/messages.html';
+	const messagesUrl = '/static/html/chatbox/messagebox.html';
     loadContent(messagesUrl, '#chatboxContainer', messages);
 
 	// To do...

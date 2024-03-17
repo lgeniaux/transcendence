@@ -1,17 +1,7 @@
 <div class="messageBox">
-    <div class="row">
-        <div class="col-12">
-            <div id="messages"><!-- Les messages sont affichés ici --></div>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-auto">
-            <form id="form" class="btn-group">
-                <input class="form-control" placeholder="Exprimez votre amour..." type="text" id="message" name="message" autocomplete="off">
-            </form>
-        </div>
-        <div class="col-auto">
-            <button class="btn btn-secondary sendBtn" type="submit">Envoyer</button>
-        </div>
-    </div>
+    <div id="messages" class="mb-2"><!-- Les messages seront affichés ici --></div>
+    <form id="form" class="message-form d-flex">
+        <input type="text" id="message" name="message" placeholder="Exprimez votre amour..." autocomplete="off" class="form-control mr-2">
+        <button type="submit" class="btn sendBtn">Envoyer</button>
+    </form>
 </div>
