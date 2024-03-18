@@ -20,7 +20,7 @@ function filterUsersByUsername(event) {
 }
 
 function fetchAllUsers() {
-    var auth_token = localStorage.getItem('authToken');
+    var auth_token = sessionStorage.getItem('authToken');
     const headers = {
         'Content-Type': 'application/json',
         'X-CSRFToken': getCSRFToken()
@@ -85,7 +85,7 @@ function getActionButtonsHtml(user) {
 }
 
 function blockUser(username) {
-    var auth_token = localStorage.getItem('authToken');
+    var auth_token = sessionStoragege.getItem('authToken');
     const headers = {
         'Content-Type': 'application/json',
         'X-CSRFToken': getCSRFToken(),
@@ -118,7 +118,7 @@ function blockUser(username) {
 }
 
 function unblockUser(username) {
-    var auth_token = localStorage.getItem('authToken');
+    var auth_token = sessionStorage.getItem('authToken');
     const headers = {
         'Content-Type': 'application/json',
         'X-CSRFToken': getCSRFToken(),
@@ -152,7 +152,7 @@ function unblockUser(username) {
 
 
 function deleteFriend(friendUsername) {
-    var auth_token = localStorage.getItem('authToken');
+    var auth_token = sessionStorage.getItem('authToken');
     const headers = {
         'Content-Type': 'application/json',
         'X-CSRFToken': getCSRFToken(),
@@ -184,7 +184,7 @@ function deleteFriend(friendUsername) {
 
 
 function addFriend(friendUsername) {
-    var auth_token = localStorage.getItem('authToken');
+    var auth_token = sessionStorage.getItem('authToken');
     const headers = {
         'Content-Type': 'application/json',
         'X-CSRFToken': getCSRFToken(),
@@ -240,7 +240,6 @@ function displayNotification(notification) {
         const notificationElement = document.createElement('div');
         notificationElement.className = 'notification';
         const dateString = new Date(notification.created_at).toLocaleString();
-
         notificationElement.innerHTML = `
             <div class="notification-card">
                 <div class="notification-header">
@@ -260,7 +259,7 @@ function displayNotification(notification) {
 
 
 function fetchAndDisplayStoredNotifications() {
-    const auth_token = localStorage.getItem('authToken');
+    const auth_token = sessionStorage.getItem('authToken');
     const headers = {
         'Content-Type': 'application/json',
         'Authorization': `Token ${auth_token}`
@@ -275,7 +274,9 @@ function fetchAndDisplayStoredNotifications() {
     .then(data => {
         // Assuming data is an array of notifications
         data.forEach(notification => {
-            displayNotification(notification);
+            if (notification.data['invite_status'] === 'pending') {
+                displayNotification(notification);
+            }
         });
     }).catch(error => console.error('Error fetching stored notifications:', error));
 }
@@ -283,7 +284,7 @@ function fetchAndDisplayStoredNotifications() {
 function initNotifications() {
     fetchAndDisplayStoredNotifications(); // Fetch and display stored notifications on page load
 
-    const auth_token = localStorage.getItem('authToken');
+    const auth_token = sessionStorage.getItem('authToken');
     const wsUrl = `ws://${window.location.host}/ws/notifications/${auth_token}/`;
     const webSocket = new WebSocket(wsUrl);
 

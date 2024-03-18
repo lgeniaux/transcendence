@@ -20,7 +20,7 @@ function initProfilePage() {
 }
 
 function fetchUserProfile() {
-    var auth_token = localStorage.getItem('authToken');
+    var auth_token = sessionStorage.getItem('authToken');
     const headers = {
         'Content-Type': 'application/json',
         'X-CSRFToken': getCSRFToken()
@@ -63,7 +63,7 @@ function updateProfile(event) {
     var username = document.querySelector('[name="username"]').value;
     var email = document.querySelector('[name="email"]').value;
     var avatar = document.querySelector('[name="avatar"]').value;
-    const auth_token = localStorage.getItem('authToken');
+    const auth_token = sessionStorage.getItem('authToken');
     const headers = {
         'Content-Type': 'application/json',
         'X-CSRFToken': getCSRFToken()

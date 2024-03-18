@@ -22,7 +22,7 @@ function redirectTo42OAuth() {
 
     const authUrl = `https://api.intra.42.fr/oauth/authorize?client_id=${clientId}&redirect_uri=${redirectUri}&response_type=${responseType}&scope=${scope}&state=${state}`;
 
-    localStorage.setItem('oauth_state', state);
+    sessionStorage.setItem('oauth_state', state);
 
     // Redirect to the 42 OAuth page
     window.location.href = authUrl;
@@ -32,7 +32,7 @@ function handle42OAuthCallback() {
     const urlParams = new URLSearchParams(window.location.search);
     const code = urlParams.get('code');
     const state = urlParams.get('state');
-    const storedState = localStorage.getItem('oauth_state');
+    const storedState = sessionStorage.getItem('oauth_state');
 
     if (state === storedState) {
         exchangeCodeForToken(code);
@@ -53,7 +53,7 @@ function exchangeCodeForToken(code) {
     .then(response => response.json())
     .then(data => {
         if (data.detail === "Success" && data.auth_token) {
-            localStorage.setItem('authToken', data.auth_token);
+            sessionStorage.setItem('authToken', data.auth_token);
             window.location.href = '/';
         }
         else {

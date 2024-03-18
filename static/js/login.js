@@ -16,7 +16,7 @@ function initLoginForm() {
 function loginUser() {
     var email = document.querySelector('[name="email"]').value;
     var password = document.querySelector('[name="password"]').value;
-    var auth_token = localStorage.getItem('authToken');
+    var auth_token = sessionStorage.getItem('authToken');
     var headers = {
         'Content-Type': 'application/json',
         'X-CSRFToken': getCSRFToken()
@@ -38,7 +38,7 @@ function loginUser() {
     .then(data => {
         if(data.detail === "Success") {
             const auth_token = data.auth_token;
-            localStorage.setItem('authToken', auth_token);
+            sessionStorage.setItem('authToken', auth_token);
             window.location.href = '/dashboard';
         }
         else {

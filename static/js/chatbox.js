@@ -1,5 +1,5 @@
 function initChatbox() {
-    const auth_token = localStorage.getItem('authToken');
+    const auth_token = sessionStorage.getItem('authToken');
     const wsUrl = `ws://${window.location.host}/ws/chat/${auth_token}/`;
     const webSocket = new WebSocket(wsUrl);
     

@@ -86,7 +86,7 @@ document.addEventListener('click', function (event) {
 });
 
 function isAuthenticated() {
-    const authToken = localStorage.getItem('authToken');
+    const authToken = sessionStorage.getItem('authToken');
     return authToken && authToken !== 'undefined' && authToken !== 'null';
 }
 
