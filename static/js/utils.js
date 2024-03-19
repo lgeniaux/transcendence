@@ -31,6 +31,31 @@ function getCSRFToken()
     return csrfToken;
 }
 
+function getAuthHeaders()
+{
+    return {
+        'Content-Type': 'application/json',
+        'X-CSRFToken': getCSRFToken(),
+        'Authorization': `Token ${localStorage.getItem('authToken')}`
+    };
+}
+
+function getRequestHeaders()
+{
+    const authToken = localStorage.getItem('authToken');
+    const headers = {
+        'Content-Type': 'application/json',
+        'X-CSRFToken': getCSRFToken() // Assurez-vous que getCSRFToken() est défini et retourne le token CSRF correct.
+    };
+
+    // Inclut l'en-tête d'Authorization seulement si authToken existe et est valide.
+    if (authToken && authToken !== 'undefined' && authToken !== 'null')
+        headers['Authorization'] = `Token ${authToken}`;
+
+    return headers;
+}
+
+
 async function getFileContent(url)
 {
     try
@@ -43,7 +68,6 @@ async function getFileContent(url)
         const html = await response.text(); // Extraire le texte de la réponse
 
         return html; // Retourner le contenu du fichier
-
     }
 	catch (error)
 	{

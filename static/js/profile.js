@@ -1,6 +1,5 @@
 // profile.js
 
-
 function initProfilePage() {
     fetchUserProfile();
     var profileForm = document.getElementById('profileForm');
@@ -19,7 +18,8 @@ function initProfilePage() {
     }
 }
 
-function fetchUserProfile() {
+function fetchUserProfile()
+{
     var auth_token = localStorage.getItem('authToken');
     const headers = {
         'Content-Type': 'application/json',
@@ -43,22 +43,8 @@ function fetchUserProfile() {
     .catch(error => console.error('Error:', error));
 }
 
-function getCSRFToken() {
-    let csrfToken = null;
-    if (document.cookie && document.cookie !== '') {
-        const cookies = document.cookie.split(';');
-        for (let i = 0; i < cookies.length; i++) {
-            const cookie = cookies[i].trim();
-            if (cookie.substring(0, 'csrftoken='.length) === 'csrftoken=') {
-                csrfToken = decodeURIComponent(cookie.substring('csrftoken='.length));
-                break;
-            }
-        }
-    }
-    return csrfToken;
-}
-
-function updateProfile(event) {
+function updateProfile(event)
+{
     event.preventDefault();
     var username = document.querySelector('[name="username"]').value;
     var email = document.querySelector('[name="email"]').value;
@@ -103,4 +89,4 @@ window.initPageFunctions = window.initPageFunctions || [];
 window.initPageFunctions.push(initProfilePage);
 
 
-export { getCSRFToken };
+// export { getCSRFToken };

@@ -13,7 +13,6 @@ function initChatbox() {
     
     webSocket.onopen = function() {
         console.log('WebSocket opened');
-        attachFormSubmitListener(webSocket);
     };
 
     webSocket.onclose = function() {
@@ -23,39 +22,72 @@ function initChatbox() {
     webSocket.onerror = function(event) {
         console.error('WebSocket error:', event);
     };
+
+    observeForm(webSocket); // Nouvelle fonction pour observer le formulaire
 }
 
-function attachFormSubmitListener(webSocket) {
+// Afin de ne pas rater le formulaire lorsqu'il est ajouté dynamiquement, nous allons observer le document entier.
+function observeForm(webSocket)
+{
+    const observer = new MutationObserver((mutations) => {
+        mutations.forEach((mutation) => {
+            if (mutation.type === "childList")
+			{
+                const form = document.getElementById('form');
+
+				// Si le formulaire est trouvé...
+                if (form)
+				{
+                    attachFormSubmitListener(webSocket); // On récupère le formulaire et on attache l'écouteur.
+                    observer.disconnect(); // Arrêtez d'observer une fois le formulaire trouvé et l'écouteur attaché.
+                }
+            }
+        });
+    });
+
+    const config = { childList: true, subtree: true };
+    observer.observe(document.body, config); // Commencez à observer le document entier.
+}
+
+
+function attachFormSubmitListener(webSocket)
+{
     const form = document.getElementById('form');
     form.addEventListener('submit', function(event) {
         event.preventDefault();
         const messageInput = document.getElementById('message');
         const message = messageInput.value.trim();
-        if (message && webSocket.readyState === WebSocket.OPEN) {
+
+        if (message && webSocket.readyState === WebSocket.OPEN)
+		{
             webSocket.send(JSON.stringify({ message: message }));
             messageInput.value = ''; // Clear the input after sending
         }
     });
 }
 
-function displayMessage(message) {
+function displayMessage(message)
+{
     const messageElement = document.createElement('div');
     messageElement.innerText = message;
     document.getElementById('messages').appendChild(messageElement);
 }
 
-// Add initChatbox to window.initPageFunctions to ensure it's called at the right time
-window.initPageFunctions = window.initPageFunctions || [];
-window.initPageFunctions.push(initChatbox);
-
-
 // ----------- frontend ----------- //
+
+document.addEventListener('userStatusChange', async (event) => {
+    const { username, newStatus } = event.detail;
+    // Vous pourriez avoir besoin de récupérer à nouveau les données de l'utilisateur ici
+    // Pour l'exemple, on va simplement rafraîchir toute la liste d'amis
+    await loadFriendList();
+});
+
 async function loadFriendList()
 {
     try
 	{
-        const users = await fetchAllFriends();
-        displayFriends(users);
+        const users = await cb_fetchAllUsers();
+        cb_displayUsers(users);
     }
 	catch (error)
 	{
@@ -63,7 +95,8 @@ async function loadFriendList()
     }
 }
 
-function fetchAllFriends() {
+function cb_fetchAllUsers()
+{
     return new Promise((resolve, reject) => {
         var auth_token = localStorage.getItem('authToken');
         const headers = {
@@ -94,7 +127,7 @@ function fetchAllFriends() {
     });
 }
 
-async function displayFriends(users)
+async function cb_displayUsers(users)
 {
     try
 	{
@@ -113,9 +146,9 @@ async function displayFriends(users)
                     var actionContainerId = `actions-${user.username}`;
                     var avatar = user.avatar ? user.avatar : 'static/img/person-fill.svg';
                     var userHTML = templateContent
-                        .replace('{{avatar}}', avatar)
-                        .replace('{{username}}', user.username)
-                        .replace('{{actionButtons}}', getChatboxActionButtonsHtml(user))
+						.replace('{{actionButtons}}', getChatboxActionButtonsHtml(user))
+						.replace('{{avatar}}', avatar)
+						.replace('{{username}}', user.username)
                         .replace('{{actionContainerId}}', actionContainerId);
 
                     usersList.innerHTML += userHTML;
@@ -135,22 +168,26 @@ function getChatboxActionButtonsHtml(user)
 {
     let buttonsHtml = '';
 
-    if (user.status !== 'blocked')
+    if (user.status === 'friends')
 	{
-        buttonsHtml += `
-            <a class="dropdown-item dangerBtn" onclick="blockUser('{{username}}')">Bloquer</a>
-            <a class="dropdown-item dangerBtn" onclick="deleteFriend('{{username}}')">Supprimer</a>
-        `;
-        if (user.status === 'friends')
-		{
-            buttonsHtml += `<a class="dropdown-item" onclick="viewProfile('{{username}}')">Voir le profil</a>`;
-            buttonsHtml += `<a class="dropdown-item" onclick="sendMessage('{{username}}')">Envoyer un message</a>`;
-        }
+        // Les utilisateurs qui sont déjà amis
+        buttonsHtml += `<a class="dropdown-item" id="messages" onclick="sendMessage('${user.username}')">Envoyer un message</a>`;
+        buttonsHtml += `<a class="dropdown-item" id="seeProfile" onclick="viewProfile('${user.username}')">Voir le profil</a>`;
+		buttonsHtml += `<hr>`
+        buttonsHtml += `<a class="dropdown-item dangerBtn" onclick="deleteFriend('${user.username}')">Supprimer</a>`;
+    }
+	else if
+	(user.status === 'blocked')
+	{
+        // Les utilisateurs qui sont bloqués
+        buttonsHtml += `<a class="dropdown-item dangerBtn" onclick="unblockUser('${user.username}')">Débloquer</a>`;
     }
 	else
-        buttonsHtml += `<a class="dropdown-item warningBtn" onclick="unblockUser('{{username}}')">Débloquer</a>`;
-
-    console.log(`État de l'utilisateur ${user.username} : ${user.status}`);
+	{
+        // Tous les autres cas, y compris ceux où l'utilisateur peut être ajouté en ami
+        buttonsHtml += `<a class="dropdown-item" onclick="addFriend('${user.username}')">Ajouter en ami</a>`;
+        buttonsHtml += `<a class="dropdown-item dangerBtn" onclick="blockUser('${user.username}')">Bloquer</a>`;
+    }
 
     return buttonsHtml;
 }
@@ -162,3 +199,7 @@ function sendMessage()
 
 	// To do...
 }
+
+// On ajoute initChatbox à window.initPageFunctions pour qu'il soit appelé lors de l'initialisation de la page.
+// window.initPageFunctions = window.initPageFunctions || [];
+// window.initPageFunctions.push(initChatbox);

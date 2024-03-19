@@ -22,6 +22,12 @@ function filterUsersByUsername(event)
     displayUsers(filteredUsers);
 }
 
+function emitUserStatusChangeEvent(username, newStatus)
+{
+    const event = new CustomEvent('userStatusChange', { detail: { username, newStatus } });
+    document.dispatchEvent(event);
+}
+
 function fetchAllUsers()
 {
     var auth_token = localStorage.getItem('authToken');
@@ -88,134 +94,108 @@ function getActionButtonsHtml(user)
     return buttonsHtml;
 }
 
-function blockUser(username)
+async function sendUserAction(username, action)
 {
-    var auth_token = localStorage.getItem('authToken');
-    const headers = {
-        'Content-Type': 'application/json',
-        'X-CSRFToken': getCSRFToken(),
-        'Authorization': 'Token ' + auth_token
+    const headers = getRequestHeaders();
+    const data = { username, action };
+
+    const endpointMap =
+	{
+        "block": 'api/block-user/',
+        "unblock": 'api/unblock-user/',
+        "add": 'api/add-friend/',
+        "delete": 'api/delete-friend/',
     };
 
-    const data = {
-        username: username,
-        action: "block"
-    };
+    try
+	{
+        const response = await fetch(endpointMap[action], {
+            method: 'POST',
+            credentials: 'include',
+            headers,
+            body: JSON.stringify(data)
+        });
 
-    fetch('api/block-user/', {
-        method: 'POST',
-        credentials: 'include',
-        headers: headers,
-
-        body: JSON.stringify(data)
-    })
-    .then(response => {
-        if (response.ok) {
-            document.getElementById(`status-${username}`).textContent = 'blocked';
-            document.getElementById(`actions-${username}`).innerHTML = getActionButtonsHtml({username: username, status: 'blocked'});
-            console.log("User blocked successfully");
-        } else {
-            console.error('Failed to block user');
-        }
+        if (!response.ok)
+            throw new Error(`Failed to ${action} user. Status: ${response.status}`);
+        
+        return await response.json(); // Assuming the API returns JSON.
     }
-    )
-    .catch(error => console.error('Error:', error));
-}
-
-function unblockUser(username)
-{
-    var auth_token = localStorage.getItem('authToken');
-    const headers = {
-        'Content-Type': 'application/json',
-        'X-CSRFToken': getCSRFToken(),
-        'Authorization': 'Token ' + auth_token
-    };
-
-    const data = {
-        username: username,
-        action: "unblock"
-    };
-
-    fetch('api/unblock-user/', {
-        method: 'POST',
-        credentials: 'include',
-        headers: headers,
-
-        body: JSON.stringify(data)
-    })
-    .then(response => {
-        if (response.ok) {
-            document.getElementById(`status-${username}`).textContent = 'not friends yet';
-            document.getElementById(`actions-${username}`).innerHTML = getActionButtonsHtml({username: username, status: 'None'});
-            console.log("User blocked successfully");
-        } else {
-            console.error('Failed to unblock user');
-        }
+	catch (error)
+	{
+        console.error(`Error performing ${action} on user: ${username}`, error);
+        throw error; // Re-throw to handle it outside or log it.
     }
-    )
-    .catch(error => console.error('Error:', error));
+}
+async function blockUser(username) {
+    try
+	{
+        await sendUserAction(username, 'block');
+        console.log("User blocked successfully");
+        updateUserInterface(username, 'blocked');
+        emitUserStatusChangeEvent(username, 'blocked');
+    }
+	catch (error)
+	{
+        console.error(`Error blocking user ${username}:`, error);
+    }
 }
 
-function addFriend(friendUsername)
+async function unblockUser(username)
 {
-    var auth_token = localStorage.getItem('authToken');
-    const headers = {
-        'Content-Type': 'application/json',
-        'X-CSRFToken': getCSRFToken(),
-        'Authorization': 'Token ' + auth_token
-    };
-
-    const data = {
-        username: friendUsername,
-        action: "add"
-    };
-
-    fetch('api/add-friend/', {
-        method: 'POST',
-        credentials: 'include',
-        headers: headers,
-        body: JSON.stringify(data)
-    })
-    .then(response => {
-        if (response.ok) {
-            document.getElementById(`status-${friendUsername}`).textContent = 'friends';
-            document.getElementById(`actions-${friendUsername}`).innerHTML = getActionButtonsHtml({username: friendUsername, status: 'friends'});
-            console.log("Friend added successfully");
-        } else {
-            console.error('Failed to add friend');
-        }
-    })
-    .catch(error => console.error('Error:', error));
+    try
+	{
+        await sendUserAction(username, 'unblock');
+        console.log("User unblocked successfully");
+        updateUserInterface(username, 'none');
+        emitUserStatusChangeEvent(username, 'none');
+    }
+	catch (error)
+	{
+        console.error(`Error unblocking user ${username}:`, error);
+    }
 }
 
-function deleteFriend(friendUsername)
+async function addFriend(username)
 {
-    var auth_token = localStorage.getItem('authToken');
-    const headers = {
-        'Content-Type': 'application/json',
-        'X-CSRFToken': getCSRFToken(),
-        'Authorization': 'Token ' + auth_token
+    try
+	{
+        await sendUserAction(username, 'add');
+        console.log("Friend added successfully");
+        updateUserInterface(username, 'friends');
+        emitUserStatusChangeEvent(username, 'friends');
+    }
+	catch (error)
+	{
+        console.error(`Error adding friend ${username}:`, error);
+    }
+}
+
+async function deleteFriend(username)
+{
+    try
+	{
+        await sendUserAction(username, 'delete');
+        console.log("Friend deleted successfully");
+        updateUserInterface(username, 'not friends yet');
+        emitUserStatusChangeEvent(username, 'not friends yet');
+    }
+	catch (error)
+	{
+        console.error(`Error deleting friend ${username}:`, error);
+    }
+}
+
+function updateUserInterface(username, newStatus)
+{
+    const statusTexts = {
+        'blocked': 'blocked',
+        'none': 'not friends yet',
+        'friends': 'friends',
+        'not friends yet': 'not friends yet'
     };
 
-    const data = {
-        username: friendUsername,
-        action: "delete"
-    };
-
-    fetch('api/delete-friend/', {
-        method: 'POST',
-        credentials: 'include',
-        headers: headers,
-        body: JSON.stringify(data)
-    })
-    .then(response => {
-        if (response.ok) {
-            document.getElementById(`status-${friendUsername}`).textContent = 'not friends yet';
-            document.getElementById(`actions-${friendUsername}`).innerHTML = getActionButtonsHtml({username: friendUsername, status: 'not friends yet'});
-            console.log("Friend deleted successfully");
-        } else {
-            console.error('Failed to delete friend');
-        }
-    })
-    .catch(error => console.error('Error:', error));
+    const statusText = statusTexts[newStatus] || 'unknown';
+    document.getElementById(`status-${username}`).textContent = statusText;
+    document.getElementById(`actions-${username}`).innerHTML = getActionButtonsHtml({username: username, status: newStatus});
 }

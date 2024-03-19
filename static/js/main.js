@@ -41,11 +41,9 @@ const routes = {
     '/tournament': {
         html: '/static/html/tournament.html',
         css: '/static/css/tournament.css',
-        js: '/static/js/tournament.js',
         requires_auth: true
     }
 };
-
 
 document.addEventListener('DOMContentLoaded', function () {
     navigate(window.location.pathname);
@@ -58,7 +56,6 @@ document.addEventListener('DOMContentLoaded', function () {
 	if (isAuthenticated())
 		loadNavbarAndChatbox();
 });
-
 
 function getRedirectPath(path) {
     if ((path === '/login' || path === '/register') && isAuthenticated()) {
@@ -199,5 +196,6 @@ function loadNavbarAndChatbox()
 	const chatboxContainer = document.getElementById('chatboxContainer');
     const chatboxUrl = '/static/html/chatbox/chatbox.html';
 	loadContent(chatboxUrl, '#chatBox', 'chatbox');
+	initChatbox();
 	loadFriendList();
 }
