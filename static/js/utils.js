@@ -42,7 +42,7 @@ function getAuthHeaders()
 
 function getRequestHeaders()
 {
-    const authToken = localStorage.getItem('authToken');
+    const authToken = sessionStorage.getItem('authToken');
     const headers = {
         'Content-Type': 'application/json',
         'X-CSRFToken': getCSRFToken() // Assurez-vous que getCSRFToken() est défini et retourne le token CSRF correct.
@@ -54,7 +54,6 @@ function getRequestHeaders()
 
     return headers;
 }
-
 
 async function getFileContent(url)
 {

@@ -30,7 +30,7 @@ function emitUserStatusChangeEvent(username, newStatus)
 
 function fetchAllUsers()
 {
-    var auth_token = localStorage.getItem('authToken');
+    var auth_token = sessionStorage.getItem('authToken');
     const headers = {
         'Content-Type': 'application/json',
         'X-CSRFToken': getCSRFToken()

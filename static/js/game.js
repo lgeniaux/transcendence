@@ -23,7 +23,7 @@ async function getUserInfos(auth_token = null) {
 	.catch(error => console.error('Error:', error));
 }
 
-const userInfos = await getUserInfos(localStorage.getItem('authToken')).catch(error => console.error('Error:', error));
+const userInfos = await getUserInfos(sessionStorage.getItem('authToken')).catch(error => console.error('Error:', error));
 if (userInfos && userInfos.username) {
     let properties = await createGame();
     // TODO: wait for user to press the start button

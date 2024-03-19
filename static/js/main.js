@@ -83,7 +83,7 @@ document.addEventListener('click', function (event) {
 });
 
 function isAuthenticated() {
-    const authToken = localStorage.getItem('authToken');
+    const authToken = sessionStorage.getItem('authToken');
     return authToken && authToken !== 'undefined' && authToken !== 'null';
 }
 
@@ -191,6 +191,7 @@ function loadNavbarAndChatbox()
     const profileModalUrl = '/static/html/navbar/profilemodal.html';
     loadContent(sidePanelUrl, '#sidePanel', 'barre de navigation');
     loadContent(profileModalUrl, '#profileModal', 'bouton de profil');
+	loadUsernameIntoModal();
 
 	// chatbox
 	const chatboxContainer = document.getElementById('chatboxContainer');

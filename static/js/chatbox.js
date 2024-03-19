@@ -1,7 +1,7 @@
 // ----------- backend ----------- //
 
 function initChatbox() {
-    const auth_token = localStorage.getItem('authToken');
+    const auth_token = sessionStorage.getItem('authToken');
     const wsUrl = `ws://${window.location.host}/ws/chat/${auth_token}/`;
     const webSocket = new WebSocket(wsUrl);
     
@@ -98,19 +98,10 @@ async function loadFriendList()
 function cb_fetchAllUsers()
 {
     return new Promise((resolve, reject) => {
-        var auth_token = localStorage.getItem('authToken');
-        const headers = {
-            'Content-Type': 'application/json',
-            'X-CSRFToken': getCSRFToken()
-        };
-
-        if (auth_token && auth_token !== 'undefined' && auth_token !== 'null')
-            headers['Authorization'] = 'Token ' + auth_token;
-
-        fetch('/api/get-users/', {
+			fetch('/api/get-users/', {
             method: 'GET',
             credentials: 'include',
-            headers: headers
+            headers: getRequestHeaders()
         })
             .then(response => {
                 if (!response.ok) {
