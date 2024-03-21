@@ -2,11 +2,11 @@
 
 // Function to initialize the login form
 function initLoginForm() {
-    console.log("Before attempting to find loginForm");
-    var loginForm = document.getElementById('loginForm');
-    console.log("After attempting to find loginForm:", loginForm);
-    if (loginForm) {
-        loginForm.addEventListener('submit', function (event) {
+    console.log("Before attempting to find loginBtn");
+    var loginBtn = document.getElementById('loginBtn');
+    console.log("After attempting to find loginBtn:", loginBtn);
+    if (loginBtn) {
+        loginBtn.addEventListener('click', function (event) {
             event.preventDefault();
             loginUser();
         });
