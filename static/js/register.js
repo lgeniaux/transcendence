@@ -13,9 +13,9 @@ function checkPassword() {
 
 function initRegisterForm() {
     console.log("Initializing register form");
-    var registerForm = document.getElementById('registerForm');
-    if (registerForm) {
-        registerForm.addEventListener('submit', function (event) {
+    var registerBtn = document.getElementById('registerBtn');
+    if (registerBtn) {
+        registerBtn.addEventListener('click', function (event) {
             event.preventDefault(); // Prevent default form submission
             if (!checkPassword()) {
                 return;

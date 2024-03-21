@@ -5,6 +5,10 @@
 	right: 0;
 	width: 400px;
 	margin-right: 40px;
+    /* make the content scrollable when it overflows */
+    max-height: 400px;
+    overflow-y: auto;
+
 }
 
 .chatbox .btn-group-vertical
@@ -28,6 +32,9 @@
     position: relative; /* Nécessaire pour le positionnement des enfants absolus */
     overflow: hidden;
 }
+
+
+
 
 .chatbox .collapseBtn::before
 {
