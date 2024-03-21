@@ -1,36 +1,30 @@
 .profile-container
 {
-	width: 1600px;
-	color: white;
-	background: linear-gradient(to right, rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0));
-	margin-top: 50px;
-	margin-bottom: 50px;
-	border-radius: 20px;
-	padding: 1px;
+    width: 100%;
+    color: white;
+    margin-top: 2rem; /* Réduit à 2rem */
+    margin-bottom: 2rem; /* Réduit à 2rem */
+    border-radius: 20px;
+    padding: 1rem; /* Ajusté à 1rem pour l'uniformité */
+    overflow-x: hidden; /* Pour éviter le débordement horizontal */
 }
 
 .profile-container h2
 {
-	color: white;
-	font-size: 40px;
-	font-weight: bold;
-	margin-bottom: 30px;
-	font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    color: white;
+    font-size: 2.5rem;
+    font-weight: bold;
+    margin-bottom: 1.5rem; /* Légèrement réduit */
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
 }
 
-.profile-container p
-{
-	font-size: 20px;
-	font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
-	margin-left: 6px;
-}
-
-.profile-container .form-control
-{
-	margin: 6px;
+.profile-container p, .profile-container .form-control, .profile-container button {
+    font-size: 1rem; /* Uniformise la taille de la police pour la lisibilité */
+    width: 100%; /* Assure que les éléments s'adaptent à leur conteneur */
+    margin: 0.5rem 0; /* Ajuste les marges pour un espacement uniforme */
 }
 
 .profile-container .row
 {
-	margin: 80px;
+    margin: 2rem 0; /* Réduit et unifié les marges des rows */
 }

@@ -41,11 +41,9 @@ const routes = {
     '/tournament': {
         html: '/static/html/tournament.html',
         css: '/static/css/tournament.css',
-        js: '/static/js/chatbox.js',
         requires_auth: true
     }
 };
-
 
 document.addEventListener('DOMContentLoaded', function () {
     navigate(window.location.pathname);
@@ -58,7 +56,6 @@ document.addEventListener('DOMContentLoaded', function () {
 	if (isAuthenticated())
 		loadNavbarAndChatbox();
 });
-
 
 function getRedirectPath(path) {
     if ((path === '/login' || path === '/register') && isAuthenticated()) {
@@ -189,18 +186,17 @@ function loadImportmap() {
 // Vincent: Fonctions pour charger la barre de navigation et la chatbox, à modifier pour qu'elle soient affichées en fonction du token
 function loadNavbarAndChatbox()
 {
+	// navbar
     const sidePanelUrl = '/static/html/navbar/sidepanel.html';
     const profileModalUrl = '/static/html/navbar/profilemodal.html';
-    const chatboxUrl = '/static/html/chatbox.html';
-
     loadContent(sidePanelUrl, '#sidePanel', 'barre de navigation');
     loadContent(profileModalUrl, '#profileModal', 'bouton de profil');
-    loadContent(chatboxUrl, '#chatBox', 'chatbox');
+	loadUsernameIntoModal();
 
+	// chatbox
 	const chatboxContainer = document.getElementById('chatboxContainer');
-    const friendlistUrl = '/static/html/chatbox/friendlist.html';
-    const messagesBoxUrl = '/static/html/chatbox/messages.html';
-
-    loadContent(messagesBoxUrl, '#chatboxContainer', 'messages');
-    loadCSS('static/css/chat/messagebox.css');
+    const chatboxUrl = '/static/html/chatbox/chatbox.html';
+	loadContent(chatboxUrl, '#chatBox', 'chatbox');
+	initChatbox();
+	loadFriendList();
 }

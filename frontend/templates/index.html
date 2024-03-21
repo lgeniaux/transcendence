@@ -7,36 +7,27 @@
 
     <link rel="stylesheet" type="text/css" href="static/css/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="static/css/main.css">
-	<link rel="stylesheet" type="text/css" href="static/css/navbar/header.css">
+	<link rel="stylesheet" type="text/css" href="static/css/navbar/navbar.css">
     <link rel="stylesheet" type="text/css" href="static/css/navbar/sidepanel.css">
     <link rel="stylesheet" type="text/css" href="static/css/navbar/profilemodal.css">
-    <link rel="stylesheet" type="text/css" href="static/css/chatbox.css">
+    <link rel="stylesheet" type="text/css" href="static/css/chatbox/friendlist.css">
+	<link rel="stylesheet" type="text/css" href="static/css/chatbox/messagebox.css">
+    <link rel="stylesheet" type="text/css" href="static/css/chatbox/chatbox.css">
 
 </head>
 <body>
 
-    <!-- Header -->
-    <header class="header navbar">
-		<div id="sidePanel"></div>
-		<h1 data-spa="/dashboard" type="button" class="homeBtn">Born2Pong</h1>
-		<div id="profileModal"></div>
-    </header>
-
     <!-- Container principal -->
     <div class="container-fluid background-container">
 
-        <!-- Contenu principal -->
-        <div class="row">
-            <div class="col-4">
-                <!-- Conteneur en haut à gauche -->
-            </div>
-            <div class="col-4">
-                <!-- Conteneur au milieu -->
-            </div>
-            <div class="col-4">
-                <!-- Conteneur en bas à droite -->
-            </div>
-        </div>
+		<!-- Header -->
+		<div class="row">
+			<header class="header navbar">
+				<div id="sidePanel"></div>
+				<h1 data-spa="/dashboard" type="button" class="homeBtn">Born2Pong</h1>
+				<div id="profileModal"></div>
+			</header>
+		</div>
 
         <div class="row">
             <div class="col-12">
@@ -57,6 +48,8 @@
 
     <script src="/static/js/bootstrap.bundle.min.js"></script>
 	<script src="/static/js/utils.js"></script>
+	<script src="/static/js/friendManagement.js"></script>
+	<script src="/static/js/navbar.js"></script>
     <script src="/static/js/chatbox.js"></script>
     <script src="/static/js/main.js"></script>
 

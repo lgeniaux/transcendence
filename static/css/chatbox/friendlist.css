@@ -14,7 +14,7 @@
 {
 	height: 100%;
 	padding: 10px;
-	border-radius: 8px;
+	border-radius: 0px 0px 8px 8px;
 	background-color: #FFB800;
 }
 
@@ -45,7 +45,6 @@
 {
     display: flex;
     align-items: center;
-    /* justify-content: center; */
 	width: 100%
 }
 

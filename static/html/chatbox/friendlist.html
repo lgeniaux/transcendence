@@ -1,17 +1,11 @@
 <!-- User template -->
+
 <div class="friendList">
-
 	<button class="user dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-		<div id="profilePicture"><img src="static/img/person-fill.svg" alt="profile picture"><!-- image à remplacer par la photo de profil --></div>
-		<div id="username">Undefined</div>
-
-		<div class="dropdown-menu dropdown-menu-end">
-			<a class="dropdown-item" id="messages">Envoyer un message</a>
-			<a class="dropdown-item" id="seeProfile">Voir le profil</a>
-			<hr>
-			<a class="dropdown-item dangerBtn" id="blockUser">Bloquer</a>
-			<a class="dropdown-item dangerBtn" id="deleteFriend">Supprimer</a>
+		<div id="profilePicture"><img src="{{avatar}}" alt="pp" class="avatar"></div>
+		<div>{{username}}</div>
+		<div class="dropdown-menu dropdown-menu-end action-buttons-container" id="{{actionContainerId}}">
+			{{actionButtons}}
 		</div>
 	</button>
-
 </div>

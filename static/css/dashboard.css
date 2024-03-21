@@ -1,15 +1,17 @@
-.dashboard-container {
+.dashboard-container
+{
     width: 100%;
-    height: calc(100vh - 50px);
+    height: 800px;
     padding: 20px;
     display: flex; 
     flex-direction: row;
     justify-content: space-between;
     color: #FFFFFF;
-    gap: 20px
+    gap: 20px;
 }
 
-.dashboard-section {
+.dashboard-section
+{
     background-color: #432100;
     border: 2px solid #FFB800;
     border-radius: 16px;
@@ -20,11 +22,11 @@
     flex-direction: column;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     overflow-y: auto;
-    height: calc(100vh - 120px); 
     margin-bottom: 20px;
 }
 
-.dashboard-section h2 {
+.dashboard-section h2
+{
     font-family: 'Fugaz One', sans-serif;
     color: #FFB800;
     text-align: center;
@@ -32,11 +34,13 @@
     font-size: 1.5rem;
 }
 
-.dashboard-section:last-child {
+.dashboard-section:last-child
+{
     margin-right: 0;
 }
 
-.notification, .tournament, .friend {
+.notification, .tournament, .friend
+{
     background-color: #5a2b00;
     border: 1px solid #FFB800;
     margin-bottom: 10px;
@@ -45,7 +49,8 @@
     margin-bottom: 15px;
 }
 
-.btn {
+.dashboard-section .btn
+{
     color: #FFFFFF;
     background-color: #FFB800;
     border: none;
@@ -59,18 +64,19 @@
     transition: background-color 0.3s; 
 }
 
-.btn:hover {
+.dashboard-section .btn:hover {
     background-color: #e6a700;
     opacity: 0.9;
 }
 
-.btn.accept { background-color: #28a745; }
-.btn.deny { background-color: #dc3545; }
-.btn.join { background-color: #007bff; }
-.btn.add-friend { background-color: #ffc107; }
+.dashboard-section .btn.accept { background-color: #28a745; }
+.dashboard-section .btn.deny { background-color: #dc3545; }
+.dashboard-section .btn.join { background-color: #007bff; }
+.dashboard-section .btn.add-friend { background-color: #ffc107; }
 
 
-#userSearch {
+#userSearch
+{
     width: calc(100% - 40px);
     padding: 10px;
     margin-bottom: 10px;
@@ -82,15 +88,19 @@
     padding: 12px 20px; 
 }
 
-#userSearch::placeholder {
+#userSearch::placeholder
+{
     color: #FFB800;
 }
 
-@media (max-width: 768px) {
-    .dashboard-container {
+@media (max-width: 768px)
+{
+    .dashboard-container
+	{
         flex-direction: column;
     }
-    .dashboard-section {
+    .dashboard-section
+	{
         width: 90%;
         margin: 0 auto 20px;
     }
