@@ -46,15 +46,12 @@ class Tournament(models.Model):
     
     def initialize_state(self):
         # we know the number of participants can only be 4, 6 or 8, so we can initialize the state accordingly (quarter-finals, semi-finals, finals etc )
-        participants = self.participants.all()
         state = {}
         state['quarter-finals'] = []
         state['semi-finals'] = []
         state['finals'] = []
         state['winner'] = None
         state['status'] = 'waiting for all participants to join'
-        for i in range(0, len(participants), 2):
-            state['quarter-finals'].append({'player1': participants[i].username, 'player2': participants[i+1].username, 'winner': None})
         self.state = state
         self.save()
 

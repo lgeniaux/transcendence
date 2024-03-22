@@ -43,7 +43,10 @@ function handle42OAuthCallback()
     const storedState = sessionStorage.getItem('oauth_state');
 
     if (state === storedState)
+    {
+        sessionStorage.removeItem('oauth_state');
         exchangeCodeForToken(code);
+    } 
     else
         console.error('State mismatch');
 }
