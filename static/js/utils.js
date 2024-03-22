@@ -86,10 +86,19 @@ async function getFileContent(url)
 function initLogoutButton()
 {
     const logoutButton = document.getElementById('logoutBtn');
+    const sidePanelLogoutButton = document.getElementById('sidePanelLogoutButton');
 
     if (logoutButton)
     {
         logoutButton.addEventListener('click', function() {
+            sessionStorage.removeItem('authToken'); // Supprime le token d'authentification
+            window.location.href = '/login'; // Redirige l'utilisateur vers la page de connexion
+        });
+    }
+
+    if (sidePanelLogoutButton)
+    {
+        sidePanelLogoutButton.addEventListener('click', function() {
             sessionStorage.removeItem('authToken'); // Supprime le token d'authentification
             window.location.href = '/login'; // Redirige l'utilisateur vers la page de connexion
         });
