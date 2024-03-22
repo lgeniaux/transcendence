@@ -6,6 +6,7 @@ if (!window.allUsers) {
 function initFriendsSearch()
 {
     var input = document.getElementById('userSearch');
+
     if(input)
         input.addEventListener('input', filterUsersByUsername);
 

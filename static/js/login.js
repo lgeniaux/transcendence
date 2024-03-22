@@ -1,11 +1,12 @@
 // login.js
 
 // Function to initialize the login form
-function initLoginForm() {
-    console.log("Before attempting to find loginBtn");
+function initLoginButton()
+{
     var loginBtn = document.getElementById('loginBtn');
-    console.log("After attempting to find loginBtn:", loginBtn);
-    if (loginBtn) {
+
+    if (loginBtn)
+    {
         loginBtn.addEventListener('click', function (event) {
             event.preventDefault();
             loginUser();
@@ -13,61 +14,73 @@ function initLoginForm() {
     }
 }
 
-function loginUser() {
-    var email = document.querySelector('[name="email"]').value;
-    var password = document.querySelector('[name="password"]').value;
-    var auth_token = sessionStorage.getItem('authToken');
-    var headers = {
-        'Content-Type': 'application/json',
-        'X-CSRFToken': getCSRFToken()
-    };
+async function loginUser()
+{
+    const email = document.querySelector('[name="email"]').value;
+    const password = document.querySelector('[name="password"]').value;
 
-    if (auth_token && auth_token !== 'undefined' && auth_token !== 'null') {
-        headers['Authorization'] = 'Token ' + auth_token;
-    }
-    // Remove
     document.getElementById('loginAlert').innerHTML = '';
 
-    fetch('/api/login-user/', {
-        method: 'POST',
-        credentials: 'include',
-        headers: headers,
-        body: JSON.stringify({ email: email, password: password })
-    })
-    .then(response => response.json())
-    .then(data => {
-        if(data.detail === "Success") {
+    try
+    {
+        const response = await fetch('/api/login-user/', {
+            method: 'POST',
+            credentials: 'include',
+            headers: getRequestHeaders(),
+            body: JSON.stringify({ email: email, password: password })
+        });
+
+        const data = await response.json();
+
+        if(data.detail === "Success")
+        {
             const auth_token = data.auth_token;
             sessionStorage.setItem('authToken', auth_token);
             window.location.href = '/dashboard';
         }
-        else {
+        else
             showLoginError(data.detail);
-        }
-    })
-    .catch(error => console.error('Error:', error));
-}
 
-function showLoginError(message) {
-    const alertHTML = `<div class="alert alert-danger" role="alert">${message}</div>`;
-    document.getElementById('loginAlert').innerHTML = alertHTML;
-}
-
-function getCSRFToken() {
-    let csrfToken = null;
-    if (document.cookie && document.cookie !== '') {
-        const cookies = document.cookie.split(';');
-        for (let i = 0; i < cookies.length; i++) {
-            const cookie = cookies[i].trim();
-            if (cookie.substring(0, 'csrftoken='.length) === 'csrftoken=') {
-                csrfToken = decodeURIComponent(cookie.substring('csrftoken='.length));
-                break;
-            }
-        }
+    } 
+    catch (error)
+    {
+        console.error('Error:', error);
     }
-    return csrfToken;
 }
+
+async function logoutUser()
+{
+    try
+    {
+        const response = await fetch('/api/logout-user/', {
+            method: 'POST',
+            credentials: 'include', // Nécessaire pour les requêtes affectant l'état de session
+            headers: getRequestHeaders()
+        });
+
+        if (response.ok)
+        {
+            sessionStorage.removeItem('authToken');
+            window.location.href = '/login';
+        }
+        else
+            console.error('Failed to logout.');
+
+    }
+    catch (error)
+    {
+        console.error('Error:', error);
+    }
+}
+
+function showLoginError(message)
+{
+    const loginAlert = document.getElementById('loginAlert');
+
+    if (loginAlert)
+        loginAlert.innerHTML = message;
+}
+
 
 window.initPageFunctions = window.initPageFunctions || [];
-window.initPageFunctions.push(initLoginForm);
-    
+window.initPageFunctions.push(initLoginButton);

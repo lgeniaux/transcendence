@@ -54,24 +54,32 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Vincent: Pour charger la barre de navigation
 	if (isAuthenticated())
-		loadNavbarAndChatbox();
+    {
+        loadNavbar();
+		loadChatbox();
+    }
 });
 
-function getRedirectPath(path) {
-    if ((path === '/login' || path === '/register') && isAuthenticated()) {
+function getRedirectPath(path)
+{
+    if ((path === '/login' || path === '/register') && isAuthenticated())
+    {
         console.log('Authenticated user. Redirecting to dashboard...');
         return '/dashboard'; // Return the home path for redirection
     }
-    if (routes[path].requires_auth && !isAuthenticated()) {
+    if (routes[path].requires_auth && !isAuthenticated())
+    {
         console.log('Redirecting to login due to authentication requirement');
         return '/'; // Redirect to home
     }
+
     return path;
 }
 
 // navigate to the page if a button is clicked, the location of the navigation is stored in the data-spa. example: <button data-spa="/login">Login</button>
 document.addEventListener('click', function (event) {
-    if (event.target.dataset.spa) {
+    if (event.target.dataset.spa)
+    {
         event.preventDefault();
 
         let originalPath = event.target.dataset.spa;
@@ -82,18 +90,22 @@ document.addEventListener('click', function (event) {
     }
 });
 
-function isAuthenticated() {
+function isAuthenticated()
+{
     const authToken = sessionStorage.getItem('authToken');
+
     return authToken && authToken !== 'undefined' && authToken !== 'null';
 }
 
-function navigate(path) {
+function navigate(path)
+{
     window.initPageFunctions = [];
-    // Louis: On  redirecte l'utilisateur vers la page d'accueil si il est déjà connecté
+
     let finalPath = getRedirectPath(path);
 
     const route = routes[finalPath];
-    if (!route) {
+    if (!route)
+    {
         console.error('Route not found');
         return;
     }
@@ -102,17 +114,18 @@ function navigate(path) {
         loadHTML(route.html);
     if (route.css)
         loadCSS(route.css);
-    if (route.js) {
+    if (route.js)
+    {
         const scripts = Array.isArray(route.js) ? route.js : [route.js];
         // on delete toutes les balises script avec le type: text/javascript
         document.querySelectorAll('script[type="text/javascript"]').forEach(script => script.remove());
         loadJS(scripts, function () {
             // Execute all init functions
-            if (Array.isArray(window.initPageFunctions)) {
+            if (Array.isArray(window.initPageFunctions))
+            {
                 window.initPageFunctions.forEach(function (initFunction) {
-                    if (typeof initFunction === 'function') {
+                    if (typeof initFunction === 'function')
                         initFunction();
-                    }
                 });
             }
         });
@@ -124,25 +137,38 @@ function navigate(path) {
         loadModule(route.module);
 }
 
-function loadHTML(url) {
-    fetch(url)
-        .then(response => response.text())
-        .then(html => {
-            document.querySelector('#app').innerHTML = html;
-        })
-        .catch(error => console.error('Error loading the HTML file:', error));
+async function loadHTML(url)
+{
+    try
+    {
+        const response = await fetch(url);
+
+        if (!response.ok)
+            throw new Error(`Erreur HTTP: ${response.status}`);
+
+        const html = await response.text();
+        document.querySelector('#app').innerHTML = html;
+    }
+    catch (error)
+    {
+        console.error('Error loading the HTML file:', error);
+    }
 }
 
-function loadCSS(url) {
+
+function loadCSS(url)
+{
     const head = document.getElementsByTagName('head')[0];
     const link = document.createElement('link');
+
     link.rel = 'stylesheet';
     link.type = 'text/css';
     link.href = url;
     head.appendChild(link);
 }
 
-function loadJS(urls, finalCallback) {
+function loadJS(urls, finalCallback)
+{
     let loadedScripts = 0;
     
     urls.forEach((url) => {
@@ -152,15 +178,15 @@ function loadJS(urls, finalCallback) {
         script.async = false;
         script.onload = () => {
             loadedScripts++;
-            if (loadedScripts === urls.length && finalCallback) {
-                finalCallback(); // All scripts loaded
-            }
+            if (loadedScripts === urls.length && finalCallback)
+                finalCallback();
         };
         document.body.appendChild(script);
     });
 }
 
-function loadModule(url) {
+function loadModule(url)
+{
     const module = document.createElement('script');
     module.src = url;
     module.type = 'module';
@@ -168,9 +194,11 @@ function loadModule(url) {
     document.body.appendChild(module);
 }
 
-function loadImportmap() {
+function loadImportmap()
+{
     if (document.querySelector('script[type="importmap"]'))
         return;
+
     const importmap = document.createElement('script');
     importmap.type = 'importmap';
     importmap.innerHTML = JSON.stringify({
@@ -181,22 +209,4 @@ function loadImportmap() {
     });
     importmap.async = false;
     document.head.appendChild(importmap);
-}
-
-// Vincent: Fonctions pour charger la barre de navigation et la chatbox, à modifier pour qu'elle soient affichées en fonction du token
-function loadNavbarAndChatbox()
-{
-	// navbar
-    const sidePanelUrl = '/static/html/navbar/sidepanel.html';
-    const profileModalUrl = '/static/html/navbar/profilemodal.html';
-    loadContent(sidePanelUrl, '#sidePanel', 'barre de navigation');
-    loadContent(profileModalUrl, '#profileModal', 'bouton de profil');
-	loadUsernameIntoModal();
-
-	// chatbox
-	const chatboxContainer = document.getElementById('chatboxContainer');
-    const chatboxUrl = '/static/html/chatbox/chatbox.html';
-	loadContent(chatboxUrl, '#chatBox', 'chatbox');
-	initChatbox();
-	loadFriendList();
 }

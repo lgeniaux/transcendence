@@ -1,3 +1,19 @@
+async function loadNavbar()
+{
+    try
+    {
+        // Charger les composants spécifiques de la navbar
+        await loadContent('/static/html/navbar/sidepanel.html', '#sidePanel', 'barre de navigation');
+        await loadContent('/static/html/navbar/profilemodal.html', '#profileModal', 'bouton de profil');
+        loadUsernameIntoModal();
+        initLogoutButton();
+    }
+    catch (error)
+    {
+        console.error('Erreur lors du chargement de la navbar :', error);
+    }
+}
+
 async function loadUsernameIntoModal()
 {
     try
