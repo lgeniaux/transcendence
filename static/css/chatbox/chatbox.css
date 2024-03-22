@@ -5,9 +5,6 @@
 	right: 0;
 	width: 400px;
 	margin-right: 40px;
-    /* make the content scrollable when it overflows */
-    max-height: 400px;
-    overflow-y: auto;
 
 }
 

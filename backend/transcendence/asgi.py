@@ -14,10 +14,11 @@ from channels.routing import ProtocolTypeRouter, URLRouter
 from channels.auth import AuthMiddlewareStack
 import livechat.routing
 import notifications.routing
+import tournaments.routing
 
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'transcendence.settings')
 
-websocket_urlpatterns = livechat.routing.websocket_urlpatterns + notifications.routing.websocket_urlpatterns
+websocket_urlpatterns = livechat.routing.websocket_urlpatterns + notifications.routing.websocket_urlpatterns + tournaments.routing.websocket_urlpatterns 
 
 application = ProtocolTypeRouter({
     "http": get_asgi_application(),

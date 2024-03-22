@@ -41,6 +41,7 @@ const routes = {
     '/tournament': {
         html: '/static/html/tournament.html',
         css: '/static/css/tournament.css',
+        js: '/static/js/tournament.js',
         requires_auth: true
     }
 };
@@ -85,6 +86,11 @@ document.addEventListener('click', function (event) {
         let originalPath = event.target.dataset.spa;
         let finalPath = getRedirectPath(originalPath);
 
+        // check if the path is /tournament if it has an id data-spa-id, stores the id in the session storage
+        if (originalPath === '/tournament' && event.target.dataset.spaId) {
+            sessionStorage.setItem('currentTournamentId', event.target.dataset.spaId);
+        }
+        
         navigate(finalPath);
         window.history.pushState({}, '', finalPath);
     }

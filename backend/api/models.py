@@ -38,7 +38,9 @@ class Tournament(models.Model):
     id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=50, unique=True)
     creator = models.ForeignKey(User, on_delete=models.CASCADE, related_name='created_tournaments')
-    participants = models.ManyToManyField(User, through='TournamentInvitation', related_name='participating_tournaments')
+    #participants are a list of inviation notificaitons the creator has sent
+    invitations = models.ManyToManyField(Notification, blank=True)
+    participants = models.ManyToManyField(User, blank=True) # users that have accepted the invitation
     start_time = models.DateTimeField(auto_now_add=True)
     state = models.JSONField(default=dict)
     
@@ -56,21 +58,13 @@ class Tournament(models.Model):
         self.state = state
         self.save()
 
-class TournamentInvitation(models.Model):
-    INVITATION_STATUS_CHOICES = [
-        ('pending', 'Pending'),
-        ('accepted', 'Accepted'),
-        ('declined', 'Declined'),
-    ]
-    
-    tournament = models.ForeignKey(Tournament, on_delete=models.CASCADE, related_name='invitations')
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='tournament_invitations')
-    status = models.CharField(max_length=20, choices=INVITATION_STATUS_CHOICES, default='pending')
-    created_at = models.DateTimeField(auto_now_add=True)
 
-    class Meta:
-        unique_together = ['tournament', 'user']
-        
+class TournamentInvitation(models.Model):
+    tournament = models.ForeignKey(Tournament, on_delete=models.CASCADE)
+    participant = models.ForeignKey(User, on_delete=models.CASCADE)
+    notification = models.ForeignKey(Notification, on_delete=models.SET_NULL, null=True, blank=True)
+    status = models.CharField(max_length=20, choices=[('pending', 'Pending'), ('accepted', 'Accepted'), ('declined', 'Declined')])
+    
 class LiveChat(models.Model):
     def __str__(self):
         return f"{self.user} : {self.message}"

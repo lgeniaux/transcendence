@@ -21,9 +21,15 @@
 				<div class="col-3">
 					<div class="match">
 						Finale
-						<div class="col-auto"><div id="f-p1"><!-- Informations du joueur --></div></div>
-						<div class="col-auto"><div class="vertical-line"></div></div>
-						<div class="col-auto"><div id="f-p2"><!-- Informations du joueur --></div></div>
+						<div class="col-auto">
+							<div id="f-p1"><!-- Informations du joueur --></div>
+						</div>
+						<div class="col-auto">
+							<div class="vertical-line"></div>
+						</div>
+						<div class="col-auto">
+							<div id="f-p2"><!-- Informations du joueur --></div>
+						</div>
 					</div>
 				</div>
 			</div>
@@ -33,17 +39,29 @@
 				<div class="col-3">
 					<div class="match">
 						Demi-finale 1
-						<div class="col-auto"><div id="sf-1-p1"><!-- Informations du joueur --></div></div>
-						<div class="col-auto"><div class="vertical-line"></div></div>
-						<div class="col-auto"><div id="sf-1-p2"><!-- Informations du joueur --></div></div>
+						<div class="col-auto">
+							<div id="sf-1-p1"><!-- Informations du joueur --></div>
+						</div>
+						<div class="col-auto">
+							<div class="vertical-line"></div>
+						</div>
+						<div class="col-auto">
+							<div id="sf-1-p2"><!-- Informations du joueur --></div>
+						</div>
 					</div>
 				</div>
 				<div class="col-3">
 					<div class="match">
 						Demi-finale 2
-						<div class="col-auto"><div id="sf2-p1"><!-- Informations du joueur --></div></div>
-						<div class="col-auto"><div class="vertical-line"></div></div>
-						<div class="col-auto"><div id="sf2-p2"><!-- Informations du joueur --></div></div>
+						<div class="col-auto">
+							<div id="sf2-p1"><!-- Informations du joueur --></div>
+						</div>
+						<div class="col-auto">
+							<div class="vertical-line"></div>
+						</div>
+						<div class="col-auto">
+							<div id="sf2-p2"><!-- Informations du joueur --></div>
+						</div>
 					</div>
 				</div>
 			</div>
@@ -53,26 +71,44 @@
 				<div class="col-3">
 					<div class="match">
 						Quart de finale 1
-						<div class="col-auto"><div id="qf1-p1"><!-- Informations du joueur --></div></div>
-						<div class="col-auto"><div class="vertical-line"></div></div>
-						<div class="col-auto"><div id="qf1-p2"><!-- Informations du joueur --></div></div>
+						<div class="col-auto">
+							<div id="qf1-p1"><!-- Informations du joueur --></div>
+						</div>
+						<div class="col-auto">
+							<div class="vertical-line"></div>
+						</div>
+						<div class="col-auto">
+							<div id="qf1-p2"><!-- Informations du joueur --></div>
+						</div>
 					</div>
 				</div>
 				<div class="col-3">
 					<div class="match">
 						Quart de finale 2
-						<div class="col-auto"><div id="qf2-p1"><!-- Informations du joueur --></div></div>
-						<div class="col-auto"><div class="vertical-line"></div></div>
-						<div class="col-auto"><div id="qf2-p2"><!-- Informations du joueur --></div></div>
+						<div class="col-auto">
+							<div id="qf2-p1"><!-- Informations du joueur --></div>
+						</div>
+						<div class="col-auto">
+							<div class="vertical-line"></div>
+						</div>
+						<div class="col-auto">
+							<div id="qf2-p2"><!-- Informations du joueur --></div>
+						</div>
 					</div>
 				</div>
 				<div class="col-3">
 					<div class="match">
 						Quart de finale 3
 						<div class="row">
-							<div class="col-auto"><div id="qf3-p1"><!-- Informations du joueur --></div></div>
-							<div class="col-auto"><div class="vertical-line"></div></div>
-							<div class="col-auto"><div id="qf3-p2"><!-- Informations du joueur --></div></div>
+							<div class="col-auto">
+								<div id="qf3-p1"><!-- Informations du joueur --></div>
+							</div>
+							<div class="col-auto">
+								<div class="vertical-line"></div>
+							</div>
+							<div class="col-auto">
+								<div id="qf3-p2"><!-- Informations du joueur --></div>
+							</div>
 						</div>
 					</div>
 				</div>
@@ -80,9 +116,15 @@
 					<div class="match">
 						Quart de finale 4
 						<div class="row">
-							<div class="col-auto"><div id="qf4-p1"><!-- Informations du joueur --></div></div>
-							<div class="col-auto"><div class="vertical-line"></div></div>
-							<div class="col-auto"><div id="qf4-p2"><!-- Informations du joueur --></div></div>
+							<div class="col-auto">
+								<div id="qf4-p1"><!-- Informations du joueur --></div>
+							</div>
+							<div class="col-auto">
+								<div class="vertical-line"></div>
+							</div>
+							<div class="col-auto">
+								<div id="qf4-p2"><!-- Informations du joueur --></div>
+							</div>
 						</div>
 					</div>
 				</div>
@@ -92,29 +134,57 @@
 	</div>
 
 </div>
+<!-- Create Tournament Button -->
 
-<!-- <div class="chatbox">
+<!-- Always Visible Create Tournament Overlay -->
+<div class="modal show d-block" id="createTournamentOverlay" tabindex="-1"
+	aria-labelledby="createTournamentOverlayLabel" aria-modal="true" role="dialog">
+	<div class="modal-dialog modal-dialog-centered">
+		<div class="modal-content" style="background-color: #5a2b00; color: white;">
+			<div class="modal-header border-0">
+				<h5 class="modal-title" id="createTournamentOverlayLabel">Create Tournament</h5>
+				<!-- Button or link to close or minimize the overlay if needed -->
+				<button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+			</div>
+			<div class="modal-body">
+					<div class="mb-3" id="tournamentName">
+						<label for="tournamentNameInput" class="form-label">Tournament Name:</label>
+						<input type="text" class="form-control" id="tournamentNameInput" placeholder="Name">
+					</div>
+					<div class="mb-3" id="playerAdd">
+						<label for="playerSearch" class="form-label">Add players:</label>
+						<div class="input-group">
+							<input type="text" class="form-control" id="playerSearch" placeholder="Username">
+							<button class="btn btn-primary" type="button">Add</button>
+						</div>
+					</div>
+					<!-- List of the added players (the list is a horizontal list) -->
+					<div class="mb-3" id="playerList">
+						<div class="d-flex flex-row" id="playerList">
+							<div class="player-card">
+								<!-- Player card (mettre bouton retirer)-->
+							</div>
+						</div>
+					</div>
 
-	<div class="btn-group-vertical" role="group">
-
-		<button class="btn btn-primary" data-bs-toggle="collapse" data-bs-target="#chatboxCollapse">
-			<img src="static/img/chat-left-text.svg" alt="Chat" class="chatIcon">
-			Messages
-		</button>
-
-		<div class="collapse" id="chatboxCollapse">
-
-			<div class="messageBox" id="messages"></div>
-
-			<form id="form" class="btn-group">
-				<input class="form-control" placeholder="Exprimez votre amour..." input="text" id="message" name="message" autocomplete="off">
-				<button class="btn btn-secondary sendBtn" type="submit">Envoyer</button>
-			</form>
-
+					<div class="mb-3">
+						<label for="numberOfPlayers" class="form-label">Number of Players:</label>
+						<select class="form-select" id="numberOfPlayers">
+							<option selected>4</option>
+							<option>6</option>
+							<option>8</option>
+						</select>
+					</div>
+					<div class="d-grid gap-2">
+						<button class="btn btn-success" type="submit">Create Tournament</button>
+					</div>
+			</div>
+			<div class="modal-footer border-0">
+				<!-- Button or link to close or minimize the overlay if needed -->
+				<!-- <button type="button" class="btn btn-outline-light" data-bs-dismiss="modal">Close</button> -->
+			</div>
 		</div>
-
 	</div>
-
 </div>
 
-<script src='static/js/chat/chatbox.js'></script> -->
+<div class="modal-backdrop fade show"></div>
