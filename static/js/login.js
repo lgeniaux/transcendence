@@ -19,7 +19,6 @@ function loginUser() {
     var auth_token = sessionStorage.getItem('authToken');
     var headers = {
         'Content-Type': 'application/json',
-        'X-CSRFToken': getCSRFToken()
     };
 
     if (auth_token && auth_token !== 'undefined' && auth_token !== 'null') {
@@ -53,20 +52,6 @@ function showLoginError(message) {
     document.getElementById('loginAlert').innerHTML = alertHTML;
 }
 
-function getCSRFToken() {
-    let csrfToken = null;
-    if (document.cookie && document.cookie !== '') {
-        const cookies = document.cookie.split(';');
-        for (let i = 0; i < cookies.length; i++) {
-            const cookie = cookies[i].trim();
-            if (cookie.substring(0, 'csrftoken='.length) === 'csrftoken=') {
-                csrfToken = decodeURIComponent(cookie.substring('csrftoken='.length));
-                break;
-            }
-        }
-    }
-    return csrfToken;
-}
 
 window.initPageFunctions = window.initPageFunctions || [];
 window.initPageFunctions.push(initLoginForm);

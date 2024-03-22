@@ -1,10 +1,8 @@
 import { launchGame, createGame } from "/static/game/js/main.js";
-import { getCSRFToken } from "/static/js/profile.js";
 
 async function getUserInfos(auth_token = null) {
     const headers = {
-        'Content-Type': 'application/json',
-        'X-CSRFToken': getCSRFToken()
+        'Content-Type': 'application/json'
     };
 
     if (auth_token && auth_token !== 'undefined' && auth_token !== 'null') {

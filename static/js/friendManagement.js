@@ -32,8 +32,7 @@ function fetchAllUsers()
 {
     var auth_token = sessionStorage.getItem('authToken');
     const headers = {
-        'Content-Type': 'application/json',
-        'X-CSRFToken': getCSRFToken()
+        'Content-Type': 'application/json'
     };
 
     if (auth_token && auth_token !== 'undefined' && auth_token !== 'null')

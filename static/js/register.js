@@ -34,8 +34,7 @@ function registerUser() {
         method: 'POST',
         credentials: 'include', // Ensure credentials are included for CSRF
         headers: {
-            'Content-Type': 'application/json',
-            'X-CSRFToken': getCSRFToken()
+            'Content-Type': 'application/json'
         },
         body: JSON.stringify({ username: username, email: email, password: password })
     })
@@ -58,20 +57,6 @@ function showRegisterError(message) {
     document.getElementById('registerAlert').innerHTML = alertHTML;
 }
 
-function getCSRFToken() {
-    let csrfToken = null;
-    if (document.cookie && document.cookie !== '') {
-        const cookies = document.cookie.split(';');
-        for (let i = 0; i < cookies.length; i++) {
-            const cookie = cookies[i].trim();
-            if (cookie.substring(0, 'csrftoken='.length) === 'csrftoken=') {
-                csrfToken = decodeURIComponent(cookie.substring('csrftoken='.length));
-                break;
-            }
-        }
-    }
-    return csrfToken;
-}
 
 window.initPageFunctions = window.initPageFunctions || [];
 window.initPageFunctions.push(initRegisterForm);

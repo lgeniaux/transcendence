@@ -45,8 +45,7 @@ function exchangeCodeForToken(code) {
     fetch('/api/oauth-code-for-token/', {
         method: 'POST',
         headers: {
-            'Content-Type': 'application/json',
-            'X-CSRFToken': getCSRFToken() 
+            'Content-Type': 'application/json'
         },
         body: JSON.stringify({ code: code })
     })
@@ -74,21 +73,6 @@ function generateRandomString(length = 32) {
     }
 
     return str;
-}
-
-function getCSRFToken() {
-    let csrfToken = null;
-    if (document.cookie && document.cookie !== '') {
-        const cookies = document.cookie.split(';');
-        for (let i = 0; i < cookies.length; i++) {
-            const cookie = cookies[i].trim();
-            if (cookie.substring(0, 'csrftoken='.length) === 'csrftoken=') {
-                csrfToken = decodeURIComponent(cookie.substring('csrftoken='.length));
-                break;
-            }
-        }
-    }
-    return csrfToken;
 }
 
 window.initPageFunctions = window.initPageFunctions || [];

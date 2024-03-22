@@ -8,7 +8,6 @@ from notifications import consumers
 from .tournaments import CreateTournament
 from livechat.views import GetConversationMessages
 
-
 app_name = 'api'
 
 urlpatterns = [
@@ -31,7 +30,7 @@ urlpatterns = [
    path('tournament/create-tournament/', CreateTournament.as_view(), name='create-tournament'),
 
    path('get-notifications/',  GetUserNotifications.as_view(), name='get-notifications'),
-   path('respond-to-invitation/', ManageInvitationNotification.as_view(), name='respond-to-invitation'),
+   path('respond-to-invite/', ManageInvitationNotification.as_view(), name='respond-to-invite'),
 
    path('get-messages/', GetConversationMessages.as_view(), name='get-conversation-messages'),
 

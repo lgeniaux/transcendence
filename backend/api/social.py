@@ -18,6 +18,7 @@ from asgiref.sync import async_to_sync
 from asgiref.sync import async_to_sync
 from channels.layers import get_channel_layer
 from tournaments.views import broadcast_to_tournament_group
+from django.views.decorators.csrf import csrf_exempt
 
 
 
@@ -164,7 +165,8 @@ class GetUserNotifications(APIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request, *args, **kwargs):
-        notifications = request.user.notifications.all()
+        #get all notifications with status 'pending' for the user (the invite_status is in the data field)
+        notifications = Notification.objects.filter(recipient=request.user, data__invite_status='pending')
         serializer = NotificationSerializer(notifications, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
     
@@ -191,18 +193,14 @@ class ManageInvitationNotificationSerializer(serializers.Serializer):
             raise serializers.ValidationError({"detail": "Invalid notification type"})
 
         if notification.notification_type == "tournament-invite":
-            Tournament_invitation_status = notification.data.get('invite_status')
-            print(Tournament_invitation_status)
+            Tournament_invitation_status = notification.data['invite_status']
             if Tournament_invitation_status != "pending":
                 raise serializers.ValidationError({"detail": "This invitation has already been responded to"})
         return notification
     
-            
 
 
-
-
-class ManageInvitationNotification(views.APIView):
+class ManageInvitationNotification(APIView):
     authentication_classes = [TokenAuthentication]
     permission_classes = [IsAuthenticated]
 
@@ -222,15 +220,16 @@ class ManageInvitationNotification(views.APIView):
                 }
                 if action == "accept":
                     tournament.participants.add(request_user)
-                    tournament.save()
                     notification.data['invite_status'] = "accepted"
-                    notification.save()
                     broadcast_to_tournament_group(tournament.id, broadcast_message)
+                    notification.save()
+                    tournament.save()
                     return Response({"detail": "Tournament invitation successfully accepted"}, status=status.HTTP_200_OK)
                 elif action == "deny":
                     notification.data['invite_status'] = "denied"
-                    notification.save()
                     broadcast_to_tournament_group(tournament.id, broadcast_message)
+                    notification.save()
+                    tournament.save()
                     return Response({"detail": "Tournament invitation successfully denied"}, status=status.HTTP_200_OK)
 
             elif notification.notification_type == "game-invite":
