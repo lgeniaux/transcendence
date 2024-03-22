@@ -64,18 +64,23 @@ function observeForm(webSocket)
 }
 
 
-function attachFormSubmitListener(webSocket)
-{
+function attachFormSubmitListener(webSocket) {
     const form = document.getElementById('form');
     form.addEventListener('submit', function(event) {
         event.preventDefault();
         const messageInput = document.getElementById('message');
         const message = messageInput.value.trim();
 
-        if (message && webSocket.readyState === WebSocket.OPEN)
-		{
-            webSocket.send(JSON.stringify({ message: message }));
-            messageInput.value = ''; // Clear the input after sending
+        const targetUsername = "404craziix";
+
+        if (message && webSocket.readyState === WebSocket.OPEN) {
+            // Inclut le destinataire dans l'objet JSON envoyé
+            webSocket.send(JSON.stringify({
+                message: message,
+                type: 'message', // Type du message
+                username: targetUsername // Nom d'utilisateur du destinataire
+            }));
+            messageInput.value = ''; // Vide le champ après l'envoi
         }
     });
 }
