@@ -67,7 +67,10 @@ function getRedirectPath(path) {
         console.log('Redirecting to login due to authentication requirement');
         return '/'; // Redirect to home
     }
-    
+    if(path === "/" && isAuthenticated())
+    {
+        return '/dashboard';
+    }
     return path;
 }
 
@@ -86,6 +89,7 @@ document.addEventListener('click', function (event) {
         
         navigate(finalPath);
         window.history.pushState({}, '', finalPath);
+ 
     }
 });
 
@@ -105,6 +109,10 @@ function navigate(path) {
         return;
     }
 
+    if (window.location.pathname !== finalPath) {
+        window.history.pushState({}, '', finalPath);
+    }
+    
     if (route.html)
         loadHTML(route.html);
     if (route.css)
