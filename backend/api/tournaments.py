@@ -9,10 +9,9 @@ from .models import Tournament, User
 from notifications.models import Notification
 from notifications.views import send_notification, send_notification_to_user
 
+
 User = get_user_model()
 
-from django.utils import timezone
-import json
 
 def invite_participants_to_tournament(tournament, participants_usernames, sender_username):
     for username in participants_usernames:
@@ -30,7 +29,6 @@ def invite_participants_to_tournament(tournament, participants_usernames, sender
                 notification_type="tournament-invite", 
                 data=data
             )
-            tournament.invitations_sent.add(participant)
         except User.DoesNotExist:
             continue
 
@@ -38,6 +36,7 @@ def invite_participants_to_tournament(tournament, participants_usernames, sender
 def invite_participant_to_tournament(tournament, participant_username, sender_username):
     try:
         participant = User.objects.get(username=participant_username)
+
         data = {
             'sender_username': sender_username,
             'tournament_name': tournament.name,
@@ -49,7 +48,6 @@ def invite_participant_to_tournament(tournament, participant_username, sender_us
             notification_type="tournament-invite", 
             data=data
         )
-        tournament.invitations_sent.add(participant)
     except User.DoesNotExist:
         pass
 
@@ -97,9 +95,9 @@ class TournamentSerializer(serializers.ModelSerializer):
         # Ensure 'participants_username' is removed from validated_data before creating the Tournament instance
         tournament = Tournament.objects.create(name=name, creator=self.context['request'].user)
 
-        tournament.participants.set(participants)
-        tournament.initialize_state()
         invite_participants_to_tournament(tournament, validated_data['participants_username'], self.context['request'].user.username)
+        tournament.initialize_state()
+        
         return tournament
 
     
