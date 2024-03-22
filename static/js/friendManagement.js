@@ -28,26 +28,28 @@ function emitUserStatusChangeEvent(username, newStatus)
     document.dispatchEvent(event);
 }
 
-function fetchAllUsers()
+async function fetchAllUsers()
 {
-    var auth_token = sessionStorage.getItem('authToken');
-    const headers = {
-        'Content-Type': 'application/json'
-    };
+    try
+    {
+        const response = await fetch('/api/get-users/', {
+            method: 'GET',
+            credentials: 'include',
+            headers: getRequestHeaders()
+        });
 
-    if (auth_token && auth_token !== 'undefined' && auth_token !== 'null')
-        headers['Authorization'] = 'Token ' + auth_token;
+        if (!response.ok)
+            throw new Error(`HTTP error! status: ${response.status}`);
 
-    fetch('/api/get-users/', {
-        method: 'GET',
-        credentials: 'include',
-        headers: headers
-    })
-        .then(response => response.json())
-        .then(data => {
-            allUsers = data;
-            displayUsers(allUsers);
-        }).catch(error => console.error('Error:', error));
+        const data = await response.json();
+
+        allUsers = data;
+        displayUsers(allUsers); // Assurez-vous que cette fonction est prête à gérer les données des utilisateurs.
+    }
+    catch (error)
+    {
+        console.error('Error:', error);
+    }
 }
 
 function displayUsers(users)
@@ -126,7 +128,9 @@ async function sendUserAction(username, action)
         throw error; // Re-throw to handle it outside or log it.
     }
 }
-async function blockUser(username) {
+
+async function blockUser(username)
+{
     try
 	{
         await sendUserAction(username, 'block');

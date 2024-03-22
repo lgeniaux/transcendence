@@ -1,6 +1,20 @@
 // ----------- backend ----------- //
 
-function initChatbox() {
+async function loadChatbox()
+{
+    try
+    {
+        await loadContent('/static/html/chatbox/chatbox.html', '#chatBox', 'chatbox');
+        initChatbox();
+    }
+    catch (error)
+    {
+        console.error('Erreur lors du chargement de la chatbox :', error);
+    }
+}
+
+function initChatbox()
+{
     const auth_token = sessionStorage.getItem('authToken');
     const wsUrl = `ws://${window.location.host}/ws/chat/${auth_token}/`;
     const webSocket = new WebSocket(wsUrl);
@@ -85,38 +99,41 @@ document.addEventListener('userStatusChange', async (event) => {
 async function loadFriendList()
 {
     try
-	{
+    {
         const users = await cb_fetchAllUsers();
         cb_displayUsers(users);
     }
-	catch (error)
-	{
-        console.error('Une erreur s\'est produite lors du chargement des amis :', error);
+    catch (error)
+    {
+        // Gère les erreurs potentielles survenues lors de la récupération ou l'affichage des utilisateurs
+        console.error("Une erreur s'est produite lors du chargement des amis :", error);
     }
 }
 
-function cb_fetchAllUsers()
+
+async function cb_fetchAllUsers()
 {
-    return new Promise((resolve, reject) => {
-			fetch('/api/get-users/', {
+    try
+    {
+        const response = await fetch('/api/get-users/', {
             method: 'GET',
             credentials: 'include',
             headers: getRequestHeaders()
-        })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Erreur lors de la récupération des utilisateurs');
-                }
-                return response.json();
-            })
-            .then(data => {
-                resolve(data);
-            })
-            .catch(error => {
-                reject(error);
-            });
-    });
+        });
+
+        if (!response.ok)
+            throw new Error('Erreur lors de la récupération des utilisateurs');
+
+        const data = await response.json();
+
+        return data;
+    }
+    catch (error)
+    {
+        throw error; // L'erreur est renvoyée pour être gérée par l'appelant
+    }
 }
+
 
 async function cb_displayUsers(users)
 {

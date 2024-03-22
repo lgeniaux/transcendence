@@ -1,11 +1,43 @@
-function loadContent(url, targetSelector, contentName)
+async function loadContent(url, selector, description = '')
 {
-    fetch(url)
-        .then(response => response.text())
-        .then(html => {
-            document.querySelector(targetSelector).innerHTML = html;
-        })
-        .catch(error => console.error(`Erreur lors du chargement de ${contentName} :`, error));
+    try
+    {
+        const response = await fetch(url);
+
+        if (!response.ok)
+            throw new Error(`Échec du chargement ${description}: ${response.statusText}`);
+
+        const html = await response.text();
+        document.querySelector(selector).innerHTML = html;
+    }
+    catch (error)
+    {
+        console.error('Erreur lors du chargement du contenu:', error);
+    }
+}
+
+
+function getCSRFToken()
+{
+    let csrfToken = null;
+
+    if (document.cookie && document.cookie !== '')
+	{
+        const cookies = document.cookie.split(';');
+
+        for (let i = 0; i < cookies.length; i++)
+		{
+            const cookie = cookies[i].trim();
+
+            if (cookie.substring(0, 'csrftoken='.length) === 'csrftoken=')
+			{
+                csrfToken = decodeURIComponent(cookie.substring('csrftoken='.length));
+                break;
+            }
+        }
+    }
+
+    return csrfToken;
 }
 
 function getAuthHeaders()
@@ -45,5 +77,27 @@ async function getFileContent(url)
 	catch (error)
 	{
         throw new Error(`Erreur lors du chargement du fichier depuis l'URL ${url}: ${error.message}`);
+    }
+}
+
+function initLogoutButton()
+{
+    const logoutButton = document.getElementById('logoutBtn');
+    const sidePanelLogoutButton = document.getElementById('sidePanelLogoutButton');
+
+    if (logoutButton)
+    {
+        logoutButton.addEventListener('click', function() {
+            sessionStorage.removeItem('authToken'); // Supprime le token d'authentification
+            window.location.href = '/login'; // Redirige l'utilisateur vers la page de connexion
+        });
+    }
+
+    if (sidePanelLogoutButton)
+    {
+        sidePanelLogoutButton.addEventListener('click', function() {
+            sessionStorage.removeItem('authToken'); // Supprime le token d'authentification
+            window.location.href = '/login'; // Redirige l'utilisateur vers la page de connexion
+        });
     }
 }
