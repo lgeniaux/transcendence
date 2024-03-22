@@ -5,7 +5,7 @@ from .profile import UserProfile, ChangePassword
 from .social import AddOrDeleteFriend, GetUsersList, BlockOrUnblockUser, GetUserNotifications, ManageInvitationNotification
 # import notifications.consumers
 from notifications import consumers 
-from .tournaments import CreateTournament
+from .tournaments import CreateTournament, GetMyTournaments
 from livechat.views import GetConversationMessages
 
 app_name = 'api'
@@ -28,7 +28,7 @@ urlpatterns = [
 
    path('ws/notifications/<str:token>/', consumers.NotificationConsumer.as_asgi()),
    path('tournament/create-tournament/', CreateTournament.as_view(), name='create-tournament'),
-
+   path('tournament/get-tournaments/', GetMyTournaments.as_view(), name='get-tournaments'),
    path('get-notifications/',  GetUserNotifications.as_view(), name='get-notifications'),
    path('respond-to-invite/', ManageInvitationNotification.as_view(), name='respond-to-invite'),
 

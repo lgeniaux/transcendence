@@ -15,6 +15,9 @@ User = get_user_model()
 
 def invite_participants_to_tournament(tournament, participants_usernames, sender_username):
     for username in participants_usernames:
+        if username == sender_username:
+            tournament.participants.add(User.objects.get(username=username))
+            continue
         try:
             participant = User.objects.get(username=username)
             data = {
@@ -62,6 +65,7 @@ class TournamentSerializer(serializers.ModelSerializer):
 
     def validate(self, data):
         participants_username = data['participants_username']
+        participants_username.append(self.context['request'].user.username)
         if len(participants_username) not in [4, 8, 16]:
             raise serializers.ValidationError("Number of participants must be 4, 8 or 16.")
         
@@ -114,5 +118,19 @@ class CreateTournament(APIView):
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
+class GetMyTournaments(APIView):
+    permission_classes = [IsAuthenticated]
+    
+    def get(self, request, *args, **kwargs):
+        tournaments = Tournament.objects.filter(participants=request.user)
+        tournaments = sorted(tournaments, key=lambda x: x.start_time, reverse=True)
 
-
+        data = []
+        for tournament in tournaments:
+            data.append({
+                'id': tournament.id,
+                'name': tournament.name,
+                'creator': tournament.creator.username,
+                'state': tournament.state,
+            })
+        return Response(data, status=status.HTTP_200_OK)

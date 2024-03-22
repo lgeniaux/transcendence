@@ -37,11 +37,15 @@ function manageInvite(notificationId, action) {
         .then(data => {
             // if http code is 200, then the invite was accepted/rejected and can be removed from the UI
             console.log('Response to invite:', data);
-            if (data.detail === 'Tournament invitation successfully accepted' | data.detail === 'Tournament invitation successfully denied'){
+            if (data.detail === 'Tournament invitation successfully accepted' | data.detail === 'Tournament invitation successfully denied') {
                 const notificationElement = document.querySelector(`.notification[data-notification-id="${notificationId}"]`);
                 if (notificationElement) {
                     notificationElement.remove();
                 }
+            }
+            if (data.detail === 'Tournament invitation successfully accepted') {
+                // display the card of the tournament
+                fetchAndDisplayTournaments();
             }
         }).catch(error => console.error('Error responding to invite:', error));
 }
@@ -59,6 +63,7 @@ function getActionButtonsNotification(notification) {
 
 function displayNotification(notification) {
     const notificationsList = document.querySelector('.notifications-list');
+
     if (notificationsList) {
         const notificationElement = document.createElement('div');
         notificationElement.className = 'notification';
@@ -105,7 +110,7 @@ function fetchAndDisplayStoredNotifications() {
                     displayNotification(notification);
                 }
             });
-        }).catch(error => console.error('Error fetching stored notifications:', error));
+        }).catch(error => console.error('Error fetching notifications:', error));
 }
 
 function initNotifications() {
@@ -134,8 +139,58 @@ function initNotifications() {
     }
 }
 
+function displayTournaments(tournaments) {
+    const tournamentsList = document.querySelector('.tournaments-list');
+    //clear the list
+    tournamentsList.innerHTML = '';
+    if (tournamentsList) {
+        tournaments.forEach(tournament => {
+            const tournamentElement = document.createElement('div');
+            //<div class="tournament-card" type="button" data-spa="/tournament" data-spa-id="8">
+            tournamentElement.className = 'tournament';
+            tournamentElement.setAttribute('type', 'button');
+            tournamentElement.setAttribute('data-spa', '/tournament');
+            tournamentElement.setAttribute('data-spa-id', tournament.id);
+            tournamentElement.innerHTML = `
+                    <h3>${tournament.name}</h3>
+                    <span class="tournament-state">${tournament.state.status}</span>
+                `;
+            tournamentsList.appendChild(tournamentElement);
+        }
+        );
+    }
+}
+
+function fetchAndDisplayTournaments() {
+    const auth_token = sessionStorage.getItem('authToken');
+    const headers = {
+        'Content-Type': 'application/json',
+        'Authorization': `Token ${auth_token}`
+    };
+    fetch('/api/tournament/get-tournaments/', {
+        method: 'GET',
+        credentials: 'include',
+        headers: headers
+    })
+        .then(response => response.json())
+        .then(data => {
+            console.log('Tournaments:', data);
+            displayTournaments(data);
+        }).catch(error => console.error('Error fetching tournaments:', error));
+}
+
+function initTournamentsList() {
+    fetchAndDisplayTournaments();
+}
+
+
+
+
+
+
+
 window.initPageFunctions = window.initPageFunctions || [];
 window.initPageFunctions.push(initNotifications);
 window.initPageFunctions.push(initFriendsSearch);
-// window.initPageFunctions.push(initTournamentsList);
+window.initPageFunctions.push(initTournamentsList);
 
