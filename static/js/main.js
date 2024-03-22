@@ -63,16 +63,11 @@ document.addEventListener('DOMContentLoaded', function () {
 
 function getRedirectPath(path)
 {
-    if ((path === '/login' || path === '/register') && isAuthenticated())
-    {
-        console.log('Authenticated user. Redirecting to dashboard...');
-        return '/dashboard'; // Return the home path for redirection
-    }
+    if ((path === '/' || path === '/login' || path === '/register') && isAuthenticated())
+        return '/dashboard';
+
     if (routes[path].requires_auth && !isAuthenticated())
-    {
-        console.log('Redirecting to login due to authentication requirement');
-        return '/'; // Redirect to home
-    }
+        return '/';
 
     return path;
 }
@@ -93,6 +88,7 @@ document.addEventListener('click', function (event) {
         
         navigate(finalPath);
         window.history.pushState({}, '', finalPath);
+ 
     }
 });
 
@@ -116,6 +112,10 @@ function navigate(path)
         return;
     }
 
+    if (window.location.pathname !== finalPath) {
+        window.history.pushState({}, '', finalPath);
+    }
+    
     if (route.html)
         loadHTML(route.html);
     if (route.css)
