@@ -3,6 +3,7 @@ from django.conf import settings
 
 
 class Notification(models.Model):
+    id = models.AutoField(primary_key=True)
     recipient = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='notifications')
     message = models.TextField()
     notification_type = models.CharField(max_length=50)

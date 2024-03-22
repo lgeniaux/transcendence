@@ -11,7 +11,6 @@ class TournamentConsumer(AsyncWebsocketConsumer):
         token_key = self.scope['url_route']['kwargs']['token']
         self.user = await self.get_user(token_key)
         self.tournament_id = self.scope['url_route']['kwargs']['tournament_id']
-
         if self.user and await self.is_participant(self.user.id, self.tournament_id):
             group_name = f'tournament_{self.tournament_id}'
             await self.channel_layer.group_add(

@@ -184,13 +184,15 @@ class ManageInvitationNotificationSerializer(serializers.Serializer):
     def validate_notification(self, notification_id, request_user):
         try:
             notification = Notification.objects.get(id=notification_id, recipient=request_user)
+            
         except Notification.DoesNotExist:
             raise serializers.ValidationError({"detail": "Notification does not exist"})
-        if notification.notification_type not in ["tournament_invite", "game_invite"]:
+        if notification.notification_type not in ["tournament-invite", "game-invite"]:
             raise serializers.ValidationError({"detail": "Invalid notification type"})
-        
-        if notification.notification_type == "tournament_invite":
+
+        if notification.notification_type == "tournament-invite":
             Tournament_invitation_status = notification.data.get('invite_status')
+            print(Tournament_invitation_status)
             if Tournament_invitation_status != "pending":
                 raise serializers.ValidationError({"detail": "This invitation has already been responded to"})
         return notification
@@ -211,7 +213,7 @@ class ManageInvitationNotification(views.APIView):
             action = serializer.validated_data['action']
             request_user = request.user
 
-            if notification.notification_type == "tournament_invite":
+            if notification.notification_type == "tournament-invite":
                 tournament = Tournament.objects.get(id=notification.data['tournament_id'])
                 broadcast_message = {
                     'user': request_user.username,
@@ -231,7 +233,7 @@ class ManageInvitationNotification(views.APIView):
                     broadcast_to_tournament_group(tournament.id, broadcast_message)
                     return Response({"detail": "Tournament invitation successfully denied"}, status=status.HTTP_200_OK)
 
-            elif notification.notification_type == "game_invite":
+            elif notification.notification_type == "game-invite":
                 # to do
                 pass
 
