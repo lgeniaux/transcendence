@@ -2,7 +2,8 @@ if (!window.allUsers) {
     window.allUsers = [];
 }
 
-function displayCreateTournamentForm() {
+function displayCreateTournamentForm()
+{
     // in the html there is a div : <div class="modal show d-block" id="createTournamentOverlay" tabindex="-1" aria-labelledby="createTournamentOverlayLabel" aria-modal="true" role="dialog">
     const createTournamentOverlay = document.getElementById('createTournamentOverlay');
     if (createTournamentOverlay) {
@@ -16,41 +17,36 @@ function displayCreateTournamentForm() {
 
 }
 
-function createTournament() {
-    const authToken = sessionStorage.getItem('authToken');
+async function createTournament()
+{
     const tournamentName = document.getElementById('tournamentNameInput').value;
     const nb_players_option = document.getElementById('numberOfPlayers');
     const nb_players = nb_players_option.options[nb_players_option.selectedIndex].value;
 
-    const data = {
-        name: tournamentName,
-        nb_players: nb_players
-    };
+    const data = { name: tournamentName, nb_players: nb_players };
 
-    fetch('/api/tournament/create-tournament/', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Token ${authToken}`
-        },
-        body: JSON.stringify(data)
-    })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Failed to create tournament');
-            }
-            return response.json();
-        })
-        .then(data => {
-            console.log('Tournament created:', data);
-            sessionStorage.setItem('currentTournamentId', data.tournament_id);
-            sessionStorage.removeItem('createState');
-            window.location.reload();
-        })
-        .catch(error => {
-            console.error('Failed to create tournament:', error);
+    try
+	{
+        const response = await fetch('/api/tournament/create-tournament/', {
+            method: 'POST',
+            headers: getRequestHeaders(),
+            body: JSON.stringify(data)
         });
+
+        if (!response.ok)
+            throw new Error('Failed to create tournament');
+
+        const result = await response.json();
+        console.log('Tournament created:', result);
+        sessionStorage.setItem('currentTournamentId', result.tournament_id);
+        window.location.reload();
+    }
+	catch (error)
+	{
+        console.error('Failed to create tournament:', error);
+    }
 }
+
 
 
 function initTournamentCreateButton() {

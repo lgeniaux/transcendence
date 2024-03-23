@@ -4,14 +4,26 @@
 	src: url('/static/fonts/FugazOne-Regular.ttf') format('truetype');
 }
 
+.tournament
+{
+	height: 800px;
+	margin: 50px;
+}
+
+.tournament .globalRow
+{
+	height: 100%;
+}
+
 .tournament-bracket
 {
+	display: flex;
+	flex-direction: column;
+	height: 100%;
 	background-color: #FFB800;
-	min-width: 1200px;
+	border: 8px solid black;
 	border: none;
 	border-radius: 16px;
-	margin-top: 40px;
-	margin-bottom: 40px;
 }
 
 .tournament-bracket h2
@@ -78,4 +90,16 @@
 
 #playerResults {
     margin-top: 10px;
+}
+
+.listContainer
+{
+	height: 100%;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	background-color: #FFB800;
+	border: 8px solid black;
+	border-radius: 16px;
+	padding: 10px;
 }
