@@ -3,13 +3,14 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from .models import Game
-from .serializers import GameSerializer, UserRegistrationSerializer, UserLoginSerializer
+from .serializers import GameSerializer, UserRegistrationSerializer, UserLoginSerializer, UserDeleteSerializer
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import User
 from django.db import IntegrityError
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.authtoken.models import Token
 from rest_framework.authentication import TokenAuthentication
+import random
 
 # LIST OF ALL API ENDPOINTS
 
@@ -50,7 +51,9 @@ class UserLogin(APIView):
             password = serializer.validated_data['password']
             
             try:
-                user = User.objects.get(email=email)  # Note de Louis: j'ai viré la fonction authenticate() car elle demande un username au lieu d'un email
+                user = User.objects.get(email=email)
+                if not user.is_active:  # Note de Louis: j'ai viré la fonction authenticate() car elle demande un username au lieu d'un email
+                    return Response({"detail": "This account has been deactivated"}, status=status.HTTP_401_UNAUTHORIZED)
             except User.DoesNotExist:
                 return Response({"detail": "Invalid credentials"}, status=status.HTTP_401_UNAUTHORIZED)
             
@@ -70,3 +73,25 @@ class UserLogout(APIView):
             request.user.auth_token.delete()
             return Response({"detail": "You have successfuly been logged out"}, status=status.HTTP_200_OK)
         return Response({"detail": "You are not logged in"}, status=status.HTTP_401_UNAUTHORIZED)
+    
+
+
+class UserDelete(APIView):
+    authentication_classes = [TokenAuthentication]
+    def post(self, request, *args, **kwargs):
+
+        if request.user.is_authenticated:
+            serializer = UserDeleteSerializer(data=request.data)
+            if  serializer.is_valid():
+                request.user.username = "deleted_user_" + str(random.randint(0, 100000))
+                request.user.email = "deleted_user_" + str(random.randint(0, 100000))
+                request.user.is_active = False
+                request.user.set_password(None)
+                request.user.auth_token.delete()
+                request.user.save()
+                return Response({"detail": "User successfully deleted"}, status=status.HTTP_200_OK)
+            else:
+                return Response({"detail": "Invalid password"}, status=status.HTTP_401_UNAUTHORIZED)
+        return Response({"detail": "You are not logged in"}, status=status.HTTP_401_UNAUTHORIZED)
+    
+                

@@ -4,16 +4,11 @@ if (!window.allUsers) {
 
 function displayCreateTournamentForm()
 {
-    // in the html there is a div : <div class="modal show d-block" id="createTournamentOverlay" tabindex="-1" aria-labelledby="createTournamentOverlayLabel" aria-modal="true" role="dialog">
-    const createTournamentOverlay = document.getElementById('createTournamentOverlay');
-    if (createTournamentOverlay) {
-        createTournamentOverlay.classList.add('show');
-        createTournamentOverlay.classList.add('d-block');
-    }
-    const modalBackdrop = document.querySelector('.modal-backdrop');
-    if (modalBackdrop) {
-        modalBackdrop.classList.add('show');
-    }
+    // append the create-tournament.html to the html of the tournament page
+    const createTournamentForm = document.createElement('div');
+    createTournamentForm.innerHTML = "/static/html/create-tournament.html";
+    document.body.appendChild(createTournamentForm);
+
 
 }
 
