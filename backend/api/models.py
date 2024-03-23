@@ -10,7 +10,7 @@ from notifications.models import Notification
 class User(AbstractUser):
     username = models.CharField(max_length=50, unique=True)
     email = models.EmailField(max_length=254, unique=True)
-    avatar = models.ImageField(upload_to='avatars/', null=True, blank=True)
+    avatar = models.ImageField(upload_to='avatars/', default="avatars/zippy.jpg", blank=True)
     online_status = models.BooleanField(default=False)
     friendlist = models.ManyToManyField('self', blank=True)
     blocklist = models.ManyToManyField('self', blank=True)

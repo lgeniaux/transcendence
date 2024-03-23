@@ -14,13 +14,12 @@ class UserSerializer(serializers.ModelSerializer):
         fields = ['id', 'username', 'email', 'avatar', 'online_status']
 
 class UserChangeSerializer(serializers.ModelSerializer):
-    email = serializers.EmailField(required=False)
     username = serializers.CharField(required=False)
     avatar = serializers.ImageField(required=False)
 
     class Meta:
         model = User
-        fields = ['username', 'email', 'avatar']
+        fields = ['username', 'avatar']
         
 class GameSerializer(serializers.ModelSerializer):
     class Meta:

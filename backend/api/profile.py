@@ -11,7 +11,7 @@ import requests
 
 
 class UserProfile(APIView):
-    permission_classes = [permissions.IsAuthenticated] # On a deja spécifié dans settings qu'on utilisait des tokens pour l'authentification
+    permission_classes = [permissions.IsAuthenticated]
 
     def get(self, request, *args, **kwargs):
         serializer = UserSerializer(request.user)
