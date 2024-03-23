@@ -56,32 +56,16 @@ def invite_participant_to_tournament(tournament, participant_username, sender_us
 
 
 class TournamentSerializer(serializers.ModelSerializer):
-    participants_username = serializers.ListField(child=serializers.CharField(max_length=50), write_only=True)
+    nb_players = serializers.IntegerField()
     name = serializers.CharField(max_length=50)
 
     class Meta:
         model = Tournament
-        fields = ['id', 'name', 'participants_username']
+        fields = ['id', 'name', 'nb_players']
 
     def validate(self, data):
-        participants_username = data['participants_username']
-        participants_username.append(self.context['request'].user.username)
-        if len(participants_username) not in [4, 8, 16]:
+        if data['nb_players'] not in [4, 8, 16]:
             raise serializers.ValidationError("Number of participants must be 4, 8 or 16.")
-        
-        participants = []
-        for username in participants_username:
-            try:
-                participant = User.objects.get(username=username)
-                if participant in participants:
-                    raise serializers.ValidationError("Participants must be unique.")
-                if self.context['request'].user in participant.blocklist.all():
-                    raise serializers.ValidationError(f"You cannot invite {username} because you are on their blocklist.")
-                participants.append(participant)
-            except User.DoesNotExist:
-                raise serializers.ValidationError(f"User {username} does not exist.")
-        
-        data['participants'] = participants
         return data
 
     def validate_name(self, name):
@@ -93,13 +77,12 @@ class TournamentSerializer(serializers.ModelSerializer):
         return name
     
     def create(self, validated_data):
-        participants = validated_data.pop('participants', [])
         name = validated_data.pop('name')
 
         # Ensure 'participants_username' is removed from validated_data before creating the Tournament instance
         tournament = Tournament.objects.create(name=name, creator=self.context['request'].user)
 
-        invite_participants_to_tournament(tournament, validated_data['participants_username'], self.context['request'].user.username)
+        tournament.participants.add(self.context['request'].user)
         tournament.initialize_state()
         
         return tournament
@@ -113,6 +96,7 @@ class CreateTournament(APIView):
         serializer = TournamentSerializer(data=request.data, context={'request': request})
         if serializer.is_valid():
             tournament = serializer.save()
+            print(tournament.name)
             return Response({'tournament_id': tournament.id}, status=status.HTTP_201_CREATED)
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
