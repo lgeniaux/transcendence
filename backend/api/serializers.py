@@ -139,3 +139,14 @@ class ChangePasswordSerializer(serializers.Serializer):
         if not any(not char.isalnum() for char in value):
             raise serializers.ValidationError("Password must contain at least one special character.")
         return value
+    
+class UserDeleteSerializer(serializers.Serializer):
+    password = serializers.CharField(style={'input_type': 'password'}, write_only=True, required=False)
+    
+    def validate_password(self, value):
+        # if user is oauth user, then password is not required
+        if self.context['request'].user.is_oauth:
+            return value
+        if not self.context['request'].user.check_password(value):
+            raise serializers.ValidationError("Invalid password")
+        return value

@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import GameList, UserRegistrationView, UserLogin, UserLogout
+from .views import GameList, UserRegistrationView, UserLogin, UserLogout, UserDelete
 from .oauth import CodeForToken
 from .profile import UserProfile, ChangePassword
 from .social import AddOrDeleteFriend, GetUsersList, BlockOrUnblockUser, GetUserNotifications, ManageInvitationNotification
@@ -18,6 +18,7 @@ urlpatterns = [
    path('oauth-code-for-token/', CodeForToken.as_view(), name='oauth-code-for-token'),
    path('me/', UserProfile.as_view(), name='me'),
    path('change-password/', ChangePassword.as_view(), name='change-password'),
+   path('me/delete/', UserDelete.as_view(), name='delete-user'),
 
    #SOCIAL
    path('add-friend/', AddOrDeleteFriend.as_view(), name='add-friend'),

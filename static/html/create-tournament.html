@@ -1,0 +1,36 @@
+<!-- Always Visible Create Tournament Overlay -->
+<div class="modal" id="createTournamentOverlay" tabindex="-1"
+	aria-labelledby="createTournamentOverlayLabel" aria-modal="true" role="dialog">
+	<div class="modal-dialog modal-dialog-centered">
+		<div class="modal-content" style="background-color: #5a2b00; color: white;">
+			<div class="modal-header border-0">
+				<h5 class="modal-title" id="createTournamentOverlayLabel">Create Tournament</h5>
+				<!-- Button or link to close or minimize the overlay if needed -->
+				<button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+			</div>
+			<div class="modal-body">
+					<div class="mb-3" id="tournamentName">
+						<label for="tournamentNameInput" class="form-label">Tournament Name:</label>
+						<input type="text" class="form-control" id="tournamentNameInput" placeholder="Name">
+					</div>
+					<div class="mb-3">
+						<label for="numberOfPlayers" class="form-label">Number of Players:</label>
+						<select class="form-select" id="numberOfPlayers">
+							<option selected>4</option>
+							<option>8</option>
+							<option>16</option>
+						</select>
+					</div>
+					<div class="d-grid gap-2">
+						<button class="btn btn-success" id="createTournamentButton" type="submit">Create Tournament</button>
+					</div>
+			</div>
+			<div class="modal-footer border-0">
+				<!-- Button or link to close or minimize the overlay if needed -->
+				<!-- <button type="button" class="btn btn-outline-light" data-bs-dismiss="modal">Close</button> -->
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="modal-backdrop fade"></div>
