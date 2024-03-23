@@ -134,10 +134,10 @@
 	</div>
 
 </div>
-<!-- Create Tournament Button -->
+
 
 <!-- Always Visible Create Tournament Overlay -->
-<div class="modal show d-block" id="createTournamentOverlay" tabindex="-1"
+<div class="modal" id="createTournamentOverlay" tabindex="-1"
 	aria-labelledby="createTournamentOverlayLabel" aria-modal="true" role="dialog">
 	<div class="modal-dialog modal-dialog-centered">
 		<div class="modal-content" style="background-color: #5a2b00; color: white;">
@@ -151,22 +151,6 @@
 						<label for="tournamentNameInput" class="form-label">Tournament Name:</label>
 						<input type="text" class="form-control" id="tournamentNameInput" placeholder="Name">
 					</div>
-					<div class="mb-3" id="playerAdd">
-						<label for="playerSearch" class="form-label">Add players:</label>
-						<div class="input-group">
-							<input type="text" class="form-control" id="playerSearch" placeholder="Username">
-							<button class="btn btn-primary" type="button">Add</button>
-						</div>
-					</div>
-					<!-- List of the added players (the list is a horizontal list) -->
-					<div class="mb-3" id="playerList">
-						<div class="d-flex flex-row" id="playerList">
-							<div class="player-card">
-								<!-- Player card (mettre bouton retirer)-->
-							</div>
-						</div>
-					</div>
-
 					<div class="mb-3">
 						<label for="numberOfPlayers" class="form-label">Number of Players:</label>
 						<select class="form-select" id="numberOfPlayers">
@@ -176,7 +160,7 @@
 						</select>
 					</div>
 					<div class="d-grid gap-2">
-						<button class="btn btn-success" type="submit">Create Tournament</button>
+						<button class="btn btn-success" id="createTournamentButton" type="submit">Create Tournament</button>
 					</div>
 			</div>
 			<div class="modal-footer border-0">
@@ -187,4 +171,4 @@
 	</div>
 </div>
 
-<div class="modal-backdrop fade show"></div>
+<div class="modal-backdrop fade"></div>
