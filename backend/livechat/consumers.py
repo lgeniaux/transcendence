@@ -4,79 +4,55 @@ from channels.db import database_sync_to_async
 from django.contrib.auth import get_user_model
 from rest_framework.authtoken.models import Token
 from .models import PrivateMessage
-import api
 
 User = get_user_model()
 
 class LiveChatConsumer(AsyncWebsocketConsumer):
-    #vars 
     async def connect(self):
-        # Your connection logic
+        self.user = None
         token_key = self.scope['url_route']['kwargs']['token']
-        self.user = await self.get_user(token_key)
-        if self.user:
+        user = await self.get_user(token_key)
+        
+        if user:
+            self.user = user
+            self.room_group_name = f"user_{self.user.id}"
             await self.channel_layer.group_add(
-                "global_chat",
+                self.room_group_name,
                 self.channel_name
             )
             await self.accept()
-            # await self.send_last_100_messages()
         else:
             await self.close()
 
-
     async def disconnect(self, close_code):
-        # Your disconnection logic
-        await self.channel_layer.group_discard(
-            "global_chat",
-            self.channel_name
-        )
+        if self.user:
+            await self.channel_layer.group_discard(
+                self.room_group_name,
+                self.channel_name
+            )
 
-    # Triggered when a message is received from WebSocket 
     async def receive(self, text_data):
         data = json.loads(text_data)
         message = data['message']
         target_username = data.get('username')
         
-        # Récupère l'objet User pour le nom d'utilisateur cible
-        target_user = await self.get_user_by_username(target_username)
-        
-        if target_user:  # S'assure que target_user est un objet User valide
-            await self.save_private_message(message, target_user)  # Passe l'objet User à la méthode
-            print("%s to %s: %s" % (self.user.username, target_user, message))
-            # Envoie le message. Assure-toi que la logique d'envoi est correcte pour ta situation.
-            await self.send_private_message({
-                "message": message,
-                "sender": self.user.username,
-                "target_user": target_username  # Utilise le nom d'utilisateur ici uniquement à des fins d'affichage ou de log
-            })
-        else:
-            print(f"User {target_username} not found.")
+        if target_username:
+            target_user = await self.get_user_by_username(target_username)
+            if target_user:
+                await self.save_private_message(message, target_user)
+                await self.channel_layer.group_send(
+                    f"user_{target_user.id}",
+                    {
+                        "type": "chat_message",
+                        "message": message,
+                        "sender": self.user.username,
+                    }
+                )
 
-
-    async def send_private_message(self, event):
-        message = event['message']
-        sender = event['sender']
-        target_user = event['target_user']
-        await self.channel_layer.group_send(
-            f"private_chat_{target_user}",
-            {
-                "type": "chat.message",
-                "message": message,
-                "sender": sender,
-                "target_user": target_user
-            }
-        )
-
- 
     async def chat_message(self, event):
-        message = event['message']
-        sender = event['sender']
-        target_user = event['target_user']
         await self.send(text_data=json.dumps({
-            'message': message,
-            'sender': sender,
-            'target_user': target_user
+            'message': event['message'],
+            'sender': event['sender'],
         }))
 
     @database_sync_to_async
@@ -94,7 +70,7 @@ class LiveChatConsumer(AsyncWebsocketConsumer):
             return token.user
         except Token.DoesNotExist:
             return None
-    
+
     @database_sync_to_async
     def get_user_by_username(self, username):
         try:
