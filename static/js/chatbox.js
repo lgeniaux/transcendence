@@ -252,12 +252,12 @@ function getChatboxActionButtonsHtml(user)
         buttonsHtml += `<a class="dropdown-item dangerBtn" onclick="unblockUser('${user.username}')">Débloquer</a>`;
     }
 	else
-	{
+	{ 
         // Tous les autres cas, y compris ceux où l'utilisateur peut être ajouté en ami
         buttonsHtml += `<a class="dropdown-item" onclick="addFriend('${user.username}')">Ajouter en ami</a>`;
         buttonsHtml += `<a class="dropdown-item dangerBtn" onclick="blockUser('${user.username}')">Bloquer</a>`;
     }
-
+    
     return buttonsHtml;
 }
 

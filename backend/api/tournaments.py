@@ -118,3 +118,17 @@ class GetMyTournaments(APIView):
                 'state': tournament.state,
             })
         return Response(data, status=status.HTTP_200_OK)
+    
+class GetTournamentState(APIView):
+    """
+    /api/tournament/${tournamentId}/state/
+    """
+    permission_classes = [IsAuthenticated]
+    
+    def get(self, request, *args, **kwargs):
+         tournament_id = kwargs['tournament_id']
+         try:
+              tournament = Tournament.objects.get(id=tournament_id)
+              return Response(tournament.state, status=status.HTTP_200_OK)
+         except Tournament.DoesNotExist:
+              return Response({'error': 'Tournament not found'}, status=status.HTTP_404_NOT_FOUND)

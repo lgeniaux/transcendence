@@ -94,4 +94,3 @@ class UserDelete(APIView):
                 return Response({"detail": "Invalid password"}, status=status.HTTP_401_UNAUTHORIZED)
         return Response({"detail": "You are not logged in"}, status=status.HTTP_401_UNAUTHORIZED)
     
-                
