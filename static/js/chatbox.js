@@ -22,8 +22,13 @@ function initChatbox()
     
     webSocket.onmessage = function(event) {
         const message = JSON.parse(event.data);
+        console.log('Target username:', window.targetUsername)
         console.log('Live message:', message);
-        displayMessage(message.message);
+        //get sender of the message
+        const sender = message.sender;
+        console.log('message :', message.message);
+        if (sender === window.targetUsername)
+            displayMessage(message.message, sender);
     };
     
     webSocket.onopen = function() {
@@ -83,17 +88,50 @@ function attachFormSubmitListener(webSocket)
                 type: 'message', // Type du message
                 username: targetUsername // Nom d'utilisateur du destinataire
             }));
+            displayMessage(message, 'Moi');
             messageInput.value = ''; // Vide le champ après l'envoi
         }
     });
 }
 
-function displayMessage(message)
+function fetchAndDisplayStoredMessages() {
+    const auth_token = sessionStorage.getItem('authToken');
+    const headers = {
+        'Content-Type': 'application/json',
+        'Authorization': `Token ${auth_token}`
+    };
+
+    fetch('/api/get-messages/', { // Ensure you have an endpoint to fetch stored messages
+        method: 'POST',
+        credentials: 'include',
+        headers: headers,
+        body: JSON.stringify({ username: window.targetUsername})
+    })
+        .then(response => response.json())
+        .then(data => {
+            // Assuming data is an array of messages
+            data.forEach(message => {
+                displayStoredMessage(message);
+            });
+        }).catch(error => console.error('Error fetching messages:', error));
+}
+
+function displayMessage(content, sender)
 {
     const messageElement = document.createElement('div');
-    messageElement.innerText = message;
+    messageElement.innerText = sender + ': ' + content;
     document.getElementById('messages').appendChild(messageElement);
+    document.getElementById('messages').scrollTop = document.getElementById('messages').scrollHeight;
 }
+
+function displayStoredMessage(message) {
+    const messageElement = document.createElement('div');
+    messageElement.innerText = message.sender + ': ' + message.content;
+    const messagesContainer = document.getElementById('messages');
+    messagesContainer.appendChild(messageElement);
+    messagesContainer.scrollTop = messagesContainer.scrollHeight;
+}
+
 
 // ----------- frontend ----------- //
 
@@ -225,6 +263,7 @@ function sendMessage()
 {
 	const messagesUrl = '/static/html/chatbox/messagebox.html';
     loadContent(messagesUrl, '#chatboxContainer', messages);
+    fetchAndDisplayStoredMessages();
 
 	// To do...
 }
