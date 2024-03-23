@@ -1,17 +1,28 @@
-.messageBox {
+.messageBox
+{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between; /* Répartit l'espace entre les éléments */
+    height: 350px;
     background-color: rgb(32, 32, 32);
     color: white;
     padding: 10px;
     box-sizing: border-box;
-    border: none;
+    position: relative; /* Assure que le positionnement absolu du bouton retour fonctionne correctement */
 }
 
-#messages
+.messageBox .backBtn
 {
-    overflow: auto;
-    overflow-wrap: break-word;
-    max-height: 250px; /* Ajustez selon l'espace disponible */
-    margin-bottom: 10px;
+    border: none;
+    cursor: pointer;
+    outline: none;
+    margin-left: auto; /* Déplace le bouton vers la droite */
+	background: none;
+}
+
+.messageBox .backBtn img
+{
+	height: 30px;
 }
 
 .messageBox .form-control
@@ -25,19 +36,21 @@
 
 .messageBox .sendBtn
 {
-    padding: 6px 12px; /* Ajustez pour une meilleure apparence du bouton */
+    padding: 6px 12px;
     color: black;
-    font-family: 'Courier New', Courier, monospace;
+    font-family: 'Fugaz One';
     font-weight: bold;
     background-color: #FFB800;
     border: none;
     border-radius: 4px;
     box-shadow: none;
-    cursor: pointer; /* Améliore l'indication visuelle pour l'utilisateur */
+    cursor: pointer;
+    margin-left: 10px;
 }
 
 .messageBox .message-form
 {
     display: flex;
     width: 100%;
+    align-items: center; /* Pour aligner les éléments verticalement */
 }
