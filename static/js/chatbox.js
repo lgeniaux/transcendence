@@ -219,13 +219,17 @@ async function cb_displayUsers(users)
     }
 }
 
-function attachClickEventToFriends()
-{
+function attachClickEventToFriends() {
+    // Attache un gestionnaire d'événements à tous les éléments avec la classe 'user'
     document.querySelectorAll('.user').forEach(userElement => {
-        userElement.addEventListener('click', function() {
-            const username = this.getAttribute('data-username');
-            console.log("Ami cliqué :", username);
-            window.targetUsername = username;
+        userElement.addEventListener('click', function(event) {
+            // Vérifie si l'élément cliqué ou l'un de ses parents est le menu déroulant
+            if (!event.target.closest('.dropdown-menu')) {
+                const username = this.getAttribute('data-username');
+                console.log("Ami cliqué :", username);
+                window.targetUsername = username;
+                // Ici, tu peux ajouter la logique pour afficher la chatbox ou effectuer d'autres actions
+            }
         });
     });
 }
@@ -262,7 +266,7 @@ function sendMessage(username)
 	const messagesUrl = '/static/html/chatbox/messagebox.html';
     loadContent(messagesUrl, '#chatboxContainer', messages);
     fetchAndDisplayStoredMessages();
-	document.getElementById('chatboxHeader').innerText = `${username}`;
+	document.getElementById('chatboxHeader').innerText = window.targetUsername;
 }
 
 // On ajoute initChatbox à window.initPageFunctions pour qu'il soit appelé lors de l'initialisation de la page.
