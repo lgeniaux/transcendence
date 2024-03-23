@@ -37,7 +37,8 @@ class CodeForToken(APIView):
                         User = get_user_model()
                         user, created = User.objects.get_or_create(email=user_info['email'], defaults={'username': user_info['login']})
                         if created:
-                            pass
+                            user.is_oauth = True
+                            user.save()
                         token, _ = Token.objects.get_or_create(user=user)
                         return Response({"detail": "Success", "auth_token": token.key}, status=status.HTTP_200_OK)
                 

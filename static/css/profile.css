@@ -1,30 +1,102 @@
-.profile-container
-{
-    width: 100%;
-    color: white;
-    margin-top: 2rem; /* Réduit à 2rem */
-    margin-bottom: 2rem; /* Réduit à 2rem */
-    border-radius: 20px;
-    padding: 1rem; /* Ajusté à 1rem pour l'uniformité */
-    overflow-x: hidden; /* Pour éviter le débordement horizontal */
+.profile-container {
+    max-width: 960px;
+    margin: 2rem auto;
+    padding: 1rem;
+    color: #FFF;
+    background: rgba(0, 0, 0, 0.8);
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
 }
 
-.profile-container h2
-{
-    color: white;
-    font-size: 2.5rem;
+.profile-section {
+    margin-bottom: 2rem;
+}
+
+.section-title {
+    background-color: #432100;
+    color: #FFB800;
+    padding: 0.5rem;
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+    font-size: 1.5rem;
+    text-align: center;
+    margin: 0;
+}
+
+.info-box {
+    background-color: #5a2b00;
+    padding: 0.5rem 1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.info-value {
     font-weight: bold;
-    margin-bottom: 1.5rem; /* Légèrement réduit */
-    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    color: #FFB800;
 }
 
-.profile-container p, .profile-container .form-control, .profile-container button {
-    font-size: 1rem; /* Uniformise la taille de la police pour la lisibilité */
-    width: 100%; /* Assure que les éléments s'adaptent à leur conteneur */
-    margin: 0.5rem 0; /* Ajuste les marges pour un espacement uniforme */
+.form-styled {
+    background-color: #5a2b00;
+    padding: 1rem;
+    border-radius: 8px;
 }
 
-.profile-container .row
-{
-    margin: 2rem 0; /* Réduit et unifié les marges des rows */
+.input-group {
+    margin-bottom: 1rem;
+}
+
+.form-input {
+    width: 100%;
+    padding: 0.5rem;
+    border-radius: 4px;
+    border: 1px solid #FFB800;
+    background-color: #432100;
+    color: #FFF;
+    margin-top: 0.25rem;
+}
+
+.form-input::placeholder {
+    color: #FFB800;
+}
+
+.btn {
+    background-color: #FFB800;
+    color: #432100;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    font-weight: bold;
+    text-transform: uppercase;
+    transition: background-color 0.2s ease;
+    cursor: pointer;
+    display: inline-block;
+    margin-top: 0.5rem;
+}
+
+.btn:hover {
+    background-color: #e6a700;
+}
+
+.form-button {
+    width: 100%;
+    box-sizing: border-box;
+}
+
+@media (max-width: 768px) {
+    .profile-container {
+        padding: 1rem;
+    }
+
+    .section-title {
+        font-size: 1.2rem;
+    }
+
+    .form-input {
+        padding: 0.5rem;
+    }
+
+    .btn {
+        padding: 0.5rem 1rem;
+    }
 }
