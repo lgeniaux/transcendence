@@ -8,6 +8,11 @@
 
 }
 
+#chatboxHeader
+{
+	margin-left: 10px;
+}
+
 .chatbox .btn-group-vertical
 {
 	width: 100%;
@@ -29,9 +34,6 @@
     position: relative; /* Nécessaire pour le positionnement des enfants absolus */
     overflow: hidden;
 }
-
-
-
 
 .chatbox .collapseBtn::before
 {
@@ -55,6 +57,8 @@
 
 .chatbox .collapseBtn .container-fluid
 {
+	display: flex;
+	flex-direction: row;
     background-color: #FFB800;
     color: white;
     border-radius: 8px 8px 0px 0px;

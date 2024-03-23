@@ -1,54 +1,61 @@
-<div id="profile" class="profile-container">
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile - Born2Pong</title>
+</head>
+<body>
 
-    <div class="row">
+    <div class="container-fluid profile-container mt-4">
+        <h2 class="text-center mb-4 profile-title">Mon Profil</h2>
 
-        <div class="col-auto">
-    		<h2>Mes informations</h2>
-
-            Nom d'utilisateur: <p id="username">EXAMPLE_USERNAME</p>
-            Adresse e-mail: <p id="email">EXEMPLE_EMAIL</p>
+        <div class="profile-information mb-3">
+            <h3>Informations Personnelles</h3>
+            <div class="user-info mb-3">
+                <span class="info-label">Nom d'utilisateur:</span>
+                <span id="username">EXAMPLE_USERNAME</span>
+            </div>
+            <div class="user-info mb-3">
+                <span class="info-label">Adresse e-mail:</span>
+                <span id="email">exemple@email.com</span>
+            </div>
         </div>
 
+        <div class="profile-edit mb-3">
+            <h3>Modifier le Profil</h3>
+            <div id="profileForm" class="profile-form">
+                <div class="mb-3">
+                    <label for="username" class="form-label">Nom d'utilisateur</label>
+                    <input type="text" class="form-control" name="username" placeholder="Nom d'utilisateur">
+                </div>
+                <div class="mb-3">
+                    <label for="avatar" class="form-label">Avatar:</label>
+                    <input type="file" class="form-control" name="avatar">
+                </div>
+                <button type="submit" class="btn profile-btn" id="profileChangeButton">Mettre à jour le Profil</button>
+            </div>
+        </div>
+
+        <div class="profile-password" style="display: none;">
+            <h3>Changer le Mot de Passe</h3>
+            <div id="passwordForm" class="password-form">
+                <div class="mb-3">
+                    <label for="old_password" class="form-label">Mot de passe actuel</label>
+                    <input type="password" class="form-control" name="old_password" placeholder="Mot de passe actuel">
+                </div>
+                <div class="mb-3">
+                    <label for="new_password" class="form-label">Nouveau mot de passe</label>
+                    <input type="password" class="form-control" name="new_password" placeholder="Nouveau mot de passe">
+                </div>
+                <div class="mb-3">
+                    <label for="confirm_password" class="form-label">Confirmer le mot de passe</label>
+                    <input type="password" class="form-control" name="confirm_password" placeholder="Confirmer le mot de passe">
+                </div>
+                <button type="submit" class="btn profile-btn" id="passwordChangeButton">Modifier le Mot de Passe</button>
+            </div>
+        </div>
     </div>
 
-	<div class="row">
-
-		<div class="col-auto">
-
-			<h2>Modifier votre profil</h2>
-
-			<form id="profileForm">
-				<label for="email">Adresse e-mail</label><br>
-				<input class="form-control" type="email" name="email" placeholder="Adresse e-mail"><br>
-
-				<label for="username">Nom d'utilisateur</label><br>
-				<input class="form-control" type="text" name="username" placeholder="Nom d'utilisateur"><br>
-
-				Avatar: <input class="form-control" type="file" name="avatar"><br>
-				<button class="btn btn-primary" type="submit">Update Profile</button>
-			</form>
-
-		</div>
-	</div>
-
-	<div class="row">
-
-		<div class="col-auto">
-
-			<h2>Modifier votre mot de passe</h2>
-
-			<form id="passwordForm">
-				<label for="old_password">Mot de passe actuel</label><br>
-				<input class="form-control" type="password" name="old_password" placeholder="Mot de passe actuel"><br>
-
-				<label for="new_password">Nouveau mot de passe</label><br>
-				<input class="form-control" type="password" name="new_password" placeholder="Nouveau mot de passe"><br>
-
-				<button class="btn btn-primary" type="submit">Change Password</button>
-			</form>
-
-		</div>
-
-	</div>
-
-</div>
+</body>
+</html>

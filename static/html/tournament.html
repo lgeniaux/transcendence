@@ -1,8 +1,8 @@
-<div class="container dashboard">
+<div class="tournament">
 
-	<div class="row">
+	<div class="row globalRow justify-content-evenly">
 
-		<div class="col-12 tournament-bracket">
+		<div class="col-7 tournament-bracket">
 			<!-- Titre -->
 			<div class="row justify-content-evenly">
 				<div class="col align-self-center">
@@ -15,9 +15,8 @@
 					<hr>
 				</div>
 			</div>
-
 			<!-- Troisième rangée - Finale -->
-			<div class="row justify-content-around finals">
+			<div class="row justify-content-around finals flex-grow-1">
 				<div class="col-3">
 					<div class="match">
 						Finale
@@ -33,9 +32,8 @@
 					</div>
 				</div>
 			</div>
-
 			<!-- Deuxième rangée - Demi-finales -->
-			<div class="row justify-content-around semiFinals">
+			<div class="row justify-content-around semiFinals flex-grow-1">
 				<div class="col-3">
 					<div class="match">
 						Demi-finale 1
@@ -65,9 +63,8 @@
 					</div>
 				</div>
 			</div>
-
 			<!-- Première rangée - Quarts de finale -->
-			<div class="row justify-content-around quarterFinals">
+			<div class="row justify-content-around quarterFinals flex-grow-1">
 				<div class="col-3">
 					<div class="match">
 						Quart de finale 1
@@ -131,13 +128,17 @@
 			</div>
 		</div>
 
+		<div class="col-3">
+			<div class="listContainer"></div>
+		</div>
+
 	</div>
 
 </div>
-<!-- Create Tournament Button -->
+
 
 <!-- Always Visible Create Tournament Overlay -->
-<div class="modal show d-block" id="createTournamentOverlay" tabindex="-1"
+<div class="modal" id="createTournamentOverlay" tabindex="-1"
 	aria-labelledby="createTournamentOverlayLabel" aria-modal="true" role="dialog">
 	<div class="modal-dialog modal-dialog-centered">
 		<div class="modal-content" style="background-color: #5a2b00; color: white;">
@@ -151,32 +152,16 @@
 						<label for="tournamentNameInput" class="form-label">Tournament Name:</label>
 						<input type="text" class="form-control" id="tournamentNameInput" placeholder="Name">
 					</div>
-					<div class="mb-3" id="playerAdd">
-						<label for="playerSearch" class="form-label">Add players:</label>
-						<div class="input-group">
-							<input type="text" class="form-control" id="playerSearch" placeholder="Username">
-							<button class="btn btn-primary" type="button">Add</button>
-						</div>
-					</div>
-					<!-- List of the added players (the list is a horizontal list) -->
-					<div class="mb-3" id="playerList">
-						<div class="d-flex flex-row" id="playerList">
-							<div class="player-card">
-								<!-- Player card (mettre bouton retirer)-->
-							</div>
-						</div>
-					</div>
-
 					<div class="mb-3">
 						<label for="numberOfPlayers" class="form-label">Number of Players:</label>
 						<select class="form-select" id="numberOfPlayers">
 							<option selected>4</option>
-							<option>6</option>
 							<option>8</option>
+							<option>16</option>
 						</select>
 					</div>
 					<div class="d-grid gap-2">
-						<button class="btn btn-success" type="submit">Create Tournament</button>
+						<button class="btn btn-success" id="createTournamentButton" type="submit">Create Tournament</button>
 					</div>
 			</div>
 			<div class="modal-footer border-0">
@@ -187,4 +172,4 @@
 	</div>
 </div>
 
-<div class="modal-backdrop fade show"></div>
+<div class="modal-backdrop fade"></div>

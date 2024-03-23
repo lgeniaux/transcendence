@@ -1,7 +1,8 @@
 <div class="messageBox">
+	<button class="backBtn" onclick="loadFriendList()"><img src="static/img/box-arrow-right.svg"></button>
     <div id="messages" class="mb-2"><!-- Les messages seront affichés ici --></div>
     <form id="form" class="message-form d-flex">
-        <input type="text" id="message" name="message" placeholder="Exprimez votre amour..." autocomplete="off" class="form-control mr-2">
+        <input type="text" class="form-control mr-2" id="message" name="message" placeholder="Exprimez votre amour..." autocomplete="off">
         <button type="submit" class="btn sendBtn">Envoyer</button>
     </form>
 </div>

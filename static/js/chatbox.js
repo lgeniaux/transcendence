@@ -19,7 +19,7 @@ function initChatbox()
     const auth_token = sessionStorage.getItem('authToken');
     const wsUrl = `ws://${window.location.host}/ws/chat/${auth_token}/`;
     const webSocket = new WebSocket(wsUrl);
-    
+
     webSocket.onmessage = function(event) {
         const message = JSON.parse(event.data);
         console.log('Target username:', window.targetUsername)
@@ -30,7 +30,7 @@ function initChatbox()
         if (sender === window.targetUsername)
             displayMessage(message.message, sender);
     };
-    
+
     webSocket.onopen = function() {
         console.log('WebSocket opened');
     };
@@ -59,7 +59,7 @@ function observeForm(webSocket)
                 if (form)
 				{
                     attachFormSubmitListener(webSocket); // On récupère le formulaire et on attache l'écouteur.
-                    observer.disconnect(); // Arrêtez d'observer une fois le formulaire trouvé et l'écouteur attaché.
+                    // observer.disconnect();
                 }
             }
         });
@@ -68,7 +68,6 @@ function observeForm(webSocket)
     const config = { childList: true, subtree: true };
     observer.observe(document.body, config); // Commencez à observer le document entier.
 }
-
 
 function attachFormSubmitListener(webSocket)
 {
@@ -149,6 +148,7 @@ async function loadFriendList()
         const users = await cb_fetchAllUsers();
         await cb_displayUsers(users);
 		attachClickEventToFriends();
+		document.getElementById('chatboxHeader').innerText = 'Chat';
     }
     catch (error)
     {
@@ -230,7 +230,6 @@ function attachClickEventToFriends()
     });
 }
 
-
 function getChatboxActionButtonsHtml(user)
 {
     let buttonsHtml = '';
@@ -243,8 +242,7 @@ function getChatboxActionButtonsHtml(user)
 		buttonsHtml += `<hr>`
         buttonsHtml += `<a class="dropdown-item dangerBtn" onclick="deleteFriend('${user.username}')">Supprimer</a>`;
     }
-	else if
-	(user.status === 'blocked')
+	else if (user.status === 'blocked')
 	{
         // Les utilisateurs qui sont bloqués
         buttonsHtml += `<a class="dropdown-item dangerBtn" onclick="unblockUser('${user.username}')">Débloquer</a>`;
@@ -259,13 +257,12 @@ function getChatboxActionButtonsHtml(user)
     return buttonsHtml;
 }
 
-function sendMessage()
+function sendMessage(username)
 {
 	const messagesUrl = '/static/html/chatbox/messagebox.html';
     loadContent(messagesUrl, '#chatboxContainer', messages);
     fetchAndDisplayStoredMessages();
-
-	// To do...
+	document.getElementById('chatboxHeader').innerText = `${username}`;
 }
 
 // On ajoute initChatbox à window.initPageFunctions pour qu'il soit appelé lors de l'initialisation de la page.

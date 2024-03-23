@@ -5,12 +5,12 @@
 		<button class="btn collapseBtn" data-bs-toggle="collapse" data-bs-target="#chatboxCollapse">
 			<div class="container-fluid">
 				<img src="static/img/chat-left-text.svg" alt="Chat" class="chatIcon">
-				Messages
+				<div id="chatboxHeader"></div>
 			</div>
 		</button>
 
 		<div class="collapse" id="chatboxCollapse">
-			<div id="chatboxContainer"><!-- le contenu du chat est injecté ici. --></div>
+			<div id="chatboxContainer" class="friendList"><!-- le contenu du chat est injecté ici. --></div>
 		</div>
 
 	</div>
