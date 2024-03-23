@@ -15,6 +15,7 @@ class User(AbstractUser):
     friendlist = models.ManyToManyField('self', blank=True)
     blocklist = models.ManyToManyField('self', blank=True)
     tournaments = models.ManyToManyField('Tournament', blank=True)
+    is_oauth = models.BooleanField(default=False)
     
     # Note de Louis: I didn't add a password field because it is already included in AbstractUser
 
