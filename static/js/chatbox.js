@@ -5,6 +5,7 @@ async function loadChatbox()
     try
     {
         await loadContent('/static/html/chatbox/chatbox.html', '#chatBox', 'chatbox');
+		loadFriendList();
         initChatbox();
     }
     catch (error)
@@ -64,16 +65,18 @@ function observeForm(webSocket)
 }
 
 
-function attachFormSubmitListener(webSocket) {
+function attachFormSubmitListener(webSocket)
+{
     const form = document.getElementById('form');
+
     form.addEventListener('submit', function(event) {
         event.preventDefault();
         const messageInput = document.getElementById('message');
         const message = messageInput.value.trim();
+        const targetUsername = window.targetUsername;
 
-        const targetUsername = "404craziix";
-
-        if (message && webSocket.readyState === WebSocket.OPEN) {
+        if (message && webSocket.readyState === WebSocket.OPEN)
+		{
             // Inclut le destinataire dans l'objet JSON envoyé
             webSocket.send(JSON.stringify({
                 message: message,
@@ -106,7 +109,8 @@ async function loadFriendList()
     try
     {
         const users = await cb_fetchAllUsers();
-        cb_displayUsers(users);
+        await cb_displayUsers(users);
+		attachClickEventToFriends();
     }
     catch (error)
     {
@@ -114,7 +118,6 @@ async function loadFriendList()
         console.error("Une erreur s'est produite lors du chargement des amis :", error);
     }
 }
-
 
 async function cb_fetchAllUsers()
 {
@@ -162,6 +165,7 @@ async function cb_displayUsers(users)
 						.replace('{{actionButtons}}', getChatboxActionButtonsHtml(user))
 						.replace('{{avatar}}', avatar)
 						.replace('{{username}}', user.username)
+						.replace('{{data-username}}', user.username)
                         .replace('{{actionContainerId}}', actionContainerId);
 
                     usersList.innerHTML += userHTML;
@@ -176,6 +180,18 @@ async function cb_displayUsers(users)
         console.error('Une erreur s\'est produite lors du chargement et de l\'affichage des amis :', error);
     }
 }
+
+function attachClickEventToFriends()
+{
+    document.querySelectorAll('.user').forEach(userElement => {
+        userElement.addEventListener('click', function() {
+            const username = this.getAttribute('data-username');
+            console.log("Ami cliqué :", username);
+            window.targetUsername = username;
+        });
+    });
+}
+
 
 function getChatboxActionButtonsHtml(user)
 {
