@@ -23,8 +23,22 @@ function filterUsersByUsername(event)
 }
 
 // Notifications
+
+function getNotificationsById(notificationId)
+{
+    const notifications = document.querySelectorAll('.notification');
+    for (let i = 0; i < notifications.length; i++)
+    {
+        if (notifications[i].getAttribute('data-notification-id') === notificationId.toString())
+        {
+            return notifications[i];
+        }
+    }
+}
+
 async function manageInvite(notificationId, action)
 {
+    const notification = getNotificationsById(notificationId);
     try
 	{
         const response = await fetch('/api/respond-to-invite/', {
@@ -39,8 +53,15 @@ async function manageInvite(notificationId, action)
 
         const data = await response.json();
         console.log('Response to invite:', data);
+        // delete notification from DOM
+        const notificationElement = document.querySelector(`.notification[data-notification-id="${notificationId}"]`);
+        if (notificationElement.classList.contains('tournament-invite'))
+            initTournamentsList();
 
-        // Logique suivante inchangée...
+        if (notificationElement)
+            notificationElement.remove();
+        
+
     }
 	catch (error)
 	{
@@ -68,7 +89,7 @@ function getActionButtonsNotification(notification)
     if (notification.notification_type === 'game-start')
     {
         return `
-            <button class="btn btn-success" onclick="manageInvite(${notification.id}, 'accept')">Start</button>
+            <button class="btn btn-success" onclick="manageInvite(${notification}, 'accept')">Start</button>
             `;
     }
 }
@@ -80,7 +101,7 @@ function displayNotification(notification)
     if (notificationsList)
 	{
         const notificationElement = document.createElement('div');
-        notificationElement.className = 'notification';
+        notificationElement.className = 'notification' + ' ' + notification.notification_type;
         const dateString = new Date(notification.created_at).toLocaleString();
         notificationElement.setAttribute('data-notification-id', notification.id);
         notificationElement.innerHTML = `
