@@ -17,7 +17,9 @@ class User(AbstractUser):
     tournaments = models.ManyToManyField('Tournament', blank=True)
     is_oauth = models.BooleanField(default=False)
     
-    # Note de Louis: I didn't add a password field because it is already included in AbstractUser
+    def in_active_game(self):
+        return Game.objects.filter(models.Q(player1=self) | models.Q(player2=self)).filter(status='in progress').exists()
+    
 
 class Game(models.Model):
     def __str__(self):
@@ -28,12 +30,12 @@ class Game(models.Model):
     player2 = models.ForeignKey(User, on_delete=models.CASCADE, related_name='player2')
     score_player1 = models.IntegerField(default=0)
     score_player2 = models.IntegerField(default=0)
-    winner = models.ForeignKey(User, on_delete=models.CASCADE, related_name='winner')
+    winner = models.ForeignKey(User, on_delete=models.CASCADE, related_name='winner', null=True, blank=True)
     start_time = models.DateTimeField(auto_now_add=True)
     end_time = models.DateTimeField(null=True, blank=True)
     tournament = models.ForeignKey('Tournament', on_delete=models.CASCADE, null=True, blank=True)
     round_name = models.CharField(max_length=50, null=True, blank=True)
-
+    status = models.CharField(max_length=50, default="waiting for player2")
 
 class Tournament(models.Model):
     id = models.AutoField(primary_key=True)
