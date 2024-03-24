@@ -52,49 +52,6 @@ async function fetchAllUsers()
     }
 }
 
-function displayUsers(users)
-{
-    var usersList = document.getElementById('users-list');
-    usersList.innerHTML = '';
-
-    users.forEach(user => {
-        var avatarSrc = user.avatar;
-        var actionContainerId = `actions-${user.username}`;
-        
-        var userHTML = `
-            <div class="friend">
-                <img src="${avatarSrc}" alt="User avatar" />
-                <div>
-                    <h2>${user.username}</h2>
-                    <p>Status: <span id="status-${user.username}">${user.status}</span></p>
-                </div>
-                <div id="${actionContainerId}">
-                    ${getActionButtonsHtml(user)}
-                </div>
-            </div>
-        `;
-        usersList.innerHTML += userHTML;
-    });
-}
-
-function getActionButtonsHtml(user)
-{
-    let buttonsHtml = '';
-    if (user.status !== 'blocked')
-	{
-        buttonsHtml += `<button class="btn btn-danger" onclick="blockUser('${user.username}')">Block</button>`;
-
-        if (user.status === 'friends')
-            buttonsHtml += `<button class="btn btn-danger" onclick="deleteFriend('${user.username}')">Delete</button>`;
-        else
-            buttonsHtml += `<button class="btn btn-success" onclick="addFriend('${user.username}')">Add</button>`;
-    }
-    else
-        buttonsHtml += `<button class="btn btn-warning" onclick="unblockUser('${user.username}')">Unblock</button>`;
-    
-    return buttonsHtml;
-}
-
 async function sendUserAction(username, action)
 {
     const headers = getRequestHeaders();
@@ -129,63 +86,39 @@ async function sendUserAction(username, action)
     }
 }
 
-async function blockUser(username)
+async function handleUserAction(username, action)
 {
-    try
-	{
-        await sendUserAction(username, 'block');
-        console.log("User blocked successfully");
-        updateUserInterface(username, 'blocked');
-        emitUserStatusChangeEvent(username, 'blocked');
-    }
-	catch (error)
-	{
-        console.error(`Error blocking user ${username}:`, error);
-    }
-}
+    let statusAfterAction;
 
-async function unblockUser(username)
-{
-    try
+    switch (action)
 	{
-        await sendUserAction(username, 'unblock');
-        console.log("User unblocked successfully");
-        updateUserInterface(username, 'none');
-        emitUserStatusChangeEvent(username, 'none');
+        case 'block':
+            statusAfterAction = 'blocked';
+            break;
+        case 'unblock':
+            statusAfterAction = 'none';
+            break;
+        case 'add':
+            statusAfterAction = 'friends';
+            break;
+        case 'delete':
+            statusAfterAction = 'not friends yet';
+            break;
+        default:
+            console.error(`Unknown action: ${action}`);
+            return;
     }
-	catch (error)
-	{
-        console.error(`Error unblocking user ${username}:`, error);
-    }
-}
 
-async function addFriend(username)
-{
     try
 	{
-        await sendUserAction(username, 'add');
-        console.log("Friend added successfully");
-        updateUserInterface(username, 'friends');
-        emitUserStatusChangeEvent(username, 'friends');
+        await sendUserAction(username, action);
+        console.log(`User ${action}ed successfully`);
+        updateUserInterface(username, statusAfterAction);
+        emitUserStatusChangeEvent(username, statusAfterAction);
     }
 	catch (error)
 	{
-        console.error(`Error adding friend ${username}:`, error);
-    }
-}
-
-async function deleteFriend(username)
-{
-    try
-	{
-        await sendUserAction(username, 'delete');
-        console.log("Friend deleted successfully");
-        updateUserInterface(username, 'not friends yet');
-        emitUserStatusChangeEvent(username, 'not friends yet');
-    }
-	catch (error)
-	{
-        console.error(`Error deleting friend ${username}:`, error);
+        console.error(`Error ${action}ing user ${username}:`, error);
     }
 }
 

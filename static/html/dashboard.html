@@ -15,10 +15,13 @@
     
     <div class="dashboard-section search-users col">
         <h2>Find Friends</h2>
-        <div class="search-bar d-flex flex-row">
-            <input type="text" id="userSearch" placeholder="Search for users...">
-            <button class="btn search" id="userSearchButton">Search</button>
-        </div>
+        <div class="search-bar">
+			<div class="input-group">
+				<input type="text" id="userSearch" class="form-control" placeholder="Search for users...">
+				<button class="btn btn-outline-secondary" id="userSearchButton" type="button">Search</button>
+			</div>
+		</div>
+
         <div id="users-list" class="search-results">
             <p>Loading FriendList . . . </p>
         </div>

@@ -3,6 +3,8 @@ if (!window.allUsers) {
     window.allUsers = [];
 }
 
+// Friends management
+
 function initFriendsSearch()
 {
     var input = document.getElementById('userSearch');
@@ -20,6 +22,63 @@ function filterUsersByUsername(event)
     const filteredUsers = allUsers.filter(user => user.username.includes(searchTerm));
 
     displayUsers(filteredUsers);
+}
+
+function displayUsers(users)
+{
+    var usersList = document.getElementById('users-list');
+    usersList.innerHTML = '';
+
+    users.forEach(user => {
+        var actionContainerId = `actions-${user.username}`;
+        var avatarSrc = '/static/img/person-fill.svg';
+
+		// if (user.avatar)
+		// 	avatarSrc = user.avatar;
+
+        var userHTML = `
+			<div class="card friend">
+				<div class="card-body">
+					<div class="row">
+						<div class="col-8">
+							<div class="friendProfile">
+								<img src="${avatarSrc}" alt="User avatar" class="me-3" style="width: 60px; height: 60px; border-radius: 50%;">
+								<div class="friendInfo">
+									<h3 class="mb-0">${user.username}</h3>
+									<p class="mb-0">Status: <span id="status-${user.username}">${user.status}</span></p>
+								</div>
+							</div>
+						</div>
+						<div class="col-4">
+							<div id="${actionContainerId}" class="btn-group action-buttons">
+								${getActionButtonsHtml(user)}
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+        `;
+
+        usersList.innerHTML += userHTML;
+    });
+}
+
+function getActionButtonsHtml(user)
+{
+    let buttonsHtml = '';
+
+    if (user.status === 'friends')
+        buttonsHtml += `<button class="btn btn-danger" type="button" onclick="handleUserAction('${user.username}', 'delete')">Delete</button>`;
+    else
+        buttonsHtml += `<button class="btn btn-success" type="button" onclick="handleUserAction('${user.username}', 'add')">Add</button>`;
+
+
+    // if (user.status !== 'blocked')
+    //     buttonsHtml += `<button class="btn btn-danger" type="button" onclick="blockUser('${user.username}')">Block</button>`;
+    // else
+    //     buttonsHtml += `<button class="btn btn-warning" type="button" onclick="unblockUser('${user.username}')">Unblock</button>`;
+
+    return buttonsHtml;
 }
 
 // Notifications
@@ -163,6 +222,8 @@ async function initNotifications()
         console.error('WebSocket error:', event);
     }
 }
+
+// Tournaments
 
 function displayTournaments(tournaments)
 {
