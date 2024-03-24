@@ -44,6 +44,12 @@ const routes = {
         js: '/static/js/tournament.js',
         requires_auth: true
     },
+    '/game': {
+        html: '/static/html/game/game.html',
+        css: '/static/css//game/game.css',
+        js: '/static/js/game/game.js',
+        requires_auth: true
+    },
     '/404': {
         html: '/static/html/404.html',
         css: '/static/css/404.css',
@@ -93,7 +99,7 @@ document.addEventListener('click', function (event) {
 
         navigate(finalPath);
         window.history.pushState({}, '', finalPath);
- 
+        
     }
 });
 

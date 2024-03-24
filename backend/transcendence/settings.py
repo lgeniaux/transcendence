@@ -45,6 +45,7 @@ INSTALLED_APPS = [
 	'livechat',
     'notifications',
     'tournaments',
+    'games',
 ]
 
 ASGI_APPLICATION = 'transcendence.asgi.application'
