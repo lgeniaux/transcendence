@@ -89,7 +89,7 @@ function getActionButtonsNotification(notification)
     if (notification.notification_type === 'game-start')
     {
         return `
-            <button class="btn btn-success" onclick="manageInvite(${notification}, 'accept')">Start</button>
+            <button class="btn btn-success" onclick="manageInvite(${notification.id}, 'accept')">Start</button>
             `;
     }
 }
