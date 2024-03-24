@@ -10,7 +10,7 @@ from django.shortcuts import get_object_or_404
 class GameStatusSerializer(serializers.ModelSerializer):
     class Meta:
         model = Game
-        fields = ['game_id', 'status', 'score_player1', 'score_player2', 'winner']
+        fields = ['game_id', 'status', 'score_player1', 'score_player2', 'player1', 'player2', 'winner']
 
 class GetGameStatus(APIView):
     """
@@ -22,7 +22,13 @@ class GetGameStatus(APIView):
         try:
             game = Game.objects.get(game_id=game_id)
             serializer = GameStatusSerializer(game)
-            return Response(serializer.data)
+           
+            #do not return the response if the request user is not player1 or player2
+            if request.user != game.player1 and request.user != game.player2:
+                return Response({"detail": "You are not a player of this game."}, status=status.HTTP_400_BAD_REQUEST)
+            actual_user_role = 'player1' if game.player1 == request.user else 'player2'
+            return Response({'game': serializer.data, 'player': actual_user_role}, status=status.HTTP_200_OK)
+            
         except Game.DoesNotExist:
             return Response({"detail": "Game not found."}, status=status.HTTP_404_NOT_FOUND)
 
@@ -84,6 +90,11 @@ class EndGameSerializer(serializers.Serializer):
         if len(score) != 2:
             raise serializers.ValidationError('Invalid score format')
         if not score[0].isdigit() or not score[1].isdigit():
+            raise serializers.ValidationError('Invalid score format') 
+        # one of the two players MUST have a score of 5 to end the game
+        if score[0] != '5' and score[1] != '5':
+            raise serializers.ValidationError('Invalid score format')
+        if int(score[0]) > 5 or int(score[1]) > 5:
             raise serializers.ValidationError('Invalid score format')
         if score[0] == score[1]:
             raise serializers.ValidationError('Draw is not allowed')
@@ -104,5 +115,5 @@ class EndGame(APIView):
             game.score_player1 = score[0]
             game.score_player2 = score[1]
             game.save()
-            return Response({'message': 'Game ended', 'score_player1': game.score_player1, 'score_player2': game.score_player2, 'winner': game.winner}, status=status.HTTP_200_OK)
+            return Response({'message': 'Game ended', 'score_player1': game.score_player1, 'score_player2': game.score_player2, 'winner': game.winner.username}, status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

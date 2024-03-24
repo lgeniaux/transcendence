@@ -245,6 +245,12 @@ class ManageInvitationNotification(APIView):
                         'status' : "pending"
                     }
                     send_notification(game.player1, message, 'game-start', data)
+                    message = message = f"You have accepted the game invite from {game.player1.username}"
+                    data = {
+                        'game_id' : game.game_id,
+                        'status' : "pending"
+                    }
+                    send_notification(game.player2, message, 'game-start', data)
                     return Response({"detail": "Game invitation successfully accepted"}, status=status.HTTP_200_OK)
                 elif action == "deny":
                     notification.data['status'] = "denied"

@@ -1,33 +1,40 @@
+function displayGameView(game) {
+    player = game.player;
+    game = game.game;
+    if (game.status === 'waiting to start' && player === 'player2') {
+        document.querySelector('.game-status').innerHTML = 'Waiting for player 1 to start the game';
+    }
+}
+
+function startGame() {
+
+}
+
 function getGameStatus() {
     const gameId = sessionStorage.getItem('currentGameId');
     const authToken = sessionStorage.getItem('authToken');
 
-    fetch(`/api/game/get-status/?`, {
+    const response = fetch(`/api/game/get-status/${gameId}/`, {
         method: 'GET',
         headers: {
             'Authorization': `Token ${authToken}`
         }
     })
-        .then(response => {
-            if (response.ok)
-                return response.json();
-            else
-                throw new Error('Failed to get game status');
-        })
-        .then(game => {
-            console.log('Game:', game);
-            displayGameView(game);
-        })
-        .catch(error => {
-            console.error('Error getting game status:', error);
-        });
+
+    response.then(response => {
+        if (!response.ok)
+            throw new Error(`HTTP error! status: ${response.status}`);
+        
+        return response.json();
+    }
+    ).then(game => {
+        console.log('Game status:', game);
+        displayGameView(game);
+    }).catch(error => {
+
+    });
+
 }
-
-
-function displayGameView() {
-    getGameStatus();
-}
-
 
 function initGame() {
     const gameId = sessionStorage.getItem('currentGameId');
@@ -37,10 +44,11 @@ function initGame() {
     else {
         const authToken = sessionStorage.getItem('authToken');
         const ws = new WebSocket(`ws://${window.location.host}/ws/game/${authToken}/${gameId}/`);
+        
 
         ws.onopen = function (event) {
             console.log('WebSocket opened');
-            displayGameView();
+            getGameStatus();
 
             ws.onclose = function (event) {
                 console.log('WebSocket closed');
