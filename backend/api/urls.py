@@ -2,7 +2,7 @@ from django.urls import path
 from .views import GameList, UserRegistrationView, UserLogin, UserLogout, UserDelete
 from .oauth import CodeForToken
 from .profile import UserProfile, ChangePassword
-from .social import AddOrDeleteFriend, GetUsersList, BlockOrUnblockUser, GetUserNotifications, ManageInvitationNotification
+from .social import AddOrDeleteFriend, GetUsersList, BlockOrUnblockUser, GetUserNotifications, ManageInvitationNotification, InvitePlayerToGame
 # import notifications.consumers
 from notifications import consumers 
 from .tournaments import CreateTournament, GetMyTournaments, GetTournamentState
@@ -38,6 +38,6 @@ urlpatterns = [
 
    path('get-messages/', GetConversationMessages.as_view(), name='get-conversation-messages'),
 
-
+   path('game/invite/', InvitePlayerToGame.as_view(), name='invite-player'),
 
 ]
