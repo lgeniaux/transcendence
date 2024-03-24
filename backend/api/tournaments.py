@@ -82,7 +82,9 @@ class TournamentSerializer(serializers.ModelSerializer):
         # Ensure 'participants_username' is removed from validated_data before creating the Tournament instance
         tournament = Tournament.objects.create(name=name, creator=self.context['request'].user)
 
+
         tournament.participants.add(self.context['request'].user)
+        tournament.nb_players = validated_data['nb_players']
         tournament.initialize_state()
         
         return tournament
@@ -128,7 +130,7 @@ class GetTournamentState(APIView):
     def get(self, request, *args, **kwargs):
          tournament_id = kwargs['tournament_id']
          try:
-              tournament = Tournament.objects.get(id=tournament_id)
-              return Response(tournament.state, status=status.HTTP_200_OK)
+            tournament = Tournament.objects.get(id=tournament_id)
+            return Response({'state': tournament.state, 'nb_players': tournament.nb_players, 'is_creator': tournament.creator == request.user}, status=status.HTTP_200_OK)
          except Tournament.DoesNotExist:
               return Response({'error': 'Tournament not found'}, status=status.HTTP_404_NOT_FOUND)

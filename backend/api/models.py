@@ -44,9 +44,9 @@ class Tournament(models.Model):
     participants = models.ManyToManyField(User, blank=True) # users that have accepted the invitation
     start_time = models.DateTimeField(auto_now_add=True)
     state = models.JSONField(default=dict)
+    nb_players = models.IntegerField()
     
     def initialize_state(self):
-        # we know the number of participants can only be 4, 6 or 8, so we can initialize the state accordingly (quarter-finals, semi-finals, finals etc )
         state = {}
         state['quarter-finals'] = []
         state['semi-finals'] = []

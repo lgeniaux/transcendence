@@ -126,12 +126,39 @@ function fetchTournamentState() {
         })
         .then(data => {
             console.log('Tournament state:', data);
-            // Handle the data here
+            return data;
         })
         .catch(error => {
             console.error('Error:', error);
         });
 }
+
+function displayInviteContacts() {
+    const tournamentContainer = document.getElementById('tournament-container');
+    // append a div with the id 'tournament-container' to the html of the tournament page
+    const tournamentHTML = `
+        <div class="col-3">
+        <div class="listContainer">
+            <h2>Invite Contacts</h2>
+            <div id="contacts-list" class="search-results">
+                <p>Loading Contacts . . . </p>
+            </div>
+        </div>
+    </div>`;
+    const inviteList = document.createElement('div');
+    inviteList.innerHTML = tournamentHTML;
+    tournamentContainer.appendChild(inviteList);
+}
+
+function displayTournamentView() {
+
+    const data = fetchTournamentState();
+    if (data) {
+        displayInviteContacts();
+    }
+
+}
+
 
 function initTournament() {
     const tournamentId = sessionStorage.getItem('currentTournamentId');
@@ -146,7 +173,7 @@ function initTournament() {
 
         ws.onopen = function (event) {
             console.log('WebSocket opened');
-            fetchTournamentState();
+            displayTournamentView();
         }
 
         ws.onclose = function (event) {
