@@ -54,8 +54,21 @@ function getActionButtonsNotification(notification)
     if (notification.notification_type === 'tournament-invite')
 	{
         return `
-            <button class="btn btn-danger" onclick="manageInvite(${notification.id}, 'reject')">Reject</button>
+            <button class="btn btn-danger" onclick="manageInvite(${notification.id}, 'deny')">Reject</button>
             <button class="btn btn-success" onclick="manageInvite(${notification.id}, 'accept')">Accept</button>
+            `;
+    }
+    if (notification.notification_type === 'game-invite')
+    {
+        return `
+            <button class="btn btn-danger" onclick="manageInvite(${notification.id}, 'deny')">Deny</button>
+            <button class="btn btn-success" onclick="manageInvite(${notification.id}, 'accept')">Accept</button>
+            `;
+    }
+    if (notification.notification_type === 'game-start')
+    {
+        return `
+            <button class="btn btn-success" onclick="manageInvite(${notification.id}, 'accept')">Start</button>
             `;
     }
 }
@@ -73,13 +86,10 @@ function displayNotification(notification)
         notificationElement.innerHTML = `
             <div class="notification-card">
                 <div class="notification-header">
-                    <span class="notification-type">${notification.notification_type.replace('-', ' ')}</span>
                     <span class="notification-date">${dateString}</span>
                 </div>
                 <div class="notification-body">
                     <p>${notification.message}</p>
-                    <p>From: <strong>${notification.data.sender_username}</strong></p>
-                    <p>Tournament: <strong>${notification.data.tournament_name}</strong> (ID: ${notification.data.tournament_id})</p>
                 </div>
                 <div class="notification-actions">
                     ${getActionButtonsNotification(notification)}
@@ -107,7 +117,8 @@ async function fetchAndDisplayStoredNotifications()
         const data = await response.json();
 
         data.forEach(notification => {
-            if (notification.data['invite_status'] === 'pending')
+            if (notification.data['status'] === 'pending')
+                console.log('Pending notification:', notification);
                 displayNotification(notification);
         });
     }

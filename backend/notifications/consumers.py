@@ -17,7 +17,6 @@ class NotificationConsumer(AsyncWebsocketConsumer):
                 self.channel_name
             )
             await self.accept()
-            await self.send_notifications()
         else:
             await self.close()
 

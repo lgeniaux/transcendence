@@ -5,7 +5,7 @@ from .profile import UserProfile, ChangePassword
 from .social import AddOrDeleteFriend, GetUsersList, BlockOrUnblockUser, GetUserNotifications, ManageInvitationNotification, InvitePlayerToGame
 # import notifications.consumers
 from notifications import consumers 
-from .tournaments import CreateTournament, GetMyTournaments, GetTournamentState
+from .tournaments import CreateTournament, GetMyTournaments, GetTournamentState, InvitePlayerToTournament
 from livechat.views import GetConversationMessages
 
 app_name = 'api'
@@ -31,6 +31,7 @@ urlpatterns = [
    path('tournament/create-tournament/', CreateTournament.as_view(), name='create-tournament'),
    path('tournament/get-tournaments/', GetMyTournaments.as_view(), name='get-tournaments'),
    path('tournament/<int:tournament_id>/state/', GetTournamentState.as_view(), name='get-tournament-state'),
+   path('tournament/invite/', InvitePlayerToTournament.as_view(), name='invite-player'),
 
 
    path('get-notifications/',  GetUserNotifications.as_view(), name='get-notifications'),

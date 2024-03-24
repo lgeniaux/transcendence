@@ -166,7 +166,7 @@ class GetUserNotifications(APIView):
 
     def get(self, request, *args, **kwargs):
         #get all notifications with status 'pending' for the user (the invite_status is in the data field)
-        notifications = Notification.objects.filter(recipient=request.user, data__invite_status='pending')
+        notifications = Notification.objects.filter(recipient=request.user, data__status='pending')
         serializer = NotificationSerializer(notifications, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
     
@@ -193,7 +193,7 @@ class ManageInvitationNotificationSerializer(serializers.Serializer):
             raise serializers.ValidationError({"detail": "Invalid notification type"})
 
         if notification.notification_type == "tournament-invite" or notification.notification_type == "game-invite":
-            if notification.data['invite_status'] != "pending":
+            if notification.data['status'] != "pending":
                 raise serializers.ValidationError({"detail": "This invitation has already been responded to"})
         return notification
     
@@ -219,33 +219,38 @@ class ManageInvitationNotification(APIView):
                 }
                 if action == "accept":
                     tournament.participants.add(request_user)
-                    notification.data['invite_status'] = "accepted"
+                    notification.data['status'] = "accepted"
                     broadcast_to_tournament_group(tournament.id, broadcast_message)
                     notification.save()
                     tournament.save()
                     return Response({"detail": "Tournament invitation successfully accepted"}, status=status.HTTP_200_OK)
                 elif action == "deny":
-                    notification.data['invite_status'] = "denied"
+                    notification.data['status'] = "denied"
                     broadcast_to_tournament_group(tournament.id, broadcast_message)
                     notification.save()
                     tournament.save()
                     return Response({"detail": "Tournament invitation successfully denied"}, status=status.HTTP_200_OK)
 
             elif notification.notification_type == "game-invite":
-               game = Game.objects.get(game_id=notification.data['game_id'])
-               if action == "accept":
+                game = Game.objects.get(game_id=notification.data['game_id'])
+                if action == "accept":
                     game.player2 = request_user
-                    notification.data['invite_status'] = "accepted"
+                    notification.data['status'] = "accepted"
                     game.status = "waiting to start"
                     notification.save()
                     game.save()
                     message = message = f"{request_user.username} has accepted the game invite"
                     data = {
                         'game_id' : game.game_id,
-                        'game_status' : game.status,
+                        'status' : "pending"
                     }
                     send_notification(game.player1, message, 'game-start', data)
                     return Response({"detail": "Game invitation successfully accepted"}, status=status.HTTP_200_OK)
+                elif action == "deny":
+                    notification.data['status'] = "denied"
+                    notification.save()
+                    game.delete()
+                    return Response({"detail": "Game invitation successfully denied"}, status=status.HTTP_200_OK)
             return Response({"detail": "Action completed successfully"}, status=status.HTTP_200_OK)
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
@@ -275,7 +280,7 @@ class InvitePlayerToGameSerializer(serializers.Serializer):
                # Check if there is already an invitation (game pending) between them
         existing_invitation = Notification.objects.filter(Q(recipient=request_user, data__contains={'game_id': player.id}, notification_type='game-invite') |
             Q(recipient=player, data__contains={'game_id': request_user.id}, notification_type='game-invite'),
-            data__contains={'invite_status': 'pending'}
+            data__contains={'status': 'pending'}
         ).exists()
         if existing_invitation:
             raise serializers.ValidationError({"detail": "An invitation is already pending"})
@@ -305,7 +310,7 @@ class InvitePlayerToGame(APIView):
             message = f"{request_user.username} has invited you to a game."
             data = {
                 'game_id': game.game_id,
-                'invite_status': 'pending'
+                'status': 'pending'
             }
             send_notification(player, message, 'game-invite', data)
             return Response({"detail": "Game invitation sent successfully"}, status=status.HTTP_200_OK)

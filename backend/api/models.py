@@ -17,7 +17,9 @@ class User(AbstractUser):
     tournaments = models.ManyToManyField('Tournament', blank=True)
     is_oauth = models.BooleanField(default=False)
     
-    # Note de Louis: I didn't add a password field because it is already included in AbstractUser
+    def in_active_game(self):
+        return Game.objects.filter(models.Q(player1=self) | models.Q(player2=self)).filter(status='in progress').exists()
+    
 
 class Game(models.Model):
     def __str__(self):
