@@ -5,7 +5,7 @@ async function loadNavbar()
         // Charger les composants spécifiques de la navbar
         await loadContent('/static/html/navbar/sidepanel.html', '#sidePanel', 'barre de navigation');
         await loadContent('/static/html/navbar/profilemodal.html', '#profileModal', 'bouton de profil');
-        loadUsernameIntoModal();
+        await loadUsernameIntoModal();
         initLogoutButton();
     }
     catch (error)

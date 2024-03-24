@@ -51,7 +51,7 @@ const routes = {
     }
 };
 
-document.addEventListener('DOMContentLoaded', function () {
+document.addEventListener('DOMContentLoaded', async function () {
     navigate(window.location.pathname);
 
     window.addEventListener('popstate', function () {
@@ -61,8 +61,8 @@ document.addEventListener('DOMContentLoaded', function () {
     // Vincent: Pour charger la barre de navigation
 	if (isAuthenticated())
     {
-        loadNavbar();
-		loadChatbox();
+        await loadNavbar();
+		await loadChatbox();
     }
 });
 
