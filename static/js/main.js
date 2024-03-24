@@ -43,6 +43,11 @@ const routes = {
         css: '/static/css/tournament.css',
         js: '/static/js/tournament.js',
         requires_auth: true
+    },
+    '/404': {
+        html: '/static/html/404.html',
+        css: '/static/css/404.css',
+        requires_auth: false
     }
 };
 
@@ -63,12 +68,13 @@ document.addEventListener('DOMContentLoaded', function () {
 
 function getRedirectPath(path)
 {
+    if (!routes[path])
+        return '/404/';
     if ((path === '/' || path === '/login' || path === '/register') && isAuthenticated())
         return '/dashboard';
 
     if (routes[path].requires_auth && !isAuthenticated())
         return '/';
-
     return path;
 }
 
@@ -99,7 +105,11 @@ function isAuthenticated()
 }
 
 function navigate(path)
-{
+{   
+
+    if (path.endsWith('/'))
+        path = path.slice(0, -1);
+
     window.initPageFunctions = [];
 
     let finalPath = getRedirectPath(path);
@@ -107,7 +117,8 @@ function navigate(path)
     const route = routes[finalPath];
     if (!route)
     {
-        console.error('Route not found');
+        console.error('Route not found:', finalPath);
+        navigate('/404/');
         return;
     }
 

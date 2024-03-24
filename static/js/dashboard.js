@@ -23,6 +23,7 @@ function filterUsersByUsername(event)
 }
 
 // Notifications
+
 async function manageInvite(notificationId, action)
 {
     try
@@ -39,8 +40,15 @@ async function manageInvite(notificationId, action)
 
         const data = await response.json();
         console.log('Response to invite:', data);
+        // delete notification from DOM
+        const notificationElement = document.querySelector(`.notification[data-notification-id="${notificationId}"]`);
+        if (notificationElement.classList.contains('tournament-invite'))
+            initTournamentsList();
 
-        // Logique suivante inchangée...
+        if (notificationElement)
+            notificationElement.remove();
+        
+
     }
 	catch (error)
 	{
@@ -80,7 +88,7 @@ function displayNotification(notification)
     if (notificationsList)
 	{
         const notificationElement = document.createElement('div');
-        notificationElement.className = 'notification';
+        notificationElement.className = 'notification' + ' ' + notification.notification_type;
         const dateString = new Date(notification.created_at).toLocaleString();
         notificationElement.setAttribute('data-notification-id', notification.id);
         notificationElement.innerHTML = `
