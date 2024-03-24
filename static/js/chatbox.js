@@ -1,12 +1,16 @@
 // ----------- backend ----------- //
 
+// Pour Bootstrap 5
+
+
 async function loadChatbox()
 {
     try
-    {
+	{
         await loadContent('/static/html/chatbox/chatbox.html', '#chatBox', 'chatbox');
-		loadFriendList();
-        initChatbox();
+		await loadFriendList();
+        initWebsocket();
+		attachChatboxEvents();
     }
     catch (error)
     {
@@ -14,7 +18,33 @@ async function loadChatbox()
     }
 }
 
-function initChatbox()
+function attachChatboxEvents()
+{
+    const chatboxCollapse = document.getElementById('chatboxCollapse');
+
+    if (chatboxCollapse)
+	{
+        chatboxCollapse.addEventListener('show.bs.collapse', async function () {
+            loadFriendList();
+			try
+			{
+				await loadFriendList();
+				console.log('Chatbox ouverte');
+			}
+			catch (error)
+			{
+				console.error('Erreur lors du chargement de la liste d’amis:', error);
+			}
+        });
+
+        chatboxCollapse.addEventListener('hide.bs.collapse', function () {
+            console.log('Chatbox fermée');
+        });
+    }
+}
+
+
+function initWebsocket()
 {
     const auth_token = sessionStorage.getItem('authToken');
     const wsUrl = `ws://${window.location.host}/ws/chat/${auth_token}/`;
@@ -93,7 +123,8 @@ function attachFormSubmitListener(webSocket)
     });
 }
 
-function fetchAndDisplayStoredMessages() {
+function fetchAndDisplayStoredMessages()
+{
     const auth_token = sessionStorage.getItem('authToken');
     const headers = {
         'Content-Type': 'application/json',
@@ -219,12 +250,14 @@ async function cb_displayUsers(users)
     }
 }
 
-function attachClickEventToFriends() {
+function attachClickEventToFriends()
+{
     // Attache un gestionnaire d'événements à tous les éléments avec la classe 'user'
     document.querySelectorAll('.user').forEach(userElement => {
         userElement.addEventListener('click', function(event) {
             // Vérifie si l'élément cliqué ou l'un de ses parents est le menu déroulant
-            if (!event.target.closest('.dropdown-menu')) {
+            if (!event.target.closest('.dropdown-menu'))
+			{
                 const username = this.getAttribute('data-username');
                 console.log("Ami cliqué :", username);
                 window.targetUsername = username;
@@ -234,9 +267,9 @@ function attachClickEventToFriends() {
     });
 }
 
-function getChatboxActionButtonsHtml(user)
+function getChatboxActionButtonsHtml(user, actionContainerId)
 {
-    let buttonsHtml = '';
+    let buttonsHtml = `<div id="${actionContainerId}">`;
 
     if (user.status === 'friends')
 	{
@@ -257,7 +290,9 @@ function getChatboxActionButtonsHtml(user)
         buttonsHtml += `<a class="dropdown-item" onclick="addFriend('${user.username}')">Ajouter en ami</a>`;
         buttonsHtml += `<a class="dropdown-item dangerBtn" onclick="blockUser('${user.username}')">Bloquer</a>`;
     }
-    
+
+	buttonsHtml += '</div>';
+
     return buttonsHtml;
 }
 
@@ -269,6 +304,6 @@ function sendMessage(username)
 	document.getElementById('chatboxHeader').innerText = window.targetUsername;
 }
 
-// On ajoute initChatbox à window.initPageFunctions pour qu'il soit appelé lors de l'initialisation de la page.
+// On ajoute initWebsocket à window.initPageFunctions pour qu'il soit appelé lors de l'initialisation de la page.
 // window.initPageFunctions = window.initPageFunctions || [];
-// window.initPageFunctions.push(initChatbox);
+// window.initPageFunctions.push(initWebsocket);
