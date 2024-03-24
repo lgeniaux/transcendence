@@ -116,6 +116,12 @@ async function manageInvite(notificationId, action)
 }
 
 
+function goToGame(gameId)
+{
+    sessionStorage.setItem('currentGameId', gameId);
+    window.location = '/game';
+}
+
 function getActionButtonsNotification(notification)
 {
     if (notification.notification_type === 'tournament-invite')
@@ -135,7 +141,7 @@ function getActionButtonsNotification(notification)
     if (notification.notification_type === 'game-start')
     {
         return `
-            <button class="btn btn-success" onclick="manageInvite(${notification.id}, 'accept')">Start</button>
+            <button class="btn btn-success" onclick="goToGame(${notification.data.game_id}, 'accept')">VIEW</button>
             `;
     }
 }
