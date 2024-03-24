@@ -69,7 +69,7 @@ document.addEventListener('DOMContentLoaded', async function () {
 function getRedirectPath(path)
 {
     if (!routes[path])
-        return '/404/';
+        return '/404';
     if ((path === '/' || path === '/login' || path === '/register') && isAuthenticated())
         return '/dashboard';
 
@@ -107,9 +107,6 @@ function isAuthenticated()
 function navigate(path)
 {   
 
-    if (path.endsWith('/'))
-        path = path.slice(0, -1);
-
     window.initPageFunctions = [];
 
     let finalPath = getRedirectPath(path);
@@ -118,7 +115,7 @@ function navigate(path)
     if (!route)
     {
         console.error('Route not found:', finalPath);
-        navigate('/404/');
+
         return;
     }
 
