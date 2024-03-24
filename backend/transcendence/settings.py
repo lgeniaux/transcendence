@@ -26,7 +26,7 @@ SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ['born2pong.dev']
+ALLOWED_HOSTS = ['localhost']
 
 # Application definition
 
@@ -156,4 +156,4 @@ MEDIA_URL = '/media/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-CSRF_TRUSTED_ORIGINS = ['https://born2pong.dev']
+CSRF_TRUSTED_ORIGINS = ['https://localhost']
