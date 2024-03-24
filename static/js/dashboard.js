@@ -24,21 +24,8 @@ function filterUsersByUsername(event)
 
 // Notifications
 
-function getNotificationsById(notificationId)
-{
-    const notifications = document.querySelectorAll('.notification');
-    for (let i = 0; i < notifications.length; i++)
-    {
-        if (notifications[i].getAttribute('data-notification-id') === notificationId.toString())
-        {
-            return notifications[i];
-        }
-    }
-}
-
 async function manageInvite(notificationId, action)
 {
-    const notification = getNotificationsById(notificationId);
     try
 	{
         const response = await fetch('/api/respond-to-invite/', {
