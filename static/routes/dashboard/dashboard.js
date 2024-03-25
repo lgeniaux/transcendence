@@ -5,8 +5,7 @@ if (!window.allUsers) {
 
 // Friends management
 
-function initFriendsSearch()
-{
+function initFriendsSearch() {
     var input = document.getElementById('userSearch');
 
     if (input)
@@ -15,8 +14,7 @@ function initFriendsSearch()
     fetchAllUsers();
 }
 
-function filterUsersByUsername(event)
-{
+function filterUsersByUsername(event) {
     const searchTerm = event.target.value
 
     const filteredUsers = allUsers.filter(user => user.username.includes(searchTerm));
@@ -24,8 +22,7 @@ function filterUsersByUsername(event)
     displayUsers(filteredUsers);
 }
 
-function displayUsers(users)
-{
+function displayUsers(users) {
     var usersList = document.getElementById('users-list');
     usersList.innerHTML = '';
 
@@ -33,57 +30,47 @@ function displayUsers(users)
         var actionContainerId = `actions-${user.username}`;
         var avatarSrc = '/static/img/person-fill.svg';
 
-		// if (user.avatar)
-		// 	avatarSrc = user.avatar;
-
         var userHTML = `
-			<div class="card friend">
-				<div class="card-body">
-					<div class="row">
-						<div class="col-8">
-							<div class="friendProfile">
-								<img src="${avatarSrc}" alt="User avatar" class="me-3" style="width: 60px; height: 60px; border-radius: 50%;">
-								<div class="friendInfo">
-									<h3 class="mb-0">${user.username}</h3>
-									<p class="mb-0">Status: <span id="status-${user.username}">${user.status}</span></p>
-								</div>
-							</div>
-						</div>
-						<div class="col-4">
-							<div id="${actionContainerId}" class="btn-group action-buttons">
-								${getActionButtonsHtml(user)}
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
+        <div class="card bg-dark text-white mb-3">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div class="d-flex align-items-center">
+                        <img src="${avatarSrc}" alt="User avatar" class="rounded-circle me-3" style="width: 60px; height: 60px;">
+                        <div>
+                            <h3 class="h5 mb-0">${user.username}</h3>
+                            <p class="mb-0">Status: <span>${user.status}</span></p>
+                        </div>
+                    </div>
+                    <div id="${actionContainerId}" class="btn-group">
+                        ${getActionButtonsHtml(user)}
+                    </div>
+                </div>
+            </div>
+        </div>
         `;
 
         usersList.innerHTML += userHTML;
     });
 }
 
-function getActionButtonsHtml(user)
-{
+
+function getActionButtonsHtml(user) {
     let buttonsHtml = '';
 
-    if (user.status === 'friends')
-        buttonsHtml += `<button class="btn btn-danger" type="button" onclick="handleUserAction('${user.username}', 'delete')">Delete</button>`;
-    else
-        buttonsHtml += `<button class="btn btn-success" type="button" onclick="handleUserAction('${user.username}', 'add')">Add</button>`;
-    //     buttonsHtml += `<button class="btn btn-danger" type="button" onclick="blockUser('${user.username}')">Block</button>`;
-    // else
-    //     buttonsHtml += `<button class="btn btn-warning" type="button" onclick="unblockUser('${user.username}')">Unblock</button>`;
+    if (user.status === 'friends') {
+        buttonsHtml += `<button class="btn btn-outline-danger btn-sm" type="button" onclick="handleUserAction('${user.username}', 'delete')">Delete</button>`;
+    } else {
+        buttonsHtml += `<button class="btn btn-outline-success btn-sm" type="button" onclick="handleUserAction('${user.username}', 'add')">Add</button>`;
+    }
 
     return buttonsHtml;
 }
 
+
 // Notifications
 
-async function manageInvite(notificationId, action)
-{
-    try
-	{
+async function manageInvite(notificationId, action) {
+    try {
         const response = await fetch('/api/respond-to-invite/', {
             method: 'POST',
             credentials: 'include',
@@ -103,78 +90,67 @@ async function manageInvite(notificationId, action)
 
         if (notificationElement)
             notificationElement.remove();
-        
+
 
     }
-	catch (error)
-	{
+    catch (error) {
         console.error('Error responding to invite:', error);
     }
 }
 
 
-function goToGame(gameId)
-{
+function goToGame(gameId) {
     sessionStorage.setItem('currentGameId', gameId);
     window.location = '/game';
 }
 
-function getActionButtonsNotification(notification)
-{
-    if (notification.notification_type === 'tournament-invite')
-	{
-        return `
-            <button class="btn btn-danger" onclick="manageInvite(${notification.id}, 'deny')">Reject</button>
-            <button class="btn btn-success" onclick="manageInvite(${notification.id}, 'accept')">Accept</button>
-            `;
+function getActionButtonsNotification(notification) {
+    let buttonsHtml = '';
+
+    if (notification.notification_type === 'tournament-invite') {
+        buttonsHtml = `
+            <button class="btn btn-outline-danger" onclick="manageInvite(${notification.id}, 'deny')">Reject</button>
+            <button class="btn btn-outline-success" onclick="manageInvite(${notification.id}, 'accept')">Accept</button>
+        `;
+    } else if (notification.notification_type === 'game-invite') {
+        buttonsHtml = `
+            <button class="btn btn-outline-success btn-sm" onclick="manageInvite(${notification.id}, 'accept')">Accept</button>
+            <button class="btn btn-outline-danger btn-sm" onclick="manageInvite(${notification.id}, 'deny')">Deny</button>
+        `;
+    } else if (notification.notification_type === 'game-start') {
+        buttonsHtml = `
+            <button class="btn btn-outline-success" onclick="goToGame(${notification.data.game_id})">VIEW</button>
+        `;
     }
-    if (notification.notification_type === 'game-invite')
-    {
-        return `
-            <button class="btn btn-danger" onclick="manageInvite(${notification.id}, 'deny')">Deny</button>
-            <button class="btn btn-success" onclick="manageInvite(${notification.id}, 'accept')">Accept</button>
-            `;
-    }
-    if (notification.notification_type === 'game-start')
-    {
-        return `
-            <button class="btn btn-success" onclick="goToGame(${notification.data.game_id}, 'accept')">VIEW</button>
-            `;
-    }
+
+    return buttonsHtml; 
 }
 
-function displayNotification(notification)
-{
+function displayNotification(notification) {
     const notificationsList = document.querySelector('.notifications-list');
 
-    if (notificationsList)
-	{
+    if (notificationsList) {
         const notificationElement = document.createElement('div');
         notificationElement.className = 'notification' + ' ' + notification.notification_type;
         const dateString = new Date(notification.created_at).toLocaleString();
         notificationElement.setAttribute('data-notification-id', notification.id);
         notificationElement.innerHTML = `
-            <div class="notification-card">
-                <div class="notification-header">
-                    <span class="notification-date">${dateString}</span>
-                </div>
-                <div class="notification-body">
-                    <p>${notification.message}</p>
-                </div>
-                <div class="notification-actions">
-                    ${getActionButtonsNotification(notification)}
-                </div>
+        <div class="card bg-dark text-white">
+            <div class="card-body">
+                <p class="card-text">${notification.message}</p>
             </div>
-        `;
+            <div class="card-footer bg-transparent border-top-0">
+                ${getActionButtonsNotification(notification)}
+            </div>
+        </div>
+    `;
         notificationsList.prepend(notificationElement);
     }
 }
 
 
-async function fetchAndDisplayStoredNotifications()
-{
-    try
-	{
+async function fetchAndDisplayStoredNotifications() {
+    try {
         const response = await fetch('/api/get-notifications/', {
             method: 'GET',
             credentials: 'include',
@@ -189,18 +165,16 @@ async function fetchAndDisplayStoredNotifications()
         data.forEach(notification => {
             if (notification.data['status'] === 'pending')
                 console.log('Pending notification:', notification);
-                displayNotification(notification);
+            displayNotification(notification);
         });
     }
-	catch (error)
-	{
+    catch (error) {
         console.error('Error fetching notifications:', error);
     }
 }
 
 
-async function initNotifications()
-{
+async function initNotifications() {
     await fetchAndDisplayStoredNotifications(); // Fetch and display stored notifications on page load
 
     const auth_token = sessionStorage.getItem('authToken');
@@ -228,35 +202,35 @@ async function initNotifications()
 
 // Tournaments
 
-function displayTournaments(tournaments)
-{
+function displayTournaments(tournaments) {
     const tournamentsList = document.querySelector('.tournaments-list');
     tournamentsList.innerHTML = '';
 
-    if (tournamentsList)
-	{
+    if (tournamentsList) {
         tournaments.forEach(tournament => {
-            const tournamentElement = document.createElement('div');
-            //<div class="tournament-card" type="button" data-spa="/tournament" data-spa-id="8">
-            tournamentElement.className = 'tournament';
-            tournamentElement.setAttribute('type', 'button');
-            tournamentElement.setAttribute('data-spa', '/tournament');
-            tournamentElement.setAttribute('data-spa-id', tournament.id);
-            tournamentElement.innerHTML = `
-                    <h3>${tournament.name}</h3>
-                    <span class="tournament-state">${tournament.state.status}</span>
-                `;
-            tournamentsList.appendChild(tournamentElement);
-        }
-        );
+            const tournamentCard = document.createElement('div');
+            tournamentCard.className = 'card bg-dark text-white mb-3';
+            tournamentCard.setAttribute('role', 'button');
+            tournamentCard.setAttribute('tabindex', '0');
+            tournamentCard.setAttribute('data-spa', '/tournament');
+            tournamentCard.setAttribute('data-spa-id', tournament.id);
+            tournamentCard.innerHTML = `
+                <div class="card-body d-flex justify-content-between align-items-center">
+                    <h5 class="card-title mb-0">${tournament.name}</h5>
+                    <span class="badge bg-success rounded-pill">${tournament.state.status}</span>
+                </div>
+            `;
+
+            // The click event listener is handled in your main.js, so no need to add it here
+            tournamentsList.appendChild(tournamentCard);
+        });
     }
 }
 
 
-async function initTournamentsList()
-{
-	try
-	{
+
+async function initTournamentsList() {
+    try {
         const response = await fetch('/api/tournament/get-tournaments/', {
             method: 'GET',
             credentials: 'include',
@@ -270,8 +244,7 @@ async function initTournamentsList()
         console.log('Tournaments:', data);
         displayTournaments(data);
     }
-	catch (error)
-	{
+    catch (error) {
         console.error('Error fetching tournaments:', error);
     }
 }

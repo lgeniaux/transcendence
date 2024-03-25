@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Statistics</title>
+</head>
+
+<body>
+    <div class="container-fluid py-4">
+        <!-- Winrate and Game History Section -->
+        <div class="row mb-4 g-3">
+            <div class="col-md-2">
+                <div class="card bg-dark text-white h-100">
+                    <div class="card-header">
+                        Winrate
+                    </div>
+                    <div class="card-body">
+                        <!-- Visualization of winrate -->
+                        <canvas id="winrateChart"></canvas> <!-- Placeholder for chart.js or similar -->
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-5">
+                <div class="card bg-dark text-white h-100">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        Game History
+                        <select class="form-select form-select-sm w-auto">
+                            <option selected>All Types</option>
+                            <option value="1">Type 1</option>
+                            <option value="2">Type 2</option>
+                        </select>
+                    </div>
+                    <div class="card-body overflow-auto" style="max-height: 500px;">
+                        <!-- Scrollable list of cards for game history -->
+                        <!-- Fake card for demonstration -->
+                        <!-- Repeat this structure for each game -->
+                        <div class="card text-dark bg-light mb-2" data-spa="/game-details" data-spa-id="1">
+                            <div class="card-body">
+                                <div class="row align-items-center">
+                                    <div class="col">
+                                        <img src="/static/img/avatar1.png" alt="Player 1" class="rounded-circle me-2">
+                                        <span class="fw-bold">Player1Username</span>
+                                        <span class="badge bg-primary ms-2">10</span>
+                                    </div>
+                                    <div class="col-auto">
+                                        VS
+                                    </div>
+                                    <div class="col">
+                                        <img src="/static/img/avatar2.png" alt="Player 2" class="rounded-circle me-2">
+                                        <span class="fw-bold">Player2Username</span>
+                                        <span class="badge bg-danger ms-2">8</span>
+                                    </div>
+                                    <div class="col-12 col-md-auto mt-2 mt-md-0">
+                                        <span class="text-muted">Type: Type1</span>
+                                    </div>
+                                    <div class="col-12 col-md-auto mt-2 mt-md-0">
+                                        <span class="text-muted">Date: 2024-03-25</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- End of Fake card for demonstration -->
+                    </div>
+                </div>
+            </div>
+            <!-- Tournaments History Section -->
+            <div class="col-md-5">
+                <div class="card bg-dark text-white h-100">
+                    <div class="card-header">
+                        Tournaments History
+                    </div>
+                    <div class="card-body overflow-auto" style="max-height: 300px;">
+                        <!-- Repeat this structure for each tournament -->
+                        <div class="card text-dark bg-light mb-2" data-spa="/tournament-details" data-spa-id="1">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div>Tournament Name: Name</div>
+                                    <div>Position: 1st</div>
+                                    <div>Date: 2024-03-25</div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- End of Fake card for demonstration -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- Statistics Graph Section -->
+        <div class="row">
+            <div class="col-12">
+                <div class="card bg-dark text-white">
+                    <div class="card-header">
+                        Statistics Graph
+                    </div>
+                    <div class="card-body">
+                        <canvas id="statsChart"></canvas> <!-- Placeholder for statistics graph -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+
+</html>

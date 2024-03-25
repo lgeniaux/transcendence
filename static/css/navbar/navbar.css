@@ -4,7 +4,7 @@
     align-items: center;
     justify-content: space-between;
     background-color: #FFB800;
-    height: 6.25rem; /* Adjusted to rem, to match footer's relative height */
+    height: 6.25rem;
     width: 100vw;
     text-align: center;
 }
@@ -13,7 +13,7 @@
 {
     color: black;
     font-family: 'Brandish', sans-serif;
-    font-size: 3.125rem; /* Adjusted to em */
+    font-size: 3.125rem;
 }
 
 .navbar .homeBtn

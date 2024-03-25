@@ -51,6 +51,12 @@ const routes = {
         css: '/static/css/game.css',
         requires_auth: true
     },
+    '/stats': {
+        html: '/static/routes/stats/stats.html',
+        css: '/static/routes/stats/stats.css',
+        js: '/static/routes/stats/stats.js',
+        requires_auth: true
+    },
     '/404': {
         html: '/static/html/404.html',
         css: '/static/css/404.css',
@@ -87,23 +93,20 @@ function getRedirectPath(path)
 
 // navigate to the page if a button is clicked, the location of the navigation is stored in the data-spa. example: <button data-spa="/login">Login</button>
 document.addEventListener('click', function (event) {
-    if (event.target.dataset.spa)
-    {
+    let target = event.target.closest('[data-spa]');
+
+    if (target && target.dataset.spa) {
         event.preventDefault();
 
-        let originalPath = event.target.dataset.spa;
+        let originalPath = target.dataset.spa;
         let finalPath = getRedirectPath(originalPath);
 
-        // check if the path is /tournament if it has an id data-spa-id, stores the id in the session storage
-        if (originalPath === '/tournament' && event.target.dataset.spaId)
-            sessionStorage.setItem('currentTournamentId', event.target.dataset.spaId);
+        if (originalPath === '/tournament' && target.dataset.spaId)
+            sessionStorage.setItem('currentTournamentId', target.dataset.spaId);
 
         navigate(finalPath);
-        window.history.pushState({}, '', finalPath);
-        
     }
 });
-
 function isAuthenticated()
 {
     const authToken = sessionStorage.getItem('authToken');
@@ -187,13 +190,13 @@ function loadCSS(url)
     head.appendChild(link);
 }
 
-function loadJS(urls, finalCallback)
-{
+function loadJS(urls, finalCallback) {
     let loadedScripts = 0;
     
     urls.forEach((url) => {
+        const noCacheUrl = `${url}?v=${new Date().getTime()}`; // Disable cache by URL
         const script = document.createElement('script');
-        script.src = url;
+        script.src = noCacheUrl;
         script.type = 'text/javascript';
         script.async = false;
         script.onload = () => {
@@ -204,6 +207,7 @@ function loadJS(urls, finalCallback)
         document.body.appendChild(script);
     });
 }
+
 
 function loadModule(url)
 {

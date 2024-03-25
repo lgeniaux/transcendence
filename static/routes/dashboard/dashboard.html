@@ -1,28 +1,31 @@
-<div class="dashboard-container d-flex flex-row">
+<div class="dashboard-container container-fluid d-flex flex-row justify-content-between gap-3" style="padding: 20px; height: 800px;">
 
-    <div class="dashboard-section notifications col">
-        <h2>Notifications</h2>
-        <div class="notifications-list">
+    <div class="dashboard-section notifications col d-flex flex-column align-items-center text-white rounded-3 p-3 overflow-hidden">
+        <h2 class=>Notifications</h2>
+        <hr class="w-50">
+        <div class="notifications-list w-100">
+            <!-- Notifications content goes here -->
         </div>
     </div>
 
-    <div class="dashboard-section tournaments col">
+    <div class="dashboard-section tournaments col d-flex flex-column align-items-center text-white rounded-3 p-3 overflow-hidden">
         <h2>My Tournaments</h2>
-        <div class="tournaments-list">
+        <hr class="w-50">
+        <div class="tournaments-list w-100">
             <p>Loading Tournaments . . . </p>
         </div>
     </div>
     
-    <div class="dashboard-section search-users col">
+    <div class="dashboard-section search-users col d-flex flex-column align-items-center text-white rounded-3 p-3 overflow-hidden">
         <h2>Find Friends</h2>
-        <div class="search-bar">
-			<div class="input-group">
-				<input type="text" id="userSearch" class="form-control" placeholder="Search for users...">
-				<button class="btn" id="userSearchButton" type="button">Search</button>
-			</div>
-		</div>
-
-        <div id="users-list" class="search-results">
+        <hr class="w-50">
+        <div class="search-bar d-flex flex-row w-60 my-2">
+            <div class="input-group">
+                <input type="text" id="userSearch" class="form-control" placeholder="Search for users...">
+                <button class="btn btn-warning text-black fw-bold text-uppercase" id="userSearchButton" type="button">Search</button>
+            </div>
+        </div>
+        <div id="users-list" class="search-results w-100 p-3 overflow-auto">
             <p>Loading FriendList . . . </p>
         </div>
     </div>
