@@ -22,7 +22,7 @@ services:
     command: ["./entrypoint.sh", "db", "python", "backend/manage.py", "runserver", "0.0.0.0:8000"]
     volumes:
       - ./web:/usr/src/app # for dev remove for correction
-      - ./tests:/usr/src/app # for dev remove for correction
+      - ./tests:/usr/src/app/tests # for dev remove for correction
       - static:/usr/src/app/static
       - ./.volumes/avatars:/usr/src/app/avatars
     networks:
