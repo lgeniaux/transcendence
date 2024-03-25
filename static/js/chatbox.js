@@ -266,6 +266,11 @@ async function startGameWithUser(username){
 
 }
 
+
+
+
+
+
 function getChatboxActionButtonsHtml(user, actionContainerId)
 {
     let buttonsHtml = `<div id="${actionContainerId}">`;
@@ -278,6 +283,7 @@ function getChatboxActionButtonsHtml(user, actionContainerId)
         buttonsHtml += `<a class="dropdown-item" id="messages" onclick="sendMessage('${user.username}')">Send message</a>`;
         buttonsHtml += `<a class="dropdown-item" id="seeProfile" onclick="viewProfile('${user.username}')">See profile page</a>`;
         buttonsHtml += `<a class="dropdown-item" onclick="startGameWithUser('${user.username}')">Invite to 1v1</a>`;
+        // Si l'url actuelle est /tournament et que on possede un sessionStorage.currentTournamentId
         buttonsHtml += `<hr>`
         buttonsHtml += `<a class="dropdown-item dangerBtn" onclick="handleUserAction('${user.username}', 'delete')">Delete</a>`;
     }

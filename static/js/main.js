@@ -39,9 +39,9 @@ const routes = {
         requires_auth: true
     },
     '/tournament': {
-        html: '/static/routes/html/tournament.html',
-        css: '/static/routes/css/tournament.css',
-        js: '/static/routes/js/tournament.js',
+        html: '/static/routes/tournament/tournament.html',
+        css: '/static/routes/tournament/tournament.css',
+        js: '/static/routes/tournament/tournament.js',
         requires_auth: true
     },
     '/game': {
