@@ -18,7 +18,7 @@
 <body>
 
     <!-- Container principal -->
-    <div class="container-fluid background-container">
+    <div class="container-fluid background-container d-flex flex-column min-vh-100">
 
 		<!-- Header -->
 		<div class="row">
@@ -29,7 +29,7 @@
 			</header>
 		</div>
 
-        <div class="row">
+        <div class="row flex-fill">
             <div class="col-12">
                 <!-- Contenu de la partie principale -->
                 <div class="content">
@@ -40,9 +40,13 @@
         </div>
 
         <!-- Footer -->
-        <footer class="footer">
-            <p>&copy; 2024 - Born2Pong</p>
-        </footer>
+    <footer class="row">
+        <div class="col-12">
+            <div class="footer mt-auto py-3">
+                <p>&copy; 2024 - Born2Pong</p>
+            </div>
+        </div>
+    </footer>
 
     </div>
 

@@ -28,7 +28,7 @@ function displayUsers(users) {
 
     users.forEach(user => {
         var actionContainerId = `actions-${user.username}`;
-        var avatarSrc = '/static/img/person-fill.svg';
+        var avatarSrc = 'https://toppng.com/uploads/preview/tumblr-aesthetic-icon-iconic-icons-circle-polaroid-ico-11562965806b70awpatjs.png';
 
         var userHTML = `
         <div class="card bg-dark text-white mb-3">
@@ -119,7 +119,7 @@ function getActionButtonsNotification(notification) {
         `;
     } else if (notification.notification_type === 'game-start') {
         buttonsHtml = `
-            <button class="btn btn-outline-success" onclick="goToGame(${notification.data.game_id})">VIEW</button>
+            <button class="btn btn-success" onclick="goToGame(${notification.data.game_id})">PLAY</button>
         `;
     }
 
@@ -136,12 +136,13 @@ function displayNotification(notification) {
         notificationElement.setAttribute('data-notification-id', notification.id);
         notificationElement.innerHTML = `
         <div class="card bg-dark text-white">
-            <div class="card-body">
-                <p class="card-text">${notification.message}</p>
-            </div>
-            <div class="card-footer bg-transparent border-top-0">
-                ${getActionButtonsNotification(notification)}
-            </div>
+            <div class="card-body d-flex justify-content-between align-items-center">
+                <img src="https://toppng.com/uploads/preview/tumblr-aesthetic-icon-iconic-icons-circle-polaroid-ico-11562965806b70awpatjs.png" alt="Notification icon" class="rounded-circle me-3" style="width: 40px; height: 40px;">
+                <h5>${notification.message}</h5>
+                <div class="card-footer bg-transparent border-top-0">
+                    ${getActionButtonsNotification(notification)}
+                </div>
+            </div> 
         </div>
     `;
         notificationsList.prepend(notificationElement);
