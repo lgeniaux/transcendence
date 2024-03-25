@@ -8,51 +8,51 @@
 <body>
 
     <div class="container-fluid profile-container mt-4">
-        <h2 class="text-center mb-4 profile-title">Mon Profil</h2>
+        <h2 class="text-center mb-4 profile-title">My profile</h2>
 
         <div class="profile-information mb-3">
-            <h3>Informations Personnelles</h3>
+            <h3>My informations</h3>
             <div class="user-info mb-3">
-                <span class="info-label">Nom d'utilisateur:</span>
+                <span class="info-label">Username:</span>
                 <span id="username">EXAMPLE_USERNAME</span>
             </div>
             <div class="user-info mb-3">
-                <span class="info-label">Adresse e-mail:</span>
+                <span class="info-label">E-mail:</span>
                 <span id="email">exemple@email.com</span>
             </div>
         </div>
 
         <div class="profile-edit mb-3">
-            <h3>Modifier le Profil</h3>
+            <h3>Edit your profile</h3>
             <div id="profileForm" class="profile-form">
                 <div class="mb-3">
-                    <label for="username" class="form-label">Nom d'utilisateur</label>
+                    <label for="username" class="form-label">Username</label>
                     <input type="text" class="form-control" name="username" placeholder="Nom d'utilisateur">
                 </div>
                 <div class="mb-3">
                     <label for="avatar" class="form-label">Avatar:</label>
                     <input type="file" class="form-control" name="avatar">
                 </div>
-                <button type="submit" class="btn profile-btn" id="profileChangeButton">Mettre à jour le Profil</button>
+                <button type="submit" class="btn profile-btn" id="profileChangeButton">Update your profile</button>
             </div>
         </div>
 
-        <div class="profile-password" style="display: none;">
-            <h3>Changer le Mot de Passe</h3>
+        <div class="profile-password">
+            <h3>Edit password</h3>
             <div id="passwordForm" class="password-form">
                 <div class="mb-3">
-                    <label for="old_password" class="form-label">Mot de passe actuel</label>
-                    <input type="password" class="form-control" name="old_password" placeholder="Mot de passe actuel">
+                    <label for="old_password" class="form-label">Actual password</label>
+                    <input type="password" class="form-control" name="old_password" placeholder="Actual password">
                 </div>
                 <div class="mb-3">
-                    <label for="new_password" class="form-label">Nouveau mot de passe</label>
-                    <input type="password" class="form-control" name="new_password" placeholder="Nouveau mot de passe">
+                    <label for="new_password" class="form-label">New password</label>
+                    <input type="password" class="form-control" name="new_password" placeholder="New password">
                 </div>
                 <div class="mb-3">
-                    <label for="confirm_password" class="form-label">Confirmer le mot de passe</label>
-                    <input type="password" class="form-control" name="confirm_password" placeholder="Confirmer le mot de passe">
+                    <label for="confirm_password" class="form-label">Confirm password</label>
+                    <input type="password" class="form-control" name="confirm_password" placeholder="Confirm password">
                 </div>
-                <button type="submit" class="btn profile-btn" id="passwordChangeButton">Modifier le Mot de Passe</button>
+                <button type="submit" class="btn profile-btn" id="passwordChangeButton">Edit your password</button>
             </div>
         </div>
     </div>
