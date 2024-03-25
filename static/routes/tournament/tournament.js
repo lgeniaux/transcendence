@@ -2,6 +2,33 @@ if (!window.allUsers) {
     window.allUsers = [];
 }
 
+async function inviteToTournament(user, tournamentId){
+    const authToken = sessionStorage.getItem('authToken');
+    const headers = {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        'Authorization': `Token ${authToken}`
+    };
+    try {
+        fetch('/api/tournament/invite/', {
+            method: 'POST',
+            headers,
+            body: JSON.stringify({ username: user.username, tournament_id: tournamentId })
+        }).then(response => {
+            return response.json();
+        }).then(data => {
+            if(data.success) {
+                console.log('User invited successfully');
+            }
+        });
+    }
+    catch(error) {
+        console.error('Error inviting user:', error);
+    }
+}
+
+
+
 function displayCreateTournamentForm() {
     // append the create-tournament.html to the html of the tournament page
     const modalHTML = `

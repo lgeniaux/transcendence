@@ -6,8 +6,11 @@ from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
 from django.shortcuts import get_object_or_404
-
-
+from channels.layers import get_channel_layer
+from asgiref.sync import async_to_sync
+from asgiref.sync import async_to_sync
+from channels.layers import get_channel_layer
+from tournaments.views import broadcast_to_tournament_group
 
 class GetGameStatus(APIView):
     """
@@ -54,6 +57,7 @@ class StartGameSerializer(serializers.Serializer):
             raise serializers.ValidationError('You are not a player of this game')
         if game.status != 'waiting to start':
             raise serializers.ValidationError('Game already started or waiting for player2')
+        # if the game is linked to a tournament brodcast the update to the tournament channel 
         return data
     
 class StartGame(APIView):
@@ -66,6 +70,16 @@ class StartGame(APIView):
             game = Game.objects.filter(game_id=game_id).first()
             game.status = 'in progress'
             game.save()
+            if game.tournament:
+                tournament = game.tournament
+                broadcast_message = {
+                    'type': 'game_start',
+                    'game_id': game_id,
+                    'status': 'in progress',
+                    'player1': game.player1.username,
+                    'player2': game.player2.username,
+                    }
+                broadcast_to_tournament_group(tournament.id, broadcast_message)
             return Response({'message': 'Game started'}, status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
@@ -122,5 +136,16 @@ class EndGame(APIView):
             game.score_player1 = score[0]
             game.score_player2 = score[1]
             game.save()
+            if game.tournament:
+                tournament = game.tournament
+                broadcast_message = {
+                    'type': 'game_end',
+                    'game_id': game_id,
+                    'status': 'ended',
+                    'score_player1': score[0],
+                    'score_player2': score[1],
+                    'winner': game.winner.username
+                    }
+                broadcast_to_tournament_group(tournament.id, broadcast_message)
             return Response({'message': 'Game ended', 'score_player1': game.score_player1, 'score_player2': game.score_player2, 'winner': game.winner.username}, status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

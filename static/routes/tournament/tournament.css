@@ -20,7 +20,7 @@
 	display: flex;
 	flex-direction: column;
 	height: 100%;
-	background-color: #FFB800;
+	background-color: rgb(24, 24, 24);
 	border: 8px solid black;
 	border: none;
 	border-radius: 16px;
@@ -30,7 +30,7 @@
 {
 	font-family: 'Fugaz One';
 	font-size: 40px;
-	color: #5a2b00;
+	color: #fefefe;
 	text-align: center;
 	margin: 20px;
 }
@@ -39,8 +39,8 @@
 {
     display: flex;
     flex-direction: column;
-	background-color: #5a2b00;
-	border: 6px solid #432100;
+	background-color: #f8b816;
+	border: 6px solid #FFB800;
 	font-family: 'Fugaz One';
 	color: white;
     align-items: center;
@@ -54,14 +54,14 @@
 
 .tournament-bracket .vertical-line
 {
-    border-left: 2px solid black;
+    border-left: 2px solid rgb(24, 24, 24);
     height: 100px;
 	margin-bottom: 10px;
 }
 
 .tournament-bracket hr
 {
-	border: 2px solid black;
+	border: 2px solid #FFB800;
 	width: 100%;
 }
 
