@@ -31,29 +31,23 @@ python3 -c 'from django.core.management.utils import get_random_secret_key; prin
 ### 3. Build and Run Docker Containers
 Execute the following command to build and run the Docker containers. This command will set up the Django application and the PostgreSQL database:
 ```bash
-docker-compose up --build
+docker-compose up --build -d
 ```
 
-### 4. Initial Database Setup
-After the containers are up and running, you'll need to create database tables. Run the Django migrations using the following command:
-```bash
-docker-compose exec web python manage.py migrate
-```
-
-### 5. Create a Superuser (Optional)
+### 4. Create a Superuser (Optional)
 If you need to access the Django admin panel, create a superuser:
 ```bash
 docker-compose exec web python manage.py createsuperuser
 ```
 Follow the prompts to set up the superuser credentials.
 
-### 6. Accessing the Application
+### 5. Accessing the Application
 The application should now be running and accessible at [http://localhost:8000](http://localhost:8000).
 
 ## Common Commands
-- **Starting the application**: `docker-compose up`
+- **Starting the application**: `docker-compose up -d`
 - **Stopping the application**: `docker-compose down`
 - **Delete the volumes (very useful, use this after modifying .env)**: `docker-compose down --volumes`
-- **Rebuilding the application**: `docker-compose up --build`
+- **Rebuilding the application**: `docker-compose up --build -d`
 - **Running Django management commands**: `docker-compose exec web python manage.py [command]`
 

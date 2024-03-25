@@ -13,4 +13,7 @@ until python -c "import psycopg2; conn = psycopg2.connect(dbname='$POSTGRES_DB',
 done
 
 >&2 echo "Postgres is up - executing command"
+
+python backend/manage.py migrate
+
 exec $cmd
