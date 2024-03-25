@@ -1,4 +1,4 @@
-import { launchGame, createGame } from "/static/game/js/main.js";
+import { launchGame } from "/static/game/js/main.js";
 
 function displayGameView(game) {
     player = game.player;
@@ -11,6 +11,7 @@ function displayGameView(game) {
 
 async function startGame() 
 {
+    document.getElementById("game").removeEventListener("click", startGame);
     const gameId = sessionStorage.getItem('currentGameId');
     const headers = {
         'Authorization': `Token ${sessionStorage.getItem('authToken')}`,
@@ -24,29 +25,20 @@ async function startGame()
     })
     if (!r.ok)
         alert("error starting game xD, starting it anyway"); //FIXME: xD
-    const properties = await createGame()
-    properties.rules.maxPoints = 5;
     let score = "";
     let results = {};
     try {
         const game = await getGame(gameId, headers);
-        results = await launchGame(game.player1, game.player2, properties);
+        results = await launchGame(game.player1, game.player2, window.properties);
     } catch (error) {
         alert('Current game not found, defaulting to new game');
-        results = await launchGame("Left player", "Right player", properties);
+        results = await launchGame("Left player", "Right player", window.properties);
     }
     score = results.score1 + "-" + results.score2;
-    endGame(score);
+    endGame(score, gameId, headers);
 }
 
-function endGame(score) {
-
-    const gameId = sessionStorage.getItem('currentGameId');
-    const authToken = sessionStorage.getItem('authToken');
-    const headers = {
-        'Authorization': `Token ${authToken}`,
-        'Content-Type': 'application/json'
-    }
+function endGame(score, gameId, headers) {
     const data = {
         game_id: gameId,
         score: score
@@ -63,7 +55,7 @@ function endGame(score) {
     });
 }
 
-async function getGame(gameId, headers) {
+async function getGame(gameId, headers) {
     const r = await fetch(`/api/game/get-status/${gameId}/`, {
         method: 'GET',
         headers
@@ -76,6 +68,7 @@ async function getGame(gameId, headers) {
 }
 
 function getGameStatus() {
+    console.log("hello")
     const gameId = sessionStorage.getItem('currentGameId');
     const authToken = sessionStorage.getItem('authToken');
 
@@ -103,6 +96,7 @@ function getGameStatus() {
 
 function initGame() {
     const gameId = sessionStorage.getItem('currentGameId');
+    document.getElementById("game").addEventListener("click", startGame);
 
     if (!gameId)
         window.location = '/';
@@ -135,5 +129,3 @@ function initGame() {
 
 window.initPageFunctions = window.initPageFunctions || [];
 window.initPageFunctions.push(initGame);
-window.startGame = startGame;
-window.endGame = endGame;
