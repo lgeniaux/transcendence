@@ -7,10 +7,7 @@ from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
 from django.shortcuts import get_object_or_404
 
-class GameStatusSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Game
-        fields = ['game_id', 'status', 'score_player1', 'score_player2', 'player1', 'player2', 'winner']
+
 
 class GetGameStatus(APIView):
     """
@@ -20,14 +17,24 @@ class GetGameStatus(APIView):
 
     def get(self, request, game_id, format=None):
         try:
-            game = Game.objects.get(game_id=game_id)
-            serializer = GameStatusSerializer(game)
+            game = get_object_or_404(Game, game_id=game_id)
+            data = {
+                'game_id': game.game_id,
+                'player1': game.player1.username,
+                'player2': game.player2.username,
+                'status': game.status,
+                'winner': game.winner.username if game.winner else None,
+                'score_player1': game.score_player1,
+                'score_player2': game.score_player2,
+                'tournament': game.tournament.name if game.tournament else None,
+                'round_name': game.round_name if game.round_name else None,
+            }
            
             #do not return the response if the request user is not player1 or player2
             if request.user != game.player1 and request.user != game.player2:
                 return Response({"detail": "You are not a player of this game."}, status=status.HTTP_400_BAD_REQUEST)
             actual_user_role = 'player1' if game.player1 == request.user else 'player2'
-            return Response({'game': serializer.data, 'player': actual_user_role}, status=status.HTTP_200_OK)
+            return Response({'game': data, 'player': actual_user_role}, status=status.HTTP_200_OK)
             
         except Game.DoesNotExist:
             return Response({"detail": "Game not found."}, status=status.HTTP_404_NOT_FOUND)

@@ -36,6 +36,9 @@ class GetConversationMessages(APIView):
 			messages = messages.order_by('timestamp')
 			if 'message_max_count' in serializer.validated_data:
 				messages = messages[:serializer.validated_data['message_max_count']]
+			else:
+				messages = messages[:100]
+
 			return Response([{'sender': message.sender.username, 'recipient': message.recipient.username, 'content': message.content, 'timestamp': message.timestamp} for message in messages])
 		else:
 			return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

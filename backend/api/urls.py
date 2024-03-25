@@ -8,6 +8,7 @@ from notifications import consumers
 from .tournaments import CreateTournament, GetMyTournaments, GetTournamentState, InvitePlayerToTournament
 from livechat.views import GetConversationMessages
 from games.views import GetGameStatus, StartGame, EndGame
+from .stats import GetUserStats
 
 app_name = 'api'
 
@@ -44,4 +45,6 @@ urlpatterns = [
    path('game/get-status/<int:game_id>/', GetGameStatus.as_view(), name='get-tournament-state'),
    path('game/start/', StartGame.as_view(), name='start-game'),
    path('game/end/', EndGame.as_view(), name='end-game'),
+
+   path('profile/stats/<str:username>/', GetUserStats.as_view(), name='get-user-stats'),
 ]

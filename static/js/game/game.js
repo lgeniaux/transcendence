@@ -4,6 +4,7 @@ function displayGameView(game) {
     if (game.status === 'waiting to start' && player === 'player2') {
         document.querySelector('.game-status').innerHTML = 'Waiting for player 1 to start the game';
     }
+    
 }
 
 function startGame() {
