@@ -38,7 +38,7 @@
 .dashboard-container .dashboard-section h2
 {
     font-family: 'Fugaz One', sans-serif;
-    color: #FFB800;
+    color: white;
     text-align: center;
     margin-bottom: 20px;
     font-size: 2.5rem;
@@ -110,7 +110,7 @@
     cursor: pointer;
 	font-family: 'Fugaz One', sans-serif;
     font-weight: bold;
-	font-size: 1.5rem;
+	font-size: 20px;
     text-transform: uppercase;
     transition: background-color 0.3s;
 	border-radius: 0px;

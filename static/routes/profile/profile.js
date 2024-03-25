@@ -1,46 +1,59 @@
 // profile.js
 
-function initProfilePage()
+async function initProfilePage()
 {
-    fetchUserProfile();
+    await fetchUserProfile();
 
     var profileFormButton = document.getElementById('profileChangeButton');
     var passwordFormButton = document.getElementById('passwordChangeButton');
+
     if (profileFormButton)
     {
-        profileFormButton.addEventListener('click', function (event) {
+        profileFormButton.addEventListener('click', async function (event) {
             event.preventDefault();
-            updateProfile(event);
+            await updateProfile(event);
         });
     }
 
     if (passwordFormButton)
     {
-        passwordFormButton.addEventListener('click', function (event) {
+        passwordFormButton.addEventListener('click', async function (event) {
             event.preventDefault();
-            changePassword(event);
+            await changePassword(event);
         });
     }
 }
 
-function fetchUserProfile()
+async function fetchUserProfile()
 {
-    fetch('/api/me/', {
-        method: 'GET',
-        credentials: 'include',
-        headers: getRequestHeaders()
-    })
-    .then(response => response.json())
-    .then(data => {
+    try
+	{
+        const response = await fetch('/api/me/', {
+            method: 'GET',
+            credentials: 'include',
+            headers: getRequestHeaders()
+        });
+
+        if (!response.ok)
+            throw new Error(`HTTP error! status: ${response.status}`);
+
+        const data = await response.json();
+
         document.getElementById('username').innerText = data.username;
         document.getElementById('email').innerText = data.email;
+
         if (data.is_oauth)
             document.querySelector('.profile-password').style.display = 'none';
         else
             document.querySelector('.profile-password').style.display = 'block';
-    })
-    .catch(error => console.error('Error:', error));
+
+    }
+	catch (error)
+	{
+        console.error('Error:', error);
+    }
 }
+
 
 function updateProfile(event)
 {
@@ -55,7 +68,6 @@ function updateProfile(event)
 
     if (avatar)
         body_data.avatar = avatar;
-
 
     fetch('/api/me/', {
         method: 'PUT',
@@ -82,11 +94,14 @@ function changePassword(event) {
     var old_password = document.querySelector('[name="old_password"]');
     var new_password = document.querySelector('[name="new_password"]');
     var confirm_password = document.querySelector('[name="confirm_password"]');
-    if (old_password && new_password && confirm_password) {
+
+    if (old_password && new_password && confirm_password)
+	{
         old_password = old_password.value;
         new_password = new_password.value;
         confirm_password = confirm_password.value;
-    } else {
+    } else
+	{
         alert('Please fill in all password fields');
         return;
     }
