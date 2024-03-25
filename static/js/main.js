@@ -46,8 +46,9 @@ const routes = {
     },
     '/game': {
         html: '/static/html/game/game.html',
-        css: '/static/css//game/game.css',
-        js: '/static/js/game/game.js',
+        module: '/static/js/game/game.js',
+        importmap: true,
+        css: '/static/css/game.css',
         requires_auth: true
     },
     '/404': {

@@ -63,6 +63,27 @@ function displayUsers(users)
     });
 }
 
+async function startGameWithUser(username){
+    const authToken = sessionStorage.getItem('authToken');
+    const headers = {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        'Authorization': `Token ${authToken}`
+    };
+    const data = { username: username };
+
+    fetch('/api/game/invite/', {
+        method: 'POST',
+        headers,
+        body: JSON.stringify(data)
+    }).then(response => {
+        return response.json();
+    }).then(data => {
+        console.log(data);
+    });
+
+}
+
 function getActionButtonsHtml(user)
 {
     let buttonsHtml = '';
@@ -73,7 +94,8 @@ function getActionButtonsHtml(user)
         buttonsHtml += `<button class="btn btn-success" type="button" onclick="handleUserAction('${user.username}', 'add')">Add</button>`;
 
 
-    // if (user.status !== 'blocked')
+    if (user.status !== 'blocked')
+        buttonsHtml += `<button class="btn" onclick="startGameWithUser('${user.username}')">1v1</button>`;
     //     buttonsHtml += `<button class="btn btn-danger" type="button" onclick="blockUser('${user.username}')">Block</button>`;
     // else
     //     buttonsHtml += `<button class="btn btn-warning" type="button" onclick="unblockUser('${user.username}')">Unblock</button>`;
