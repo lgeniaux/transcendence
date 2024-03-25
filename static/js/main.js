@@ -2,27 +2,27 @@
 
 const routes = {
     '/': {
-        html: '/static/html/home.html',
-        css: '/static/css/home.css',
+        html: '/static/home.html',
+        css: '/static/home.css',
     },
     '/login': {
-        html: '/static/html/auth/login.html',
-        css: '/static/css/auth/auth.css',
-        js: ['/static/js/oauth.js', '/static/js/login.js']
+        html: '/static/routes/auth/login.html',
+        css: '/static/routes/auth/auth.css',
+        js: ['/static/routes/auth/oauth.js', '/static/routes/auth/login.js']
     },
     '/register': {
-        html: '/static/html/auth/register.html',
-        css: '/static/css/auth/auth.css',
-        js: '/static/js/register.js'
+        html: '/static/routes/auth/register.html',
+        css: '/static/routes/auth/auth.css',
+        js: '/static/routes/auth/register.js'
     },
     '/oauth_callback': {
-        html: '/static/html/oauth_callback.html',
-        js: '/static/js/oauth.js'
+        html: '/static/routes/auth/oauth_callback.html',
+        js: '/static/routes/auth/oauth.js'
     },
     '/profile': {
-        html: '/static/html/profile.html',
-        css: '/static/css/profile.css',
-        js: '/static/js/profile.js',
+        html: '/static/routes/profile/profile.html',
+        css: '/static/routes/profile/profile.css',
+        js: '/static/routes/profile/profile.js',
         requires_auth: true
     },
     '/duel': {
@@ -33,21 +33,22 @@ const routes = {
         requires_auth: true
     },
     '/dashboard': {
-        html: '/static/html/dashboard.html',
-        css: '/static/css/dashboard.css',
-        js: '/static/js/dashboard.js',
+        html: '/static/routes/dashboard/dashboard.html',
+        css: '/static/routes/dashboard/dashboard.css',
+        js: '/static/routes/dashboard/dashboard.js',
         requires_auth: true
     },
     '/tournament': {
-        html: '/static/html/tournament.html',
-        css: '/static/css/tournament.css',
-        js: '/static/js/tournament.js',
+        html: '/static/routes/html/tournament.html',
+        css: '/static/routes/css/tournament.css',
+        js: '/static/routes/js/tournament.js',
         requires_auth: true
     },
     '/game': {
         html: '/static/html/game/game.html',
-        css: '/static/css//game/game.css',
-        js: '/static/js/game/game.js',
+        module: '/static/js/game/game.js',
+        importmap: true,
+        css: '/static/css/game.css',
         requires_auth: true
     },
     '/404': {

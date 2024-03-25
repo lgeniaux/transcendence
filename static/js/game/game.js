@@ -1,13 +1,78 @@
+import { launchGame, createGame } from "/static/game/js/main.js";
+
 function displayGameView(game) {
     player = game.player;
     game = game.game;
     if (game.status === 'waiting to start' && player === 'player2') {
         document.querySelector('.game-status').innerHTML = 'Waiting for player 1 to start the game';
     }
+    
 }
 
-function startGame() {
+async function startGame() 
+{
+    const gameId = sessionStorage.getItem('currentGameId');
+    const headers = {
+        'Authorization': `Token ${sessionStorage.getItem('authToken')}`,
+        'Content-Type': 'application/json'
+    }
 
+    const r = await fetch('/api/game/start/', {
+        method: 'POST',
+        headers,
+        body: JSON.stringify({game_id: gameId})
+    })
+    if (!r.ok)
+        alert("error starting game xD, starting it anyway"); //FIXME: xD
+    const properties = await createGame()
+    properties.rules.maxPoints = 5;
+    let score = "";
+    let results = {};
+    try {
+        const game = await getGame(gameId, headers);
+        results = await launchGame(game.player1, game.player2, properties);
+    } catch (error) {
+        alert('Current game not found, defaulting to new game');
+        results = await launchGame("Left player", "Right player", properties);
+    }
+    score = results.score1 + "-" + results.score2;
+    endGame(score);
+}
+
+function endGame(score) {
+
+    const gameId = sessionStorage.getItem('currentGameId');
+    const authToken = sessionStorage.getItem('authToken');
+    const headers = {
+        'Authorization': `Token ${authToken}`,
+        'Content-Type': 'application/json'
+    }
+    const data = {
+        game_id: gameId,
+        score: score
+    }
+
+    fetch('/api/game/end/', {
+        method: 'POST',
+        headers,
+        body: JSON.stringify(data)
+    }).then(response => {
+        return response.json();
+    }).then(data => {
+        console.log('Game ended:', data);
+    });
+}
+
+async function getGame(gameId, headers) {
+    const r = await fetch(`/api/game/get-status/${gameId}/`, {
+        method: 'GET',
+        headers
+    });
+
+    if (!r.ok)
+        throw new Error(`${await r.text()}`);
+    
+    return (await r.json()).game;
 }
 
 function getGameStatus() {
@@ -70,3 +135,5 @@ function initGame() {
 
 window.initPageFunctions = window.initPageFunctions || [];
 window.initPageFunctions.push(initGame);
+window.startGame = startGame;
+window.endGame = endGame;
