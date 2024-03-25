@@ -245,6 +245,27 @@ async function cb_displayUsers(users)
 	});
 }
 
+async function startGameWithUser(username){
+    const authToken = sessionStorage.getItem('authToken');
+    const headers = {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        'Authorization': `Token ${authToken}`
+    };
+    const data = { username: username };
+
+    fetch('/api/game/invite/', {
+        method: 'POST',
+        headers,
+        body: JSON.stringify(data)
+    }).then(response => {
+        return response.json();
+    }).then(data => {
+        console.log(data);
+    });
+
+}
+
 function getChatboxActionButtonsHtml(user, actionContainerId)
 {
     let buttonsHtml = `<div id="${actionContainerId}">`;
@@ -254,21 +275,22 @@ function getChatboxActionButtonsHtml(user, actionContainerId)
     if (user.status === 'friends')
     {
         // Les utilisateurs qui sont déjà amis
-        buttonsHtml += `<a class="dropdown-item" id="messages" onclick="sendMessage('${user.username}')">Envoyer un message</a>`;
-        buttonsHtml += `<a class="dropdown-item" id="seeProfile" onclick="viewProfile('${user.username}')">Voir le profil</a>`;
+        buttonsHtml += `<a class="dropdown-item" id="messages" onclick="sendMessage('${user.username}')">Send message</a>`;
+        buttonsHtml += `<a class="dropdown-item" id="seeProfile" onclick="viewProfile('${user.username}')">See profile page</a>`;
+        buttonsHtml += `<a class="dropdown-item" onclick="startGameWithUser('${user.username}')">Invite to 1v1</a>`;
         buttonsHtml += `<hr>`
-        buttonsHtml += `<a class="dropdown-item dangerBtn" onclick="handleUserAction('${user.username}', 'delete')">Supprimer</a>`;
+        buttonsHtml += `<a class="dropdown-item dangerBtn" onclick="handleUserAction('${user.username}', 'delete')">Delete</a>`;
     }
     else if (user.status === 'blocked')
     {
         // Les utilisateurs qui sont bloqués
-        buttonsHtml += `<a class="dropdown-item dangerBtn" onclick="handleUserAction('${user.username}', 'unblock')">Débloquer</a>`;
+        buttonsHtml += `<a class="dropdown-item dangerBtn" onclick="handleUserAction('${user.username}', 'unblock')">Unblock</a>`;
     }
     else
     { 
         // Tous les autres cas, y compris ceux où l'utilisateur peut être ajouté en ami
-        buttonsHtml += `<a class="dropdown-item" onclick="handleUserAction('${user.username}', 'add')">Ajouter en ami</a>`;
-        buttonsHtml += `<a class="dropdown-item dangerBtn" onclick="handleUserAction('${user.username}', 'block')">Bloquer</a>`;
+        buttonsHtml += `<a class="dropdown-item" onclick="handleUserAction('${user.username}', 'add')">Add contact</a>`;
+        buttonsHtml += `<a class="dropdown-item dangerBtn" onclick="handleUserAction('${user.username}', 'block')">Block</a>`;
     }
 
     buttonsHtml += '</div>';

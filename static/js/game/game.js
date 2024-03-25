@@ -89,7 +89,7 @@ function getGameStatus() {
     response.then(response => {
         if (!response.ok)
             throw new Error(`HTTP error! status: ${response.status}`);
-        
+        console.log('Response:', response);
         return response.json();
     }
     ).then(game => {
