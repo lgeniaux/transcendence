@@ -96,7 +96,6 @@ function getGameStatus() {
 
 function initGame() {
     const gameId = sessionStorage.getItem('currentGameId');
-    document.getElementById("game").addEventListener("click", startGame);
 
     if (!gameId)
         window.location = '/';
@@ -129,3 +128,4 @@ function initGame() {
 
 window.initPageFunctions = window.initPageFunctions || [];
 window.initPageFunctions.push(initGame);
+document.getElementById("game").addEventListener("click", startGame);
