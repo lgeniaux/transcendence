@@ -27,8 +27,7 @@
     display: flex;
     flex-direction: column;
 	align-items: center;
-    background-color: #FFB800;
-    border: 8px solid black;
+    background-color: rgb(24, 24, 24);
     border-radius: 30px;
     margin: 20px;
     padding: 30px;
@@ -39,7 +38,7 @@
 .dashboard-container .dashboard-section h2
 {
     font-family: 'Fugaz One', sans-serif;
-    color: black;
+    color: #FFB800;
     text-align: center;
     margin-bottom: 20px;
     font-size: 2.5rem;
@@ -71,28 +70,37 @@
 
 .dashboard-container .search-bar
 {
+	width: 60%;
 	display: flex;
 	flex-direction: row;
-	justify-content: space-between;
-	align-items: center;
 	margin: 10px;
 }
 
 .dashboard-container .search-bar .btn
 {
+	background-color: #FFB800;
     color: black;
+	font-family: 'Trebuchet MS', sans-serif;
+	font-weight: bold;
+	border: none;
+	cursor: pointer;
+	text-transform: uppercase;
+	transition: background-color 0.3s;
 }
 
+.dashboard-container .search-bar .btn:hover
+{
+	background-color: #e6a700;
+	opacity: 0.9;
+}
 
 .dashboard-container .search-results
 {
 	width: 100%;
 	padding: 40px;
 	margin: 10px;
+	padding-left: 61px;
 	overflow-y: auto;
-	background-color: rgb(24, 24, 24);
-	border-top-left-radius: 20px;
-	border-bottom-left-radius: 20px;
 }
 
 .dashboard-container .search-results .btn
@@ -100,7 +108,9 @@
     color: #FFFFFF;
     border: none;
     cursor: pointer;
+	font-family: 'Fugaz One', sans-serif;
     font-weight: bold;
+	font-size: 1.5rem;
     text-transform: uppercase;
     transition: background-color 0.3s;
 	border-radius: 0px;
