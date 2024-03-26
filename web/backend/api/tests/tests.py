@@ -15,7 +15,8 @@ def test_login_invalid(client):
 @pytest.mark.django_db
 def test_login_valid(client):
     # Test case 2: Valid credentials
-    response = client.post(base_url + "/register-user/", {"email": "validemail@gmail.com", "username": "validusername", "password": "17ValidPassword@"})
+    response = client.post(base_url + "/register-user/", {"email": "validemail@gmail.com", "username": "Vusername", "password": "17ValidPassword@"})
+    print(response.json())
     assert response.status_code == status.HTTP_201_CREATED
     response = client.post(base_url + "/login-user/", {"email": "validemail@gmail.com", "password": "17ValidPassword@"})
     assert response.status_code == status.HTTP_200_OK
@@ -35,7 +36,7 @@ def test_login_utils(client):
 @pytest.mark.django_db
 def test_already_logged_in(client):
     # Test case 5: Already logged in
-    response = client.post(base_url + "/register-user/", {"email": "validemail2@gmail.com", "username": "validusername2", "password": "17ValidPassword@"})
+    response = client.post(base_url + "/register-user/", {"email": "validemail2@gmail.com", "username": "Vusername2", "password": "17ValidPassword@"})
     response = client.post(base_url + "/login-user/", {"email": "validemail2@gmail.com", "password": "17ValidPassword@"})
     assert response.status_code == status.HTTP_200_OK
     token = response.data['auth_token']
@@ -51,22 +52,22 @@ def test_already_logged_in(client):
 @pytest.mark.django_db
 def test_bad_email(client):
     # Test case 1: Bad email
-    response = client.post(base_url + "/register-user/", {"email": "bademail", "username": "validusername", "password": "17ValidPassword@"})
+    response = client.post(base_url + "/register-user/", {"email": "bademail", "username": "Vusername", "password": "17ValidPassword@"})
     assert response.status_code == status.HTTP_400_BAD_REQUEST
-    response = client.post(base_url + "/register-user/", {"email": "bademail@", "username": "validusername", "password": "17ValidPassword@"})
+    response = client.post(base_url + "/register-user/", {"email": "bademail@", "username": "Vusername", "password": "17ValidPassword@"})
     assert response.status_code == status.HTTP_400_BAD_REQUEST
-    response = client.post(base_url + "/register-user/", {"email": "bademail@.", "username": "validusername", "password": "17ValidPassword@"})
+    response = client.post(base_url + "/register-user/", {"email": "bademail@.", "username": "Vusername", "password": "17ValidPassword@"})
     assert response.status_code == status.HTTP_400_BAD_REQUEST
-    response = client.post(base_url + "/register-user/", {"email": "bademail@.com", "username": "validusername", "password": "17ValidPassword@"})
+    response = client.post(base_url + "/register-user/", {"email": "bademail@.com", "username": "Vusername", "password": "17ValidPassword@"})
     assert response.status_code == status.HTTP_400_BAD_REQUEST
-    response = client.post(base_url + "/register-user/", {"email": "@gmail.com", "username": "validusername", "password": "17ValidPassword@"})
+    response = client.post(base_url + "/register-user/", {"email": "@gmail.com", "username": "Vusername", "password": "17ValidPassword@"})
     assert response.status_code == status.HTTP_400_BAD_REQUEST
 
 # ========== LOGOUT TESTS ==========
 
 @pytest.mark.django_db
 def test_logout(client):
-    response = client.post(base_url + "/register-user/", {"email": "validemail2@gmail.com", "username": "validusername2", "password": "17ValidPassword@"})
+    response = client.post(base_url + "/register-user/", {"email": "validemail2@gmail.com", "username": "Vusername2", "password": "17ValidPassword@"})
     response = client.post(base_url + "/login-user/", {"email": "validemail2@gmail.com", "password": "17ValidPassword@"})
     assert response.status_code == status.HTTP_200_OK
     token = response.data['auth_token']
@@ -89,7 +90,7 @@ def test_logout(client):
 
 @pytest.mark.django_db
 def test_delete_user(client):
-    response = client.post(base_url + "/register-user/", {"email": "validemail2@gmail.com", "username": "validusername2", "password": "17ValidPassword@"})
+    response = client.post(base_url + "/register-user/", {"email": "validemail2@gmail.com", "username": "Vusername2", "password": "17ValidPassword@"})
     response = client.post(base_url + "/login-user/", {"email": "validemail2@gmail.com", "password": "17ValidPassword@"})
     assert response.status_code == status.HTTP_200_OK
     token = response.data['auth_token']
@@ -111,7 +112,7 @@ def test_delete_user(client):
 
 @pytest.mark.django_db
 def test_change_password(client):
-    response = client.post(base_url + "/register-user/", {"email": "validemail2@gmail.com", "username": "validusername2", "password": "17ValidPassword@"})
+    response = client.post(base_url + "/register-user/", {"email": "validemail2@gmail.com", "username": "Vusername2", "password": "17ValidPassword@"})
     response = client.post(base_url + "/login-user/", {"email": "validemail2@gmail.com", "password": "17ValidPassword@"})
     assert response.status_code == status.HTTP_200_OK
     token = response.data['auth_token']
