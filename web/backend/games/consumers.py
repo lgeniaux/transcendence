@@ -22,13 +22,27 @@ class GameConsumer(AsyncWebsocketConsumer):
             await self.close()
 
     async def disconnect(self, close_code):
+        # Additional check to see if the disconnecting user is player1 and game is not yet finished
+        if self.user and await self.is_player1(self.user, self.game_id) and not await self.is_finished(self.game_id):
+            await self.reset_game_status()
+            await self.send_update_to_group("Game has been reset")
         if self.user:
             group_name = f'game_{self.game_id}'
             await self.channel_layer.group_discard(
                 group_name,
                 self.channel_name
             )
-            
+
+    @database_sync_to_async
+    def reset_game_status(self):
+        # Reset game status to 'waiting to start'
+        Game.objects.filter(game_id=self.game_id).update(status='waiting to start')
+
+    @database_sync_to_async
+    def is_player1(self, user, game_id):
+        game = Game.objects.filter(game_id=game_id).first()
+        return game.player1 == user
+
     @database_sync_to_async
     def get_user(self, token_key):
         try:

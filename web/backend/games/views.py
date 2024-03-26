@@ -131,7 +131,7 @@ class EndGame(APIView):
             game_id = serializer.validated_data['game_id']
             score = serializer.validated_data['score']
             game = Game.objects.filter(game_id=game_id).first()
-            game.status = 'ended'
+            game.status = 'finished'
             game.winner = game.player1 if score[0] > score[1] else game.player2
             game.score_player1 = score[0]
             game.score_player2 = score[1]
@@ -141,11 +141,11 @@ class EndGame(APIView):
                 broadcast_message = {
                     'type': 'game_end',
                     'game_id': game_id,
-                    'status': 'ended',
+                    'status': 'finished',
                     'score_player1': score[0],
                     'score_player2': score[1],
                     'winner': game.winner.username
                     }
                 broadcast_to_tournament_group(tournament.id, broadcast_message)
-            return Response({'message': 'Game ended', 'score_player1': game.score_player1, 'score_player2': game.score_player2, 'winner': game.winner.username}, status=status.HTTP_200_OK)
+            return Response({'message': 'Game finished', 'score_player1': game.score_player1, 'score_player2': game.score_player2, 'winner': game.winner.username}, status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

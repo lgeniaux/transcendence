@@ -2,7 +2,7 @@ import { launchGame } from "/static/game/js/main.js";
 
 function displayGameView(game) {
     console.log('Displaying game:', game);
-    const player = game.player;
+    var player = game.player;
     game = game.game;
     if (game.status === 'waiting to start' && player === 'player2') {
         document.getElementById("game").removeEventListener("click", startGame);
@@ -131,9 +131,11 @@ else {
         }
 
         ws.onmessage = function (event) {
-            const game = JSON.parse(event.data);
-            console.log('Live game:', game);
-            displayGameView(game);
+            const message = JSON.parse(event.data);
+            console.log('Live game:', message);
+            if (message === 'Game has been reset') {
+                getGameStatus();
+            }
         }
     }
 }
