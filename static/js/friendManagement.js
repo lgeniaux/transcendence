@@ -102,7 +102,7 @@ async function handleUserAction(username, action)
             statusAfterAction = 'friends';
             break;
         case 'delete':
-            statusAfterAction = 'not friends yet';
+            statusAfterAction = 'None';
             break;
         default:
             console.error(`Unknown action: ${action}`);
@@ -126,7 +126,7 @@ function updateUserInterface(username, newStatus)
 {
     const statusTexts = {
         'blocked': 'blocked',
-        'none': 'not friends yet',
+        'none': 'none',
         'friends': 'friends',
         'not friends yet': 'not friends yet'
     };

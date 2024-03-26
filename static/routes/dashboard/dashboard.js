@@ -38,7 +38,7 @@ function displayUsers(users) {
                         <img src="${avatarSrc}" alt="User avatar" class="rounded-circle me-3" style="width: 60px; height: 60px;">
                         <div>
                             <h3 class="h5 mb-0">${user.username}</h3>
-                            <p class="mb-0">Status: <span>${user.status}</span></p>
+                            <p class="mb-0" id="status-${user.username}">Status: <span>${user.status}</span></p>
                         </div>
                     </div>
                     <div id="${actionContainerId}" class="btn-group">
@@ -57,11 +57,12 @@ function displayUsers(users) {
 function getActionButtonsHtml(user) {
     let buttonsHtml = '';
 
-    if (user.status === 'friends') {
+    if (user.status === 'friends')
         buttonsHtml += `<button class="btn btn-outline-danger btn-sm" type="button" onclick="handleUserAction('${user.username}', 'delete')">Delete</button>`;
-    } else {
+    else if (user.status === 'blocked')
+        return buttonsHtml;
+    else
         buttonsHtml += `<button class="btn btn-outline-success btn-sm" type="button" onclick="handleUserAction('${user.username}', 'add')">Add</button>`;
-    }
 
     return buttonsHtml;
 }

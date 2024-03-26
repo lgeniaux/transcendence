@@ -62,7 +62,7 @@ function initWebsocket()
     };
 
     webSocket.onopen = function() {
-        console.log('WebSocket opened');
+        console.log('Chatbox WebSocket opened');
     };
 
     webSocket.onclose = function() {

@@ -1,10 +1,22 @@
 import { launchGame } from "/static/game/js/main.js";
 
 function displayGameView(game) {
-    player = game.player;
+    console.log('Displaying game:', game);
+    const player = game.player;
     game = game.game;
     if (game.status === 'waiting to start' && player === 'player2') {
-        document.querySelector('.game-status').innerHTML = 'Waiting for player 1 to start the game';
+        document.getElementById("game").removeEventListener("click", startGame);
+        // display a view saying "Game is ready, you are playing as the guest so you must go play on the computer {username player1}"
+        document.getElementById("game").innerHTML = `
+            <div class="alert alert-info" role="alert">
+                Game is ready, you are playing as the guest so you must go play on <strong>${game.player1}</strong>'s computer.
+            </div>
+        `;
+    }
+    else if (game.status === 'waiting to start' && player === 'player1') {
+    }
+    else if (game.status === 'finished') {
+        // display the view with the score
     }
     
 }
@@ -24,7 +36,11 @@ async function startGame()
         body: JSON.stringify({game_id: gameId})
     })
     if (!r.ok)
-        alert("error starting game xD, starting it anyway"); //FIXME: xD
+    {
+        alert("There was an error starting the game");
+        navigate('/');
+        return;
+    }
     let score = "";
     let results = {};
     try {
@@ -68,7 +84,6 @@ async function getGame(gameId, headers) {
 }
 
 function getGameStatus() {
-    console.log("hello")
     const gameId = sessionStorage.getItem('currentGameId');
     const authToken = sessionStorage.getItem('authToken');
 
@@ -89,43 +104,41 @@ function getGameStatus() {
         console.log('Game status:', game);
         displayGameView(game);
     }).catch(error => {
-
+        console.error('Error getting game status:', error);
     });
 
 }
 
-function initGame() {
-    const gameId = sessionStorage.getItem('currentGameId');
+const gameId = sessionStorage.getItem('currentGameId');
 
-    if (!gameId)
-        window.location = '/';
-    else {
-        const authToken = sessionStorage.getItem('authToken');
-        const ws = new WebSocket(`ws://${window.location.host}/ws/game/${authToken}/${gameId}/`);
-        
+if (!gameId)
+    window.location = '/';
+else {
+    const authToken = sessionStorage.getItem('authToken');
+    const ws = new WebSocket(`ws://${window.location.host}/ws/game/${authToken}/${gameId}/`);
+    
 
-        ws.onopen = function (event) {
-            console.log('WebSocket opened');
-            getGameStatus();
+    ws.onopen = function (event) {
+        console.log('WebSocket opened');
+        getGameStatus();
 
-            ws.onclose = function (event) {
-                console.log('WebSocket closed');
-            }
+        ws.onclose = function (event) {
+            console.log('WebSocket closed');
+        }
 
-            ws.onerror = function (event) {
-                console.error('WebSocket error:', event);
-            }
+        ws.onerror = function (event) {
+            console.error('WebSocket error:', event);
+        }
 
-            ws.onmessage = function (event) {
-                const game = JSON.parse(event.data);
-                console.log('Live game:', game);
-                displayGameView(game);
-            }
+        ws.onmessage = function (event) {
+            const game = JSON.parse(event.data);
+            console.log('Live game:', game);
+            displayGameView(game);
         }
     }
 }
 
 
+
 window.initPageFunctions = window.initPageFunctions || [];
-window.initPageFunctions.push(initGame);
 document.getElementById("game").addEventListener("click", startGame);
