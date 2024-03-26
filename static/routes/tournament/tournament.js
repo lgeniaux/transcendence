@@ -176,11 +176,11 @@ function displayInviteContacts() {
 }
 
 
-async function generateQuarterFinals(state) {
-
-}
-
-async function generateSemiFinalsAndFinals(state) {
+async function removeQuarterFinals() {
+    const quarterFinals = document.getElementsByClassName('quarterFinals');
+    if (quarterFinals.length > 0) {
+        quarterFinals[0].remove();
+    }
 }
 
 async function displayTournamentView() {
@@ -194,16 +194,11 @@ async function displayTournamentView() {
         console.error('Tournament container not found');
         return;
     }
-    tournamentContainer.innerHTML = '';
 
     //displayInviteContacts();
 
     if (state.nb_players === 4) {
-        generateSemiFinalsAndFinals(state);
-    }
-    else if (state.nb_players === 8) {
-        generateQuarterFinals(state);
-        generateSemiFinalsAndFinals(state);
+        removeQuarterFinals();
     }
     else {
         console.error('Invalid number of players:', state.nb_players);
