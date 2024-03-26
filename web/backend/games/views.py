@@ -162,5 +162,5 @@ class EndGame(APIView):
             for notification in notifications:
                 notification.data['status'] = 'finished'
                 notification.save()
-            return Response({'message': 'Game finished', 'score_player1': game.score_player1, 'score_player2': game.score_player2, 'winner': game.winner.username}, status=status.HTTP_200_OK)
+            return Response({'message': 'Game ended', 'score_player1': game.score_player1, 'score_player2': game.score_player2, 'winner': game.winner.username}, status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
