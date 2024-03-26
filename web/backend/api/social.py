@@ -291,10 +291,10 @@ class InvitePlayerToGameSerializer(serializers.Serializer):
         if existing_invitation:
             raise serializers.ValidationError({"detail": "An invitation is already pending"})
 
-        # Check if there's an ongoing game between them
+        # Check if there's an ongoing game between them ( status != 'finished')
         ongoing_game = Game.objects.filter(
             Q(player1=request_user, player2=player) | Q(player1=player, player2=request_user),
-            end_time__isnull=True
+            ~Q(status='finished')
         ).exists()
         if ongoing_game:
             raise serializers.ValidationError({"detail": "There's already an ongoing game between you two"})

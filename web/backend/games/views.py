@@ -11,6 +11,7 @@ from asgiref.sync import async_to_sync
 from asgiref.sync import async_to_sync
 from channels.layers import get_channel_layer
 from tournaments.views import broadcast_to_tournament_group
+from notifications.models import Notification
 
 class GetGameStatus(APIView):
     """
@@ -54,7 +55,7 @@ class StartGameSerializer(serializers.Serializer):
         if not game:
             raise serializers.ValidationError('Game not found')
         if game.player1 != user:
-            raise serializers.ValidationError('You are not a player of this game')
+            raise serializers.ValidationError('You are not the host of this game')
         if game.status != 'waiting to start':
             raise serializers.ValidationError('Game already started or waiting for player2')
         # if the game is linked to a tournament brodcast the update to the tournament channel 
@@ -97,7 +98,7 @@ class EndGameSerializer(serializers.Serializer):
         if not game:
             raise serializers.ValidationError('Game not found')
         if game.player1 != user:
-            raise serializers.ValidationError('You are not the Host of this game')
+            raise serializers.ValidationError('You are not the host of this game')
         if game.status != 'in progress':
             raise serializers.ValidationError('Game not in progress')
         if game.winner:
@@ -136,6 +137,14 @@ class EndGame(APIView):
             game.score_player1 = score[0]
             game.score_player2 = score[1]
             game.save()
+            #send the game end message to the game channel
+            channel_layer = get_channel_layer()
+            broadcast_message = {
+                'type': 'game.update',
+                'message': 'Game has ended'
+                }
+            async_to_sync(channel_layer.group_send)(f'game_{game_id}', broadcast_message)
+
             if game.tournament:
                 tournament = game.tournament
                 broadcast_message = {
@@ -147,5 +156,10 @@ class EndGame(APIView):
                     'winner': game.winner.username
                     }
                 broadcast_to_tournament_group(tournament.id, broadcast_message)
+            # change related notifications to finished
+            notifications = Notification.objects.filter(data__game_id=game_id)
+            for notification in notifications:
+                notification.data['status'] = 'finished'
+                notification.save()
             return Response({'message': 'Game finished', 'score_player1': game.score_player1, 'score_player2': game.score_player2, 'winner': game.winner.username}, status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

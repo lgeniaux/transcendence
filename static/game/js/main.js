@@ -176,5 +176,5 @@ async function launchGame(player1 = "Left player", player2 = "Right player", pro
 	});
 }
 
-window.propreties = await createGame();
+//window.propreties = await createGame();
 export { launchGame, createGame };

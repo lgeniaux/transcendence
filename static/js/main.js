@@ -116,7 +116,7 @@ function isAuthenticated()
 
 function navigate(path)
 {   
-
+    
     window.initPageFunctions = [];
 
     let finalPath = getRedirectPath(path);
