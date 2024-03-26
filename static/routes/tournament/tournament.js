@@ -1,8 +1,4 @@
-if (!window.allUsers) {
-    window.allUsers = [];
-}
-
-async function inviteToTournament(user, tournamentId) {
+async function inviteToTournament(username, tournamentId) {
     const authToken = sessionStorage.getItem('authToken');
     const headers = {
         'Accept': 'application/json',
@@ -13,17 +9,20 @@ async function inviteToTournament(user, tournamentId) {
         fetch('/api/tournament/invite/', {
             method: 'POST',
             headers,
-            body: JSON.stringify({ username: user.username, tournament_id: tournamentId })
+            body: JSON.stringify({ username, tournament_id: tournamentId })
         }).then(response => {
             return response.json();
         }).then(data => {
             if (data.success) {
                 console.log('User invited successfully');
             }
+            else {
+                console.log('Failed to invite user:');
+            }
         });
     }
     catch (error) {
-        console.error('Error inviting user:', error);
+        console.error('Failed to invite user:', error);
     }
 }
 
@@ -158,29 +157,70 @@ async function fetchTournamentState() {
 }
 
 
-function displayInviteContacts() {
-    const tournamentContainer = document.getElementById('tournament-container');
-    // append a div with the id 'tournament-container' to the html of the tournament page
-    const tournamentHTML = `
-        <div class="col-3">
-        <div class="listContainer">
-            <h2>Invite Contacts</h2>
-            <div id="contacts-list" class="search-results">
-                <p>Loading Contacts . . . </p>
-            </div>
-        </div>
-    </div>`;
-    const inviteList = document.createElement('div');
-    inviteList.innerHTML = tournamentHTML;
-    tournamentContainer.appendChild(inviteList);
-}
-
-
 async function removeQuarterFinals() {
     const quarterFinals = document.getElementsByClassName('quarterFinals');
     if (quarterFinals.length > 0) {
         quarterFinals[0].remove();
     }
+}
+
+
+function displayInviteList(users) {
+    const inviteList = document.getElementById('invite-list');
+    if (!inviteList) {
+        console.error('Invite list not found');
+        return;
+    }
+    inviteList.innerHTML = '';
+    var avatarSrc = '/static/images/avatar.png';
+
+    users.forEach(user => {
+        // if user is a friend, display the card
+        if (user.status == 'friends') {
+            var userHTML = `
+            <div class="card bg-dark text-white mb-3">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div class="d-flex align-items-center">
+                            <img src="${avatarSrc}" alt="User avatar" class="rounded-circle me-3" style="width: 60px; height: 60px;">
+                            <div>
+                                <h3 class="h5 mb-0">${user.username}</h3>
+                                <p class="mb-0" id="status-${user.username}">Status: <span>${user.status}</span></p>
+                            </div>
+                        </div>
+                        <button onclick="inviteToTournament('${user.username}', ${sessionStorage.getItem('currentTournamentId')})" class="btn btn-outline-success btn-sm" type="button">Invite</button>
+                    </div>
+                </div>
+            </div>
+            `;
+
+        inviteList.innerHTML += userHTML;
+        }
+    });
+}
+
+async function fetchAllUsers() {
+    try {
+        const authToken = sessionStorage.getItem('authToken');
+        const response = await fetch('/api/get-users/', {
+            method: 'GET',
+            headers: {
+                'Authorization': `Token ${authToken}`,
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            }
+        });
+        if (!response.ok) throw new Error('Failed to fetch users');
+        const users = await response.json();
+        displayInviteList(users);
+    } catch (error) {
+        console.error('Error fetching users:', error);
+    }
+}
+
+function goToGame(gameId) {
+    sessionStorage.setItem('currentGameId', gameId);
+    window.location.href = '/game';
 }
 
 async function displayTournamentView() {
@@ -200,9 +240,26 @@ async function displayTournamentView() {
     if (state.nb_players === 4) {
         removeQuarterFinals();
     }
-    else {
-        console.error('Invalid number of players:', state.nb_players);
+
+    console.log('Tournament state:', state); 
+    if (state.state.status !== "waiting for all participants to join") {
+        const inviteList = document.getElementsByClassName('invite-list');
+        if (inviteList.length > 0) {
+            inviteList[0].remove();
+        }
     }
+    if (state.state.status === "in progress") {
+        // if there is a game for me to play, call goToGame
+        if (state.game_to_play) {
+            goToGame(state.game_to_play);
+        }
+        
+    }
+    else {
+        users = await fetchAllUsers();
+    }
+    
+
 }
 
 
@@ -232,7 +289,9 @@ function initTournament() {
         ws.onmessage = function (event) {
             const message = JSON.parse(event.data);
             console.log('Live message:', message);
-            // Handle the message here
+            if (message) {
+                displayTournamentView();
+            }
         }
     }
 }

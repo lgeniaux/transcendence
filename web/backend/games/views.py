@@ -156,6 +156,7 @@ class EndGame(APIView):
                     'winner': game.winner.username
                     }
                 broadcast_to_tournament_group(tournament.id, broadcast_message)
+                tournament.check_round_completion()
             # change related notifications to finished
             notifications = Notification.objects.filter(data__game_id=game_id)
             for notification in notifications:

@@ -180,9 +180,8 @@ if (!gameId) {
             ws.onmessage = function (event) {
                 const message = JSON.parse(event.data);
                 console.log('Live game:', message);
-                if (message.message === 'Game has been reset' || message.message === 'Game has ended') {
+                if (message.message === 'Game has been reset' || message.message === 'Game finished') {
                     alert(message.message);
-                    getGameStatus();
                 }
             };
 

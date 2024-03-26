@@ -134,7 +134,11 @@ class GetTournamentState(APIView):
          tournament_id = kwargs['tournament_id']
          try:
             tournament = Tournament.objects.get(id=tournament_id)
-            return Response({'state': tournament.state, 'nb_players': tournament.nb_players, 'is_creator': tournament.creator == request.user}, status=status.HTTP_200_OK)
+            # game_to_play is the game id that the user have to play
+            game_to_play = None
+            if tournament.state['status'] == 'in progress':
+                game_to_play = tournament.get_game_to_play(request.user)
+            return Response({'state': tournament.state, 'nb_players': tournament.nb_players, 'is_creator': tournament.creator == request.user, 'game_to_play': game_to_play}, status=status.HTTP_200_OK)
          except Tournament.DoesNotExist:
               return Response({'error': 'Tournament not found'}, status=status.HTTP_404_NOT_FOUND)
 
@@ -202,3 +206,21 @@ class InvitePlayerToTournament(APIView):
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
+class StartTournament(APIView):
+    permission_classes = [IsAuthenticated]
+    
+    def post(self, request, *args, **kwargs):
+        tournament_id = kwargs['tournament_id']
+        try:
+            tournament = Tournament.objects.get(id=tournament_id)
+            if tournament.creator != request.user:
+                return Response({'error': 'You are not the creator of this tournament.'}, status=status.HTTP_400_BAD_REQUEST)
+            if tournament.state != 'pending':
+                return Response({'error': 'Tournament is not in pending state.'}, status=status.HTTP_400_BAD_REQUEST)
+            try:
+                tournament.start_tournament()
+            except ValueError as e:
+                return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({'message': 'Tournament started.'}, status=status.HTTP_200_OK)
+        except Tournament.DoesNotExist:
+            return Response({'error': 'Tournament not found.'}, status=status.HTTP_404_NOT_FOUND)

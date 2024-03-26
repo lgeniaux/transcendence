@@ -223,6 +223,8 @@ class ManageInvitationNotification(APIView):
                     broadcast_to_tournament_group(tournament.id, broadcast_message)
                     notification.save()
                     tournament.save()
+                    if tournament.participants.count() == tournament.nb_players:
+                        tournament.start_tournament()
                     return Response({"detail": "Tournament invitation successfully accepted"}, status=status.HTTP_200_OK)
                 elif action == "deny":
                     notification.data['status'] = "denied"
