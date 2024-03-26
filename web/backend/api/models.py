@@ -11,7 +11,7 @@ import random
 
 # Louis: j'ai remove les attributs en doublons avec la classe de base de django
 class User(AbstractUser):
-    username = models.CharField(max_length=50, unique=True)
+    username = models.CharField(max_length=10, unique=True)
     email = models.EmailField(max_length=254, unique=True)
     avatar = models.ImageField(upload_to='avatars/', default="avatars/zippy.jpg", blank=True)
     online_status = models.BooleanField(default=False)
@@ -42,7 +42,7 @@ class Game(models.Model):
 
 class Tournament(models.Model):
     id = models.AutoField(primary_key=True)
-    name = models.CharField(max_length=50, unique=True)
+    name = models.CharField(max_length=20, unique=True)
     creator = models.ForeignKey(User, on_delete=models.CASCADE, related_name='created_tournaments')
     #participants are a list of inviation notificaitons the creator has sent
     invitations = models.ManyToManyField(Notification, blank=True)
