@@ -72,8 +72,9 @@ class TournamentSerializer(serializers.ModelSerializer):
     def validate_name(self, name):
         if len(name) < 3:
             raise serializers.ValidationError("Name must be at least 3 characters long.")
-        # check if tournament with the same name already exists
-        if Tournament.objects.filter(name=name).exists():
+        # Ensure uniqueness is correctly enforced
+        existing_tournament = Tournament.objects.filter(name=name).first()
+        if existing_tournament and self.instance != existing_tournament:
             raise serializers.ValidationError("Tournament with this name already exists.")
         return name
     
@@ -97,6 +98,9 @@ class CreateTournament(APIView):
     def post(self, request, *args, **kwargs):
         serializer = TournamentSerializer(data=request.data, context={'request': request})
         if serializer.is_valid():
+            name = serializer.validated_data['name']
+            if Tournament.objects.filter(name=name).exists():
+                return Response({'error': 'Tournament with this name already exists.'}, status=status.HTTP_400_BAD_REQUEST)
             tournament = serializer.save()
             return Response({'tournament_id': tournament.id}, status=status.HTTP_201_CREATED)
         else:

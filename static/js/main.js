@@ -103,6 +103,8 @@ document.addEventListener('click', function (event) {
 
         if (originalPath === '/tournament' && target.dataset.spaId)
             sessionStorage.setItem('currentTournamentId', target.dataset.spaId);
+        else if (originalPath === '/tournament' && !target.dataset.spaId)
+            sessionStorage.removeItem('currentTournamentId');
 
         navigate(finalPath);
     }
