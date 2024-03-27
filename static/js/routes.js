@@ -25,7 +25,7 @@ export const routes = {
     },
     '/duel': {
         html: '/static/game/import.html',
-        module: '/static/js/game.js',
+        js: '/static/js/game.js',
         importmap: true,
         css: '/static/css/game.css',
         requires_auth: true
@@ -44,7 +44,7 @@ export const routes = {
     },
     '/game': {
         html: '/static/html/game/game.html',
-        module: '/static/js/game/game.js',
+        js: '/static/js/game/game.js',
         importmap: true,
         css: '/static/css/game.css',
         requires_auth: true

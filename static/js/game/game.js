@@ -151,52 +151,52 @@ function getGameStatus() {
 }
 
 
-const gameId = sessionStorage.getItem('currentGameId');
-
-if (!gameId) {
-    window.location = '/';
-} else {
-    const authToken = sessionStorage.getItem('authToken');
-    getGameStatus().then(game => {
-        if (game.game.status === 'finished') {
-            displayGameView(game);
-        } else if (game.game.status === 'waiting to start' || game.game.status === 'in progress') {
-            // Attempt to open the WebSocket only if the game is not finished
-            const ws = new WebSocket(`ws://${window.location.host}/ws/game/${authToken}/${gameId}/`);
-
-            ws.onopen = function (event) {
-                console.log('WebSocket opened');
-                displayGameView(game);
-            };
-
-            ws.onclose = function (event) {
-                console.log('WebSocket closed');
-            };
-
-            ws.onerror = function (event) {
-                console.error('WebSocket error:', event);
-            };
-
-            ws.onmessage = function (event) {
-                const message = JSON.parse(event.data);
-                console.log('Live game:', message);
-                if (message.message === 'Game has been reset' || message.message === 'Game has ended') {
-                    alert(message.message);
-                }
-            };
-
-            window.addEventListener('beforeunload', function () {
-                if (ws) {
-                    ws.close();
-                    console.log('WebSocket closed');
-                }
-            });
-        }
-    }).catch(error => {
-        console.error('Error getting game status:', error);
-    });
-}
-
 export async function init() {
+    const gameId = sessionStorage.getItem('currentGameId');
+
+    if (!gameId) {
+        window.location = '/';
+    } else {
+        const authToken = sessionStorage.getItem('authToken');
+        getGameStatus().then(game => {
+            if (game.game.status === 'finished') {
+                displayGameView(game);
+            } else if (game.game.status === 'waiting to start' || game.game.status === 'in progress') {
+                // Attempt to open the WebSocket only if the game is not finished
+                window.ws = new WebSocket(`ws://${window.location.host}/ws/game/${authToken}/${gameId}/`);
+
+                ws.onopen = function (event) {
+                    console.log('WebSocket opened');
+                    displayGameView(game);
+                };
+
+                ws.onclose = function (event) {
+                    console.log('WebSocket closed');
+                };
+
+                ws.onerror = function (event) {
+                    console.error('WebSocket error:', event);
+                };
+
+                ws.onmessage = function (event) {
+                    const message = JSON.parse(event.data);
+                    console.log('Live game:', message);
+                    if (message.message === 'Game has been reset' || message.message === 'Game has ended') {
+                        alert(message.message);
+                    }
+                };
+
+                window.addEventListener('beforeunload', function () {
+                    if (ws) {
+                        ws.close();
+                        console.log('WebSocket closed');
+                    }
+                });
+            }
+        }).catch(error => {
+            console.error('Error getting game status:', error);
+        });
+    }
     document.getElementById("game").addEventListener("click", startGame);
+
 }

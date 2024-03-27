@@ -1,6 +1,8 @@
 import { routes } from './routes.js';
 
 export async function navigate(path) {
+    if (window.ws)
+        window.ws.close();
     const finalPath = getRedirectPath(path);
     const route = routes[finalPath];
 
@@ -17,6 +19,8 @@ export async function navigate(path) {
         await loadHTML(route.html);
     if (route.css)
         await loadCSS(route.css);
+    if (route.importmap)
+        await loadImportmap(route.importmap);
     if (route.js) {
         try {
             if (Array.isArray(route.js)) {
@@ -36,12 +40,6 @@ export async function navigate(path) {
             console.error('Error importing scripts:', error);
         }
     }
-
-
-    if (route.importmap)
-        loadImportmap(route.importmap);
-    if (route.module)
-        loadModule(route.module);
 }
 
 function getRedirectPath(path) {
@@ -111,22 +109,27 @@ async function loadModule(url)
     document.body.appendChild(module);
 }
 
-async function loadImportmap()
-{
-    if (document.querySelector('script[type="importmap"]'))
-        return;
-
-    const importmap = document.createElement('script');
-    importmap.type = 'importmap';
-    importmap.innerHTML = JSON.stringify({
-        imports: {
-            'three': 'https://unpkg.com/three@0.160.1/build/three.module.js',
-            'three/addons/': 'https://unpkg.com/three@0.160.1/examples/jsm/',
-        },
-    });
-    importmap.async = false;
-    document.head.appendChild(importmap);
+async function loadImportmap() {
+    // Check if an importmap is already loaded to avoid duplication
+    if (!document.querySelector('script[type="importmap"]')) {
+        return new Promise((resolve, reject) => {
+            const importmap = document.createElement('script');
+            importmap.type = 'importmap';
+            importmap.textContent = JSON.stringify({
+                imports: {
+                    'three': 'https://unpkg.com/three@0.160.1/build/three.module.js',
+                    'three/addons/': 'https://unpkg.com/three@0.160.1/examples/jsm/',
+                },
+            });
+            importmap.onload = resolve;
+            importmap.onerror = () => reject(new Error("Failed to load the import map."));
+            document.head.appendChild(importmap);
+        });
+    }
+    // If an importmap is already present, resolve immediately
+    return Promise.resolve();
 }
+
 
 export function isAuthenticated()
 {
