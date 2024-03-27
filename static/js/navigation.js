@@ -22,7 +22,6 @@ export async function navigate(path) {
             if (Array.isArray(route.js)) {
                 // Handle multiple scripts
                 const imports = route.js.map(script => import(script));
-                console.log('Script imported successfully.');
                 const modules = await Promise.all(imports);
 
                 modules.forEach(module => {
@@ -103,31 +102,12 @@ async function loadCSS(url)
     head.appendChild(link);
 }
 
-async function loadJS(urls, finalCallback) {
-    let loadedScripts = 0;
-    
-    urls.forEach((url) => {
-        const noCacheUrl = `${url}?v=${new Date().getTime()}`; // Disable cache by URL
-        const script = document.createElement('script');
-        script.src = noCacheUrl;
-        script.type = 'text/javascript';
-        script.async = false;
-        script.onload = () => {
-            loadedScripts++;
-            if (loadedScripts === urls.length && finalCallback)
-                finalCallback();
-        };
-        document.body.appendChild(script);
-    });
-}
-
 
 async function loadModule(url)
 {
     const module = document.createElement('script');
     module.src = url;
     module.type = 'module';
-    module.async = false;
     document.body.appendChild(module);
 }
 

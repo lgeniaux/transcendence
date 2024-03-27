@@ -5,6 +5,36 @@ if (!window.allUsers) {
 
 // Friends management
 
+export async function init() {
+    initFriendsSearch();
+    initNotifications();
+    initTournamentsList();
+}
+
+async function fetchAllUsers()
+{
+    try
+    {
+        const response = await fetch('/api/get-users/', {
+            method: 'GET',
+            credentials: 'include',
+            headers: getRequestHeaders()
+        });
+
+        if (!response.ok)
+            throw new Error(`HTTP error! status: ${response.status}`);
+
+        const data = await response.json();
+
+        allUsers = data;
+        displayUsers(allUsers); // Assurez-vous que cette fonction est prête à gérer les données des utilisateurs.
+    }
+    catch (error)
+    {
+        console.error('Error:', error);
+    }
+}
+
 function initFriendsSearch() {
     var input = document.getElementById('userSearch');
 
@@ -70,7 +100,7 @@ function getActionButtonsHtml(user) {
 
 // Notifications
 
-async function manageInvite(notificationId, action) {
+window.manageInvite = async (notificationId, action) =>{
     try {
         const response = await fetch('/api/respond-to-invite/', {
             method: 'POST',
@@ -100,7 +130,7 @@ async function manageInvite(notificationId, action) {
 }
 
 
-function goToGame(gameId) {
+window.goToGame = async (gameId) =>{
     sessionStorage.setItem('currentGameId', gameId);
     window.location = '/game';
 }
@@ -202,6 +232,15 @@ async function initNotifications() {
     }
 }
 
+function emitUserStatusChangeEvent(username, newStatus)
+{
+    const event = new CustomEvent('userStatusChange', { detail: { username, newStatus } });
+    document.dispatchEvent(event);
+}
+
+
+
+
 // Tournaments
 
 function displayTournaments(tournaments) {
@@ -251,7 +290,86 @@ async function initTournamentsList() {
     }
 }
 
-window.initPageFunctions = window.initPageFunctions || [];
-window.initPageFunctions.push(initNotifications);
-window.initPageFunctions.push(initFriendsSearch);
-window.initPageFunctions.push(initTournamentsList);
+async function sendUserAction(username, action)
+{
+    const headers = getRequestHeaders();
+    const data = { username, action };
+
+    const endpointMap =
+	{
+        "block": 'api/block-user/',
+        "unblock": 'api/unblock-user/',
+        "add": 'api/add-friend/',
+        "delete": 'api/delete-friend/',
+    };
+
+    try
+	{
+        const response = await fetch(endpointMap[action], {
+            method: 'POST',
+            credentials: 'include',
+            headers,
+            body: JSON.stringify(data)
+        });
+
+        if (!response.ok)
+            throw new Error(`Failed to ${action} user. Status: ${response.status}`);
+        
+        return await response.json(); // Assuming the API returns JSON.
+    }
+	catch (error)
+	{
+        console.error(`Error performing ${action} on user: ${username}`, error);
+        throw error; // Re-throw to handle it outside or log it.
+    }
+}
+
+window.handleUserAction = async (username, action) =>
+{
+    let statusAfterAction;
+
+    switch (action)
+	{
+        case 'block':
+            statusAfterAction = 'blocked';
+            break;
+        case 'unblock':
+            statusAfterAction = 'none';
+            break;
+        case 'add':
+            statusAfterAction = 'friends';
+            break;
+        case 'delete':
+            statusAfterAction = 'None';
+            break;
+        default:
+            console.error(`Unknown action: ${action}`);
+            return;
+    }
+
+    try
+	{
+        await sendUserAction(username, action);
+        console.log(`User ${action}ed successfully`);
+        updateUserInterface(username, statusAfterAction);
+        emitUserStatusChangeEvent(username, statusAfterAction);
+    }
+	catch (error)
+	{
+        console.error(`Error ${action}ing user ${username}:`, error);
+    }
+}
+
+function updateUserInterface(username, newStatus)
+{
+    const statusTexts = {
+        'blocked': 'blocked',
+        'none': 'none',
+        'friends': 'friends',
+        'not friends yet': 'not friends yet'
+    };
+
+    const statusText = statusTexts[newStatus] || 'unknown';
+    document.getElementById(`status-${username}`).textContent = statusText;
+    document.getElementById(`actions-${username}`).innerHTML = getActionButtonsHtml({username: username, status: newStatus});
+}

@@ -1,6 +1,6 @@
 // register.js
 
-export async function initRegisterForm()
+export async function init()
 {
     var registerBtn = document.getElementById('registerBtn');
 

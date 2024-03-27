@@ -197,6 +197,6 @@ if (!gameId) {
     });
 }
 
-
-window.initPageFunctions = window.initPageFunctions || [];
-document.getElementById("game").addEventListener("click", startGame);
+export async function init() {
+    document.getElementById("game").addEventListener("click", startGame);
+}

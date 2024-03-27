@@ -118,27 +118,6 @@ function initTournamentCreateButton() {
     }
 }
 
-async function fetchAllUsers() {
-    try {
-        const response = await fetch('/api/get-users/', {
-            method: 'GET',
-            credentials: 'include',
-            headers: getRequestHeaders()
-        });
-
-        if (!response.ok)
-            throw new Error(`HTTP error! status: ${response.status}`);
-
-        const data = await response.json();
-
-        allUsers = data;
-        displayUsers(allUsers);
-    }
-    catch (error) {
-        console.error('Error:', error);
-    }
-}
-
 async function fetchTournamentState() {
     try {
         const response = await fetch(`/api/tournament/${sessionStorage.getItem('currentTournamentId')}/state/`, {
@@ -289,7 +268,7 @@ async function displayTournamentView() {
 }
 
 
-function initTournament() {
+export async function init() {
     const tournamentId = sessionStorage.getItem('currentTournamentId');
     if (!tournamentId) {
         displayCreateTournamentForm();
@@ -321,8 +300,3 @@ function initTournament() {
         }
     }
 }
-
-
-
-window.initPageFunctions = window.initPageFunctions || [];
-window.initPageFunctions.push(initTournament);

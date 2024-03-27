@@ -245,7 +245,7 @@ async function cb_displayUsers(users)
 	});
 }
 
-async function startGameWithUser(username){
+window.startGameWithUser = async (username)=>{
     const authToken = sessionStorage.getItem('authToken');
     const headers = {
         'Accept': 'application/json',

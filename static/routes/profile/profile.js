@@ -1,6 +1,6 @@
 // profile.js
 
-async function initProfilePage()
+export async function init()
 {
     await fetchUserProfile();
 
@@ -134,7 +134,3 @@ function changePassword(event) {
     .catch(error => console.error('Error:', error));
 
 }
-
-window.initPageFunctions = window.initPageFunctions || [];
-window.initPageFunctions.push(initProfilePage);
-

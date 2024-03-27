@@ -1,7 +1,6 @@
 // main.js
 
-import { routes } from './routes.js';
-import { navigate, handleNavigationClick, isAuthenticated } from './navigations.js';
+import { navigate, handleNavigationClick, isAuthenticated } from './navigation.js';
 import { loadNavbar } from './navbar.js';
 import { loadChatbox } from './chatbox.js';
 
