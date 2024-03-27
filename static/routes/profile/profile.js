@@ -55,84 +55,78 @@ async function fetchUserProfile()
 }
 
 
-function updateProfile(event)
+async function updateProfile(event)
 {
     event.preventDefault();
 
-    var username = document.querySelector('[name="username"]').value;
-    var avatar = document.querySelector('[name="avatar"]').value;
+    const username = document.querySelector('[name="username"]').value;
+    const avatar = document.querySelector('[name="avatar"]').value;
     const body_data = {};
 
-    if (username)
-        body_data.username = username;
+    if (username) body_data.username = username;
+    if (avatar) body_data.avatar = avatar;
 
-    if (avatar)
-        body_data.avatar = avatar;
+    try
+	{
+        const response = await fetch('/api/me/', {
+            method: 'PUT',
+            credentials: 'include',
+            headers: getRequestHeaders(), // Utilisation de getRequestHeaders() ici
+            body: JSON.stringify(body_data)
+        });
 
-    fetch('/api/me/', {
-        method: 'PUT',
-        credentials: 'include',
-        headers: getRequestHeaders(), // Utilisation de getRequestHeaders() ici
-        body: JSON.stringify(body_data)
-    })
-    .then(response => response.json())
-    .then(data => {
+        const data = await response.json();
+
         if (data.non_field_errors || data.error)
-        {
             alert(data.non_field_errors || data.error);
-        }
         else
-            fetchUserProfile();
-    })
-    .catch(error => console.error('Error:', error));
+            await fetchUserProfile();
+
+    }
+	catch (error)
+	{
+        console.error('Error:', error);
+    }
 }
 
-
-function changePassword(event) {
+async function changePassword(event)
+{
     event.preventDefault();
 
-    var old_password = document.querySelector('[name="old_password"]');
-    var new_password = document.querySelector('[name="new_password"]');
-    var confirm_password = document.querySelector('[name="confirm_password"]');
-
-    if (old_password && new_password && confirm_password)
-	{
-        old_password = old_password.value;
-        new_password = new_password.value;
-        confirm_password = confirm_password.value;
-    } else
-	{
-        alert('Please fill in all password fields');
-        return;
-    }
+    let old_password = document.querySelector('[name="old_password"]').value;
+    let new_password = document.querySelector('[name="new_password"]').value;
+    let confirm_password = document.querySelector('[name="confirm_password"]').value;
 
     if (new_password !== confirm_password)
-    {
+	{
         alert('Passwords do not match');
         return;
     }
 
-    fetch('/api/change-password/', {
-        method: 'PUT',
-        credentials: 'include',
-        headers: getRequestHeaders(),
-        body: JSON.stringify({
-            old_password: old_password,
-            new_password: new_password,
-            confirm_new_password: confirm_password
-        })
-    })
-    .then(response => response.json())
-    .then(data => {
+    try
+	{
+        const response = await fetch('/api/change-password/', {
+            method: 'PUT',
+            credentials: 'include',
+            headers: getRequestHeaders(),
+            body: JSON.stringify({
+                old_password: old_password,
+                new_password: new_password,
+                confirm_new_password: confirm_password
+            })
+        });
+
+        const data = await response.json();
+
         if (data.non_field_errors || data.error)
-        {
             alert(data.non_field_errors || data.error);
-        }
         else
             alert('Password changed successfully');
-    })
-    .catch(error => console.error('Error:', error));
-
+    }
+	catch (error)
+	{
+        console.error('Error:', error);
+    }
 }
 
 window.initPageFunctions = window.initPageFunctions || [];
