@@ -250,10 +250,36 @@ async function displayTournamentView() {
     }
     if (state.state.status === "in progress") {
         // if there is a game for me to play, call goToGame
+        // remove potential alert
+        const alert = document.getElementById('game-alert');
+        if (alert) {
+            alert.remove();
+        }
         if (state.game_to_play) {
-            goToGame(state.game_to_play);
+            // display alert that the game is ready and wait for the user to click on it to go to the game the alert zill be added as the firs tdiv inside the <div class="tournament"> element
+            const alertHTML = `
+            <div class="row justify-content-evenly alert alert-success alert-dismissible fade show" role="alert">
+                <strong>You have a game to play for the ${state.state.round_name}</strong>
+                <button type="button" class="btn btn-success btn-sm" onclick="goToGame(${state.game_to_play})">Go to Game</button>
+            </div>
+            `;
+            const alert = document.createElement('div');
+            alert.id = 'game-alert';
+            alert.innerHTML = alertHTML;
+            tournamentBracket = document.getElementsByClassName('tournament-bracket')[0]
+            tournamentBracket.prepend(alert);
         }
         
+    }
+    else if (state.state.status === "finished") {
+        // display the winner of the tournament
+        const winner = state.state.winner;
+        const winnerHTML = `
+        <div class="alert alert-success" role="alert">
+            <strong>The winner of the tournament is ${winner}</strong>
+        </div>
+        `;
+        tournamentContainer.innerHTML += winnerHTML;
     }
     else {
         users = await fetchAllUsers();

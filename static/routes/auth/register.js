@@ -1,20 +1,6 @@
 // register.js
 
-function checkPassword()
-{
-    var password = document.querySelector('[name="password"]').value;
-    var password2 = document.querySelector('[name="confirmPassword"]').value;
-
-    if (password !== password2)
-    {
-        console.log('Passwords do not match');
-        return false;
-    }
-    console.log('Passwords match');
-    return true;
-}
-
-function initRegisterForm()
+export async function initRegisterForm()
 {
     var registerBtn = document.getElementById('registerBtn');
 
@@ -30,6 +16,22 @@ function initRegisterForm()
         });
     }
 }
+
+function checkPassword()
+{
+    var password = document.querySelector('[name="password"]').value;
+    var password2 = document.querySelector('[name="confirmPassword"]').value;
+
+    if (password !== password2)
+    {
+        console.log('Passwords do not match');
+        return false;
+    }
+    console.log('Passwords match');
+    return true;
+}
+
+
 
 async function registerUser()
 {
@@ -70,6 +72,3 @@ function showRegisterError(message)
 
     document.getElementById('registerAlert').innerHTML = alertHTML;
 }
-
-window.initPageFunctions = window.initPageFunctions || [];
-window.initPageFunctions.push(initRegisterForm);

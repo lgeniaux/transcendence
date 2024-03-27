@@ -3,7 +3,7 @@
     // Pour Bootstrap 5
 
 
-async function loadChatbox()
+export async function loadChatbox()
 {
     try
     {

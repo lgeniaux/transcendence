@@ -1,7 +1,7 @@
 // login.js
 
 // Function to initialize the login form
-function initLoginButton()
+export async function init()
 {
     var loginBtn = document.getElementById('loginBtn');
 
@@ -12,6 +12,8 @@ function initLoginButton()
             loginUser();
         });
     }
+
+
 }
 
 async function loginUser()
@@ -80,7 +82,3 @@ function showLoginError(message)
     if (loginAlert)
         loginAlert.innerHTML = message;
 }
-
-
-window.initPageFunctions = window.initPageFunctions || [];
-window.initPageFunctions.push(initLoginButton);

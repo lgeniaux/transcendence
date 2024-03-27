@@ -1,4 +1,4 @@
-async function loadNavbar()
+export async function loadNavbar()
 {
     try
     {
@@ -14,7 +14,7 @@ async function loadNavbar()
     }
 }
 
-async function loadUsernameIntoModal()
+export async function loadUsernameIntoModal()
 {
     try
 	{

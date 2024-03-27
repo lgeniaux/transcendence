@@ -1,6 +1,6 @@
 FROM python:3.9
 
-WORKDIR /usr/src/app
+WORKDIR /goinfre/usr/src/app
 
 # Set environment variables
 ENV PYTHONDONTWRITEBYTECODE 1
@@ -18,5 +18,5 @@ COPY . .
 
 
 # Add the frontend directory as an environment variable
-ENV FRONTEND_FOLDER=/usr/src/app/frontend
+ENV FRONTEND_FOLDER=/goinfre/usr/src/app/frontend
 

@@ -2,7 +2,7 @@ services:
   db:
     image: postgres
     volumes:
-      - postgres:/var/lib/postgresql/data
+      - postgres:/goinfre/var/lib/postgresql/data
 
     environment:
       - POSTGRES_DB=${POSTGRES_DB}
@@ -21,10 +21,10 @@ services:
     user: django
     command: ["./entrypoint.sh", "db", "python", "backend/manage.py", "runserver", "0.0.0.0:8000"]
     volumes:
-      - ./web:/usr/src/app # for dev remove for correction
-      - ./tests:/usr/src/app/tests # for dev remove for correction
-      - static:/usr/src/app/static
-      - avatars:/usr/src/app/avatars
+      - ./web:/goinfre/usr/src/app # for dev remove for correction
+      - ./tests:/goinfre/usr/src/app/tests # for dev remove for correction
+      - static:/goinfre/usr/src/app/static
+      - avatars:/goinfre/usr/src/app/avatars
     networks:
       - transcendence
     ports:
@@ -40,9 +40,9 @@ services:
   nginx:
     image: nginx:latest
     volumes:
-      - ./nginx:/etc/nginx/conf.d
-      - ./nginx/ssl:/etc/nginx/ssl
-      - static:/usr/share/nginx/html/static
+      - ./nginx:/goinfre/etc/nginx/conf.d
+      - ./nginx/ssl:/goinfre/etc/nginx/ssl
+      - static:/goinfre/usr/share/nginx/html/static
     networks:
       - transcendence
     ports:
