@@ -3,7 +3,7 @@
     // Pour Bootstrap 5
 
 
-async function loadChatbox()
+export async function loadChatbox()
 {
     try
     {
@@ -62,7 +62,7 @@ function initWebsocket()
     };
 
     webSocket.onopen = function() {
-        console.log('WebSocket opened');
+        console.log('Chatbox WebSocket opened');
     };
 
     webSocket.onclose = function() {
@@ -245,7 +245,7 @@ async function cb_displayUsers(users)
 	});
 }
 
-async function startGameWithUser(username){
+window.startGameWithUser = async (username)=>{
     const authToken = sessionStorage.getItem('authToken');
     const headers = {
         'Accept': 'application/json',

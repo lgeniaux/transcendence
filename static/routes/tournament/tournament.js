@@ -1,8 +1,4 @@
-if (!window.allUsers) {
-    window.allUsers = [];
-}
-
-async function inviteToTournament(user, tournamentId){
+async function inviteToTournament(username, tournamentId) {
     const authToken = sessionStorage.getItem('authToken');
     const headers = {
         'Accept': 'application/json',
@@ -13,17 +9,20 @@ async function inviteToTournament(user, tournamentId){
         fetch('/api/tournament/invite/', {
             method: 'POST',
             headers,
-            body: JSON.stringify({ username: user.username, tournament_id: tournamentId })
+            body: JSON.stringify({ username, tournament_id: tournamentId })
         }).then(response => {
             return response.json();
         }).then(data => {
-            if(data.success) {
+            if (data.success) {
                 console.log('User invited successfully');
+            }
+            else {
+                console.log('Failed to invite user:');
             }
         });
     }
-    catch(error) {
-        console.error('Error inviting user:', error);
+    catch (error) {
+        console.error('Failed to invite user:', error);
     }
 }
 
@@ -31,49 +30,42 @@ async function inviteToTournament(user, tournamentId){
 
 function displayCreateTournamentForm() {
     // append the create-tournament.html to the html of the tournament page
-    const modalHTML = `
-        <div class="modal" id="createTournamentOverlay" tabindex="-1" aria-labelledby="createTournamentOverlayLabel" aria-modal="true" role="dialog">
-            <div class="modal-dialog modal-dialog-centered">
-                <div class="modal-content" style="background-color: #5a2b00; color: white;">
-                    <div class="modal-header border-0">
-                        <h5 class="modal-title" id="createTournamentOverlayLabel">Create Tournament</h5>
-                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                            <div class="mb-3" id="tournamentName">
-                                <label for="tournamentNameInput" class="form-label">Tournament Name:</label>
-                                <input type="text" class="form-control" id="tournamentNameInput" placeholder="Name">
-                            </div>
-                            <div class="mb-3">
-                                <label for="numberOfPlayers" class="form-label">Number of Players:</label>
-                                <select class="form-select" id="numberOfPlayers">
-                                    <option selected>4</option>
-                                    <option>8</option>
-                                    <option>16</option>
-                                </select>
-                            </div>
-                            <div class="d-grid gap-2">
-                                <button class="btn btn-success" id="createTournamentButton" type="submit">Create Tournament</button>
-                            </div>
-                    </div>
-                    <div class="modal-footer border-0">
-                    </div>
-                </div>
+    const overlayHTML = `
+        <div id="createTournamentOverlay" class="d-flex justify-content-center align-items-center" tabindex="-1" style="position: fixed; inset: 0; background-color: rgba(0, 0, 0, 0.5); z-index: 1050;">
+        <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content" style="background-color: #5a2b00; color: white;">
+            <div class="modal-header border-0">
+            <h5 class="modal-title" id="createTournamentOverlayLabel"><strong>Create Tournament</strong></h5>
+            </div>
+            <div class="modal-body">
+            <div class="mb-3" id="tournamentName">
+                <label for="tournamentNameInput" class="form-label">Tournament Name:</label>
+                <input type="text" class="form-control" id="tournamentNameInput" placeholder="Name">
+            </div>
+            <div class="mb-3">
+                <label for="numberOfPlayers" class="form-label">Number of Players:</label>
+                <select class="form-select" id="numberOfPlayers">
+                <option selected>4</option>
+                <option>8</option>
+                </select>
+            </div>
+            <div class="d-grid gap-2">
+                <button class="btn btn-success" id="createTournamentButton" type="submit">Create Tournament</button>
+            </div>
             </div>
         </div>
-
-        <div class="modal-backdrop fade"></div>
+        </div>
+    </div>
+  
     `;
 
     const overlay = document.createElement('div');
-    overlay.innerHTML = modalHTML;
+    overlay.innerHTML = overlayHTML;
     document.body.appendChild(overlay);
 
-    const createTournamentOverlay = new bootstrap.Modal(document.getElementById('createTournamentOverlay'));
-    createTournamentOverlay.show();
+    initTournamentCreateButton();
 
 }
-
 async function createTournament() {
     const tournamentName = document.getElementById('tournamentNameInput').value;
     const nb_players_option = document.getElementById('numberOfPlayers');
@@ -84,20 +76,32 @@ async function createTournament() {
     try {
         const response = await fetch('/api/tournament/create-tournament/', {
             method: 'POST',
-            headers: getRequestHeaders(),
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'Authorization': `Token ${sessionStorage.getItem('authToken')}`
+            },
             body: JSON.stringify(data)
         });
 
-        if (!response.ok)
-            throw new Error('Failed to create tournament');
-
+        if (!response.ok) throw new Error('Failed to create tournament');
+        
         const result = await response.json();
         console.log('Tournament created:', result);
         sessionStorage.setItem('currentTournamentId', result.tournament_id);
-        window.location.reload();
+        
+        removeCreateTournamentOverlay();
+
+        displayTournamentView();
+    } catch (error) {
+        console.error('Failed to create tournament:', error.message);
     }
-    catch (error) {
-        console.error('Failed to create tournament:', error);
+}
+
+function removeCreateTournamentOverlay() {
+    const overlay = document.getElementById('createTournamentOverlay');
+    if (overlay) {
+        overlay.remove(); // This completely removes the element from the DOM
     }
 }
 
@@ -105,92 +109,168 @@ async function createTournament() {
 
 function initTournamentCreateButton() {
     const createTournamentButton = document.getElementById('createTournamentButton');
-    if (createTournamentButton) {
-        createTournamentButton.addEventListener('click', function (event) {
+    if (createTournamentButton && !createTournamentButton.initialized) {
+        createTournamentButton.addEventListener('click', async (event) => {
             event.preventDefault();
-            createTournament();
+            await createTournament();
         });
+        createTournamentButton.initialized = true;
     }
 }
 
-async function fetchAllUsers()
-{
-    try
-    {
+async function fetchTournamentState() {
+    try {
+        const response = await fetch(`/api/tournament/${sessionStorage.getItem('currentTournamentId')}/state/`, {
+            method: 'GET',
+            headers: {
+                'Authorization': `Token ${sessionStorage.getItem('authToken')}`,
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            }
+        });
+        if (!response.ok) throw new Error('Failed to fetch tournament state');
+        return await response.json();
+    } catch (error) {
+        alert('Failed to fetch tournament state');
+    }
+}
+
+
+async function removeQuarterFinals() {
+    const quarterFinals = document.getElementsByClassName('quarterFinals');
+    if (quarterFinals.length > 0) {
+        quarterFinals[0].remove();
+    }
+}
+
+
+function displayInviteList(users) {
+    const inviteList = document.getElementById('invite-list');
+    if (!inviteList) {
+        console.error('Invite list not found');
+        return;
+    }
+    inviteList.innerHTML = '';
+    var avatarSrc = '/static/images/avatar.png';
+
+    users.forEach(user => {
+        // if user is a friend, display the card
+        if (user.status == 'friends') {
+            var userHTML = `
+            <div class="card bg-dark text-white mb-3">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div class="d-flex align-items-center">
+                            <img src="${avatarSrc}" alt="User avatar" class="rounded-circle me-3" style="width: 60px; height: 60px;">
+                            <div>
+                                <h3 class="h5 mb-0">${user.username}</h3>
+                                <p class="mb-0" id="status-${user.username}">Status: <span>${user.status}</span></p>
+                            </div>
+                        </div>
+                        <button onclick="inviteToTournament('${user.username}', ${sessionStorage.getItem('currentTournamentId')})" class="btn btn-outline-success btn-sm" type="button">Invite</button>
+                    </div>
+                </div>
+            </div>
+            `;
+
+        inviteList.innerHTML += userHTML;
+        }
+    });
+}
+
+async function fetchAllUsers() {
+    try {
+        const authToken = sessionStorage.getItem('authToken');
         const response = await fetch('/api/get-users/', {
             method: 'GET',
-            credentials: 'include',
-            headers: getRequestHeaders()
+            headers: {
+                'Authorization': `Token ${authToken}`,
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            }
         });
-
-        if (!response.ok)
-            throw new Error(`HTTP error! status: ${response.status}`);
-
-        const data = await response.json();
-
-        allUsers = data;
-        displayUsers(allUsers);
-    }
-    catch (error)
-    {
-        console.error('Error:', error);
+        if (!response.ok) throw new Error('Failed to fetch users');
+        const users = await response.json();
+        displayInviteList(users);
+    } catch (error) {
+        console.error('Error fetching users:', error);
     }
 }
 
-function fetchTournamentState() {
-    const tournamentId = sessionStorage.getItem('currentTournamentId');
-    const authToken = sessionStorage.getItem('authToken');
-
-    fetch(`/api/tournament/${tournamentId}/state/`, {
-        method: 'GET',
-        headers: getRequestHeaders()
-    })
-        .then(response => {
-            if (!response.ok)
-                throw new Error(`HTTP error! status: ${response.status}`);
-
-            return response.json();
-        })
-        .then(data => {
-            console.log('Tournament state:', data);
-            return data;
-        })
-        .catch(error => {
-            console.error('Error:', error);
-        });
+function goToGame(gameId) {
+    sessionStorage.setItem('currentGameId', gameId);
+    window.location.href = '/game';
 }
 
-function displayInviteContacts() {
+async function displayTournamentView() {
+    const state = await fetchTournamentState();
+    if (!state) {
+        return;
+    }
+
     const tournamentContainer = document.getElementById('tournament-container');
-    // append a div with the id 'tournament-container' to the html of the tournament page
-    const tournamentHTML = `
-        <div class="col-3">
-        <div class="listContainer">
-            <h2>Invite Contacts</h2>
-            <div id="contacts-list" class="search-results">
-                <p>Loading Contacts . . . </p>
-            </div>
-        </div>
-    </div>`;
-    const inviteList = document.createElement('div');
-    inviteList.innerHTML = tournamentHTML;
-    tournamentContainer.appendChild(inviteList);
-}
-
-function displayTournamentView() {
-
-    const data = fetchTournamentState();
-    if (data) {
-        displayInviteContacts();
+    if (!tournamentContainer) {
+        console.error('Tournament container not found');
+        return;
     }
 
+    //displayInviteContacts();
+
+    if (state.nb_players === 4) {
+        removeQuarterFinals();
+    }
+
+    console.log('Tournament state:', state); 
+    if (state.state.status !== "waiting for all participants to join") {
+        const inviteList = document.getElementsByClassName('invite-list');
+        if (inviteList.length > 0) {
+            inviteList[0].remove();
+        }
+    }
+    if (state.state.status === "in progress") {
+        // if there is a game for me to play, call goToGame
+        // remove potential alert
+        const alert = document.getElementById('game-alert');
+        if (alert) {
+            alert.remove();
+        }
+        if (state.game_to_play) {
+            // display alert that the game is ready and wait for the user to click on it to go to the game the alert zill be added as the firs tdiv inside the <div class="tournament"> element
+            const alertHTML = `
+            <div class="row justify-content-evenly alert alert-success alert-dismissible fade show" role="alert">
+                <strong>You have a game to play for the ${state.state.round_name}</strong>
+                <button type="button" class="btn btn-success btn-sm" onclick="goToGame(${state.game_to_play})">Go to Game</button>
+            </div>
+            `;
+            const alert = document.createElement('div');
+            alert.id = 'game-alert';
+            alert.innerHTML = alertHTML;
+            tournamentBracket = document.getElementsByClassName('tournament-bracket')[0]
+            tournamentBracket.prepend(alert);
+        }
+        
+    }
+    else if (state.state.status === "finished") {
+        // display the winner of the tournament
+        const winner = state.state.winner;
+        const winnerHTML = `
+        <div class="alert alert-success" role="alert">
+            <strong>The winner of the tournament is ${winner}</strong>
+        </div>
+        `;
+        tournamentContainer.innerHTML += winnerHTML;
+    }
+    else {
+        users = await fetchAllUsers();
+    }
+    
+
 }
 
 
-function initTournament() {
+export async function init() {
     const tournamentId = sessionStorage.getItem('currentTournamentId');
-    const createState = sessionStorage.getItem('createState');
-    if (createState === 'true' || !tournamentId) {
+    if (!tournamentId) {
         displayCreateTournamentForm();
         initTournamentCreateButton();
     }
@@ -214,12 +294,9 @@ function initTournament() {
         ws.onmessage = function (event) {
             const message = JSON.parse(event.data);
             console.log('Live message:', message);
-            // Handle the message here
+            if (message) {
+                displayTournamentView();
+            }
         }
     }
 }
-
-
-
-window.initPageFunctions = window.initPageFunctions || [];
-window.initPageFunctions.push(initTournament);

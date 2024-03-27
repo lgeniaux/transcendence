@@ -71,7 +71,7 @@ body {
 	padding: 30px;
 	font-size: calc(2vh + 2vw);
 	color: #FFFFFFFF;
-	font-family: 'Brandish', sans-serif;
+	font-family: 'Courier New', Courier, monospace;
 	text-align: center;
 	z-index: 3;
 }

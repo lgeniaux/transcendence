@@ -1,6 +1,6 @@
 // oauth.js
 
-function initOauthHandling()
+export async function init()
 {
     if (window.location.pathname === '/login')
     {
@@ -88,6 +88,3 @@ function generateRandomString(length = 32)
 
     return str;
 }
-
-window.initPageFunctions = window.initPageFunctions || [];
-window.initPageFunctions.push(initOauthHandling);

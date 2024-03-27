@@ -5,7 +5,7 @@ from .profile import UserProfile, ChangePassword
 from .social import AddOrDeleteFriend, GetUsersList, BlockOrUnblockUser, GetUserNotifications, ManageInvitationNotification, InvitePlayerToGame
 # import notifications.consumers
 from notifications import consumers 
-from .tournaments import CreateTournament, GetMyTournaments, GetTournamentState, InvitePlayerToTournament
+from .tournaments import CreateTournament, GetMyTournaments, GetTournamentState, InvitePlayerToTournament, StartTournament
 from livechat.views import GetConversationMessages
 from games.views import GetGameStatus, StartGame, EndGame
 from .stats import GetUserStats
@@ -34,8 +34,7 @@ urlpatterns = [
    path('tournament/get-tournaments/', GetMyTournaments.as_view(), name='get-tournaments'),
    path('tournament/<int:tournament_id>/state/', GetTournamentState.as_view(), name='get-tournament-state'),
    path('tournament/invite/', InvitePlayerToTournament.as_view(), name='invite-player'),
-
-
+   
    path('get-notifications/',  GetUserNotifications.as_view(), name='get-notifications'),
    path('respond-to-invite/', ManageInvitationNotification.as_view(), name='respond-to-invite'),
 

@@ -18,7 +18,7 @@
 <body>
 
     <!-- Container principal -->
-    <div class="container-fluid background-container">
+    <div class="container-fluid background-container d-flex flex-column min-vh-100">
 
 		<!-- Header -->
 		<div class="row">
@@ -29,7 +29,7 @@
 			</header>
 		</div>
 
-        <div class="row">
+        <div class="row flex-fill">
             <div class="col-12">
                 <!-- Contenu de la partie principale -->
                 <div class="content">
@@ -40,18 +40,29 @@
         </div>
 
         <!-- Footer -->
-        <footer class="footer">
-            <p>&copy; 2024 - Born2Pong</p>
-        </footer>
+    <footer class="row">
+        <div class="col-12">
+            <div class="footer mt-auto py-3">
+                <p>&copy; 2024 - Born2Pong</p>
+            </div>
+        </div>
+    </footer>
 
     </div>
 
+    <script type="importmap">
+        {
+          "imports": {
+            "three": "https://unpkg.com/three@0.160.1/build/three.module.js",
+            "three/addons/": "https://unpkg.com/three@0.160.1/examples/jsm/"
+          }
+        }
+    </script>
     <script src="/static/js/bootstrap.bundle.min.js"></script>
 	<script src="/static/js/utils.js"></script>
-	<script src="/static/js/friendManagement.js"></script>
-	<script src="/static/js/navbar.js"></script>
-    <script src="/static/js/chatbox.js"></script>
-    <script src="/static/js/main.js"></script>
+	<script type="module" src="/static/js/navbar.js"></script>
+    <script type="module" src="/static/js/chatbox.js"></script>
+    <script type="module" src="/static/js/main.js"></script>
 
 </body>
 </html>

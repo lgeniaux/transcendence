@@ -1,218 +1,31 @@
-@font-face
-{
-	font-family: 'Silkscreen Bold';
-	src: url('/static/fonts/Silkscreen-Bold.ttf') format('truetype');
+@font-face {
+    font-family: 'Silkscreen Bold';
+    src: url('/static/fonts/Silkscreen-Bold.ttf') format('truetype');
 }
 
-@font-face
-{
-	font-family: 'Fugaz One';
-	src: url('/static/fonts/FugazOne-Regular.ttf') format('truetype');
+@font-face {
+    font-family: 'Fugaz One';
+    src: url('/static/fonts/FugazOne-Regular.ttf') format('truetype');
 }
 
-.dashboard-container
-{
-    width: 100%;
-    height: 800px;
-    padding: 20px;
-    display: flex; 
-    flex-direction: row;
-    justify-content: space-between;
-    color: #FFFFFF;
-    gap: 20px;
-}
-
-.dashboard-container .dashboard-section
-{
-    display: flex;
-    flex-direction: column;
-	align-items: center;
-    background-color: rgb(24, 24, 24);
-    border-radius: 30px;
-    margin: 20px;
-    padding: 30px;
-    flex-grow: 1;
-	overflow: hidden;
-}
-
-.dashboard-container .dashboard-section h2
-{
-    font-family: 'Fugaz One', sans-serif;
-    color: white;
-    text-align: center;
-    margin-bottom: 20px;
-    font-size: 2.5rem;
-}
-
-.dashboard-container .dashboard-section hr
-{
-	border: 2px solid black;
-	margin-bottom: 20px;
-	border-radius: 10px;
-	width: 50%;
-}
-
-.dashboard-container .dashboard-section:last-child
-{
-    margin-right: 0;
-}
-
-.dashboard-container .notification, .tournament
-{
-    background-color: #5a2b00;
-    border: 1px solid #FFB800;
-    margin-bottom: 10px;
-    padding: 10px;
-    border-radius: 8px;
-    margin-bottom: 15px;
-	flex-grow: 1;
-}
-
-.dashboard-container .search-bar
-{
-	width: 60%;
-	display: flex;
-	flex-direction: row;
-	margin: 10px;
-}
-
-.dashboard-container .search-bar .btn
-{
-	background-color: #FFB800;
-    color: black;
-	font-family: 'Trebuchet MS', sans-serif;
-	font-weight: bold;
-	border: none;
-	cursor: pointer;
-	text-transform: uppercase;
-	transition: background-color 0.3s;
-}
-
-.dashboard-container .search-bar .btn:hover
-{
-	background-color: #e6a700;
-	opacity: 0.9;
-}
-
-.dashboard-container .search-results
-{
-	width: 100%;
-	padding: 40px;
-	margin: 10px;
-	padding-left: 61px;
-	overflow-y: auto;
-}
-
-.dashboard-container .search-results .btn
-{
-    color: #FFFFFF;
-    border: none;
-    cursor: pointer;
-	font-family: 'Fugaz One', sans-serif;
-    font-weight: bold;
-	font-size: 20px;
-    text-transform: uppercase;
-    transition: background-color 0.3s;
-	border-radius: 0px;
-}
-
-.dashboard-container .card
-{
-	width: 100%;
-	display: flex;
-	flex-direction: row;
+.dashboard-section{
 	background-color: rgb(24, 24, 24);
-	color: white;
-	height: 100px;
-    border-radius: 20px;
-	margin-bottom: 20px;
-	flex-grow: 1;
-	overflow: hidden;
-	padding: 0px;
 }
 
-.dashboard-container .friend .card-body
-{
-	border: none;
-	margin: 0px;
-	padding: 0px;
-	padding-left: 20px;
-	overflow: hidden;
-	background-color: #105200;
+.dashboard-section h2 {
+    font-family: 'Fugaz One', sans-serif;
 }
 
-.dashboard-container .friend .row
-{
-	display: flex;
-	flex-direction: row;
-	justify-content: space-between;
-	height: 100%;
+.dashboard-section hr {
+    border: 2px solid #ffffff;
+    border-radius: 10px;
 }
 
-.dashboard-container .friend .col-8
-{
-	align-self: center;
+.search-bar .btn, .search-results .btn {
+    font-family: 'Trebuchet MS', sans-serif;
 }
 
-.dashboard-container .friend .friendProfile
-{
-	display: flex;
-	flex-direction: row;
-	font-family: 'Fugaz One', sans-serif;
+.friend .friendProfile p {
+    font-family: 'Silkscreen Bold', sans-serif;
+    color: rgb(0, 240, 0);
 }
-
-.dashboard-container .friend .friendProfile h3
-{
-	font-size: 1.8rem;
-}
-
-.dashboard-container .friend .friendProfile p
-{
-	font-size: 1.0rem;
-	font-family: 'silkscreen bold', sans-serif;
-	color: rgb(0, 240, 0)
-}
-
-.dashboard-container .friend .friendInfo
-{
-	overflow-x: auto;
-}
-
-.dashboard-container .dashboard-section .btn-group
-{
-	width: 100%;
-	height: 100%;
-	border-radius: 0px;
-	overflow: hidden;
-	border: none;
-}
-
-.dashboard-container .search-results .btn:hover
-{
-    background-color: #e6a700;
-    opacity: 0.9;
-}
-
-.dashboard-container .search-results .btn.accept { background-color: #28a745; }
-.dashboard-container .search-results .btn.deny { background-color: #dc3545; }
-.dashboard-container .search-results .btn.join { background-color: #007bff; }
-.dashboard-container .search-results .btn.add-friend { background-color: #ffc107; }
-
-.dashboard-container .tournaments .tournaments-list
-{
-	width: 100%;
-}
-
-@media (max-width: 768px)
-{
-    .dashboard-container
-	{
-        flex-direction: column;
-    }
-    .dashboard-section
-	{
-        width: 90%;
-        margin: 0 auto 20px;
-    }
-}
-

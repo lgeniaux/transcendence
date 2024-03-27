@@ -10,9 +10,13 @@ ENV PYTHONUNBUFFERED 1
 RUN groupadd --gid 1000 django \
     && useradd --uid 1000 --gid 1000 -m django
 
-COPY . .
+USER django
+
+COPY requirements.txt .
 # Install dependencies
 RUN pip install --no-cache-dir -r requirements.txt
+
+COPY . .
 
 
 # Add the frontend directory as an environment variable
