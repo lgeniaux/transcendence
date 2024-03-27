@@ -86,7 +86,7 @@ class GetUserStats(APIView):
                 'winner': game.winner.username,
                 'start_time': game.start_time,
                 'end_time': game.end_time,
-                'tournament': game.tournament.name,
+                'tournament': game.tournament.name if game.tournament else None,
                 'round_name': game.round_name,
             })
         #finished tournaments
