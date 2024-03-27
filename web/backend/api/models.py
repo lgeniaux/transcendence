@@ -15,8 +15,8 @@ class User(AbstractUser):
     email = models.EmailField(max_length=254, unique=True)
     avatar = models.ImageField(upload_to='avatars/', default="avatars/zippy.jpg", blank=True)
     online_status = models.BooleanField(default=False)
-    friendlist = models.ManyToManyField('self', blank=True)
-    blocklist = models.ManyToManyField('self', blank=True)
+    friendlist = models.ManyToManyField('self', symmetrical=False, blank=True, related_name='friends')
+    blocklist = models.ManyToManyField('self', symmetrical=False, blank=True, related_name='blocked')
     tournaments = models.ManyToManyField('Tournament', blank=True)
     is_oauth = models.BooleanField(default=False)
     
