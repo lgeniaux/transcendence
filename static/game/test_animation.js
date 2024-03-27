@@ -2,7 +2,7 @@ import * as THREE from 'three';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 
-function render(p) {
+function renderOnce(p) {
 	const delta = p.clock.getDelta();
 	p.cameraMixer.update(delta);
 	p.lookatMixer.update(delta);
@@ -10,6 +10,10 @@ function render(p) {
 	p.camera.lookAt(p.model.getObjectByName('CameraLookat').position);
 	p.renderer.render(p.scene, p.camera);
 	console.log(p.camera.position, p.model.getObjectByName('CameraLookat').position);
+}
+
+function render(p) {
+	renderOnce(p);
 	requestAnimationFrame(() => render(p));
 }
 
@@ -90,7 +94,13 @@ async function test_animation() {
 			lookatMixer: lookatMixer,
 			model: model,
 		};
-		requestAnimationFrame(() => render(p));
+		p.clock.stop();
+		renderOnce(p)
+		function launchAnimation() {
+			p.clock.start();
+			requestAnimationFrame(() => render(p));
+		}
+		window.launchAnimation = launchAnimation;
 	}, (xhr) => {
 		console.log((xhr.loaded / xhr.total * 100) + '% loaded');
 	}, (error) => {
