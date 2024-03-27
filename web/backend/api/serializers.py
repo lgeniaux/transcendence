@@ -75,7 +75,7 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
         user = User.objects.create(
             username=validated_data['username'],
             email=validated_data['email'],
-            avatar=validated_data['avatar'], # none is allowed
+            avatar=validated_data['avatar'] if 'avatar' in validated_data else None,
             password=make_password(validated_data['password'])
         )
         return user

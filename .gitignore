@@ -3,6 +3,5 @@ __pycache__/
 .vscode/
 .cache/
 
-.volumes/
 web/static/
 web/tests/

@@ -230,17 +230,37 @@ async function cb_displayUsers(users)
 		// Utilisation du username pour générer un ID unique pour chaque élément de menu
 		let dropdownId = `dropdown-${user.username}`;
 		let avatarSrc = user.avatar ? user.avatar : 'static/img/person-fill.svg';
-	
-		let userHTML = `
+        let userHTML = '';
+
+        console.log(user);
+        if (user.online_status)
+        {
+		    userHTML = `
 			<button class="user dropdown-toggle" type="button" data-username="${user.username}" data-bs-toggle="dropdown" aria-expanded="false" id="${dropdownId}">
 				<div id="profilePicture"><img src="${avatarSrc}" alt="User avatar" class="avatar"></div>
 				<div>${user.username}</div>
+                <span class="badge bg-success">Online</span>
 			</button>
 			<div class="dropdown-menu dropdown-menu-end action-buttons-container" aria-labelledby="${dropdownId}">
 				${getChatboxActionButtonsHtml(user)}
 			</div>
 		`;
-	
+        }
+        else
+        {
+		    userHTML = `
+			<button class="user dropdown-toggle" type="button" data-username="${user.username}" data-bs-toggle="dropdown" aria-expanded="false" id="${dropdownId}">
+				<div id="profilePicture"><img src="${avatarSrc}" alt="User avatar" class="avatar"></div>
+				<div>${user.username}</div>
+                <span class="badge bg-danger">Offline</span>
+			</button>
+			<div class="dropdown-menu dropdown-menu-end action-buttons-container" aria-labelledby="${dropdownId}">
+				${getChatboxActionButtonsHtml(user)}
+			</div>
+		`;
+        }
+            
+
 		usersList.innerHTML += userHTML;
 	});
 }
@@ -274,8 +294,6 @@ window.startGameWithUser = async (username)=>{
 function getChatboxActionButtonsHtml(user, actionContainerId)
 {
     let buttonsHtml = `<div id="${actionContainerId}">`;
-
-	console.log('User status:', user.status);
 
     if (user.status === 'friends')
     {

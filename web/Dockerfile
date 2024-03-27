@@ -14,7 +14,9 @@ USER django
 
 COPY requirements.txt .
 # Install dependencies
-RUN pip install --no-cache-dir -r requirements.txt
+RUN pip install -U --no-cache-dir -r requirements.txt
+
+ENV PATH="/home/django/.local/bin:${PATH}"
 
 COPY . .
 
