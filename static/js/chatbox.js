@@ -57,6 +57,7 @@ function initWebsocket()
         //get sender of the message
         const sender = message.sender;
         console.log('message :', message.message);
+
         if (sender === window.targetUsername)
             displayMessage(message.message, sender);
     };
@@ -98,6 +99,41 @@ function observeForm(webSocket)
     const config = { childList: true, subtree: true };
     observer.observe(document.body, config); // Commencez à observer le document entier.
 }
+// Fonction pour envoyer un message via WebSocket
+function sendMessageViaWebSocket(webSocket, message, targetUsername)
+{
+    if (webSocket.readyState === WebSocket.OPEN)
+	{
+        webSocket.send(JSON.stringify({
+            message: message,
+            type: 'message',
+            username: targetUsername
+        }));
+    }
+}
+
+// Fonction unifiée pour afficher un message
+function displayMessage(content, sender, isSentByUser)
+{
+    // Crée un conteneur pour le message qui occupe toute la largeur
+    const messageContainer = document.createElement('div');
+    messageContainer.classList.add('message-container', isSentByUser ? 'sent' : 'received');
+
+    // Crée l'élément de message avec le contenu et le style approprié
+    const messageElement = document.createElement('div');
+    messageElement.classList.add('message', isSentByUser ? 'message-sent' : 'message-received');
+    messageElement.innerText = `${content}`;
+
+    // Ajoute le messageElement comme enfant du messageContainer
+    messageContainer.appendChild(messageElement);
+
+    // Ajoute le messageContainer au conteneur de messages global
+    const messagesContainer = document.getElementById('messages');
+    messagesContainer.appendChild(messageContainer);
+    messagesContainer.scrollTop = messagesContainer.scrollHeight;
+}
+
+
 
 function attachFormSubmitListener(webSocket)
 {
@@ -109,62 +145,40 @@ function attachFormSubmitListener(webSocket)
         const message = messageInput.value.trim();
         const targetUsername = window.targetUsername;
 
-        if (message && webSocket.readyState === WebSocket.OPEN)
-        {
-            // Inclut le destinataire dans l'objet JSON envoyé
-            webSocket.send(JSON.stringify({
-                message: message,
-                type: 'message', // Type du message
-                username: targetUsername // Nom d'utilisateur du destinataire
-            }));
-            displayMessage(message, 'Moi');
-            messageInput.value = ''; // Vide le champ après l'envoi
+        if (message)
+		{
+            sendMessageViaWebSocket(webSocket, message, targetUsername);
+            displayMessage(message, 'Moi', true);
+            messageInput.value = '';
         }
     });
 }
 
-function fetchAndDisplayStoredMessages()
-{
-    const auth_token = sessionStorage.getItem('authToken');
-    const headers = {
-        'Content-Type': 'application/json',
-        'Authorization': `Token ${auth_token}`
-    };
+async function fetchAndDisplayStoredMessages(targetUsername) {
+    try {
+        const requestBody = JSON.stringify({ username: targetUsername, message_max_count: 100});
+        console.log('Request body:', requestBody); // Affiche le corps de la requête
+        console.log('Request headers:', getRequestHeaders()); // Affiche les headers de la requête
+        
+        const response = await fetch('/api/get-messages/', {
+            method: 'POST',
+            credentials: 'include',
+            headers: getRequestHeaders(),
+            body: requestBody
+        });
 
-    fetch('/api/get-messages/', { // Ensure you have an endpoint to fetch stored messages
-        method: 'POST',
-        credentials: 'include',
-        headers: headers,
-        body: JSON.stringify({ username: window.targetUsername, message_max_count: 100})
-    })
-        .then(response => response.json())
-        .then(data => {
-            // Assuming data is an array of messages
-            data.forEach(message => {
-                displayStoredMessage(message);
-            });
-        }).catch(error => console.error('Error fetching messages:', error));
+        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+
+        const data = await response.json();
+        data.forEach(message => {
+            displayMessage(message.content, message.sender, message.sender !== targetUsername);
+        });
+    } catch (error) {
+        console.error('Error fetching messages:', error);
+    }
 }
 
-function displayMessage(content, sender)
-{
-    const messageElement = document.createElement('div');
-    messageElement.innerText = sender + ': ' + content;
-    document.getElementById('messages').appendChild(messageElement);
-    document.getElementById('messages').scrollTop = document.getElementById('messages').scrollHeight;
-}
 
-function displayStoredMessage(message)
-{
-    const messageElement = document.createElement('div');
-    if (message.sender !== window.targetUsername)
-        message.sender = 'Moi';
-    messageElement.innerText = message.sender + ': ' + message.content;
-    const messagesContainer = document.getElementById('messages');
-    messagesContainer.appendChild(messageElement);
-    console.log('Stored message displayed');
-    messagesContainer.scrollTop = messagesContainer.scrollHeight;
-}
 
 
 // ----------- frontend ----------- //
@@ -291,7 +305,7 @@ window.sendMessage = async (username) =>
 {
     const messagesUrl = '/static/html/chatbox/messagebox.html';
     loadContent(messagesUrl, '#chatboxContainer', messages);
-    fetchAndDisplayStoredMessages();
+    fetchAndDisplayStoredMessages(username);
     document.getElementById('chatboxHeader').innerText = window.targetUsername;
 }
 
