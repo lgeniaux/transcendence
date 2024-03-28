@@ -1,4 +1,4 @@
-import { launchGame } from "/static/game/js/main.js";
+import { createGame, launchGame } from "/static/game/js/main.js";
 
 function displayGameView(game, fetch = false) {
     if (fetch) {
@@ -88,6 +88,11 @@ async function startGame() {
     }
     let score = "";
     let results = {};
+    setTimeout(() => {
+        for (let i = 0; i < document.getElementsByClassName("score").length; i++) {
+            document.getElementsByClassName("score")[i].style.opacity = 1;
+        }
+    }, 3000);
     try {
         const game = await getGame(gameId, headers);
         results = await launchGame(game.player1, game.player2, window.properties);
@@ -206,6 +211,7 @@ export async function init() {
             console.error('Error getting game status:', error);
         });
     }
+    window.properties = await createGame();
     document.getElementById("game").addEventListener("click", startGame);
 
 }
