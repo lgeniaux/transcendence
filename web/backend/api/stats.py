@@ -63,7 +63,8 @@ from django.db import models
 
 class GetUserStats(APIView):
     """
-    /api/profile/stats/<str:username>
+    /api/profile/stats/
+    params: username
     Returns all game played by the user, list of tournaments finished, data containing the number of wins, losses, and the number of games played; the number of tournaments won, lost, and the number of tournaments played;
     """
 
@@ -94,6 +95,7 @@ class GetUserStats(APIView):
                     "start_time": game.start_time,
                     "end_time": game.end_time,
                     "tournament": game.tournament.name if game.tournament else None,
+                    "tournament_id": game.tournament.id if game.tournament else None,
                     "round_name": game.round_name,
                 }
             )
@@ -107,7 +109,8 @@ class GetUserStats(APIView):
                 {
                     "id": tournament.id,
                     "name": tournament.name,
-                    "state": tournament.state,
+                    "winner": tournament.state["winner"],
+                    "start_time": tournament.start_time,
                 }
             )
 

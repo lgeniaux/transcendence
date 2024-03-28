@@ -81,7 +81,5 @@ urlpatterns = [
     ),
     path("game/start/", StartGame.as_view(), name="start-game"),
     path("game/end/", EndGame.as_view(), name="end-game"),
-    path(
-        "profile/stats/<str:username>/", GetUserStats.as_view(), name="get-user-stats"
-    ),
+    path("profile/stats/", GetUserStats.as_view(), name="get-user-stats"),
 ]
