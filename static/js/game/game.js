@@ -1,8 +1,8 @@
 import { createGame, launchGame } from "/static/game/js/main.js";
 
-function displayGameView(game, fetch = false) {
+async function displayGameView(game, fetch = false) {
     if (fetch) {
-        game = getGameStatus();
+        game = await getGameStatus();
     }
 
     var player = game.player;
@@ -18,8 +18,10 @@ function displayGameView(game, fetch = false) {
         `;
     }
     else if (game.status === 'waiting to start' && player === 'player1') {
+        window.properties = await createGame();
     }
     else if (game.status === 'finished') {
+        document.getElementById("game").removeEventListener("click", startGame);
         document.getElementById("game").innerHTML = `
         <div class="container mt-5">
     <div class="row justify-content-center">
@@ -58,14 +60,8 @@ function displayGameView(game, fetch = false) {
         </div>
     </div>
 </div>
-
-
-      
         `;
     }
-
-
-
 }
 
 async function startGame() {
@@ -80,12 +76,9 @@ async function startGame() {
         method: 'POST',
         headers,
         body: JSON.stringify({ game_id: gameId })
-    })
-    if (!r.ok) {
-        alert("There was an error starting the game");
-        navigate('/');
+    });
+    if (!r.ok)
         return;
-    }
     let score = "";
     let results = {};
     setTimeout(() => {
@@ -101,7 +94,7 @@ async function startGame() {
         results = await launchGame("Left player", "Right player", window.properties);
     }
     score = results.score1 + "-" + results.score2;
-    await endGame(score, gameId, headers);
+    endGame(score, gameId, headers);
 }
 
 async function endGame(score, gameId, headers) {
@@ -211,7 +204,6 @@ export async function init() {
             console.error('Error getting game status:', error);
         });
     }
-    window.properties = await createGame();
     document.getElementById("game").addEventListener("click", startGame);
 
 }
