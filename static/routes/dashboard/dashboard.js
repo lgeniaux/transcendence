@@ -132,6 +132,7 @@ window.manageInvite = async (notificationId, action) =>{
 
 window.goToGame = async (gameId) =>{
     sessionStorage.setItem('currentGameId', gameId);
+    sessionStorage.setItem('endGameRedirect', '/dashboard');
     window.location = '/game';
 }
 
@@ -139,16 +140,18 @@ function getActionButtonsNotification(notification) {
     let buttonsHtml = '';
 
     if (notification.notification_type === 'tournament-invite') {
-        buttonsHtml = `        <div class="search-bar d-flex flex-row w-60 my-2">
-        <div class="input-group">
-            <input type="text" id="userSearch" class="form-control" placeholder="Search for users...">
-            <button class="btn btn-warning text-black fw-bold text-uppercase" id="userSearchButton" type="button">Search</button>
-        </div>
-    </div>ger btn-sm" onclick="manageInvite(${notification.id}, 'deny')">Deny</button>
+        buttonsHtml = `
+            <button class="btn btn-success" onclick="manageInvite(${notification.id}, 'accept')">Accept</button>
+            <button class="btn btn-danger" onclick="manageInvite(${notification.id}, 'deny')">Deny</button>
         `;
     } else if (notification.notification_type === 'game-start') {
         buttonsHtml = `
             <button class="btn btn-success" onclick="goToGame(${notification.data.game_id})">PLAY</button>
+        `;
+    } else if (notification.notification_type === 'game-invite') {
+        buttonsHtml = `
+            <button class="btn btn-success" onclick="manageInvite(${notification.id}, 'accept')">Accept</button>
+            <button class="btn btn-danger" onclick="manageInvite(${notification.id}, 'deny')">Deny</button>
         `;
     }
 
