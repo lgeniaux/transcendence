@@ -6,6 +6,7 @@ export async function init()
 
     var profileFormButton = document.getElementById('profileChangeButton');
     var passwordFormButton = document.getElementById('passwordChangeButton');
+    var deleteFormButton = document.getElementById('profileDeleteButton');
 
     if (profileFormButton)
     {
@@ -20,6 +21,13 @@ export async function init()
         passwordFormButton.addEventListener('click', async function (event) {
             event.preventDefault();
             await changePassword(event);
+        });
+    }
+    if (deleteFormButton)
+    {
+        deleteFormButton.addEventListener('click', async function (event) {
+            event.preventDefault();
+            await deleteProfile(event);
         });
     }
 }
@@ -133,3 +141,41 @@ async function changePassword(event)
 // window.initPageFunctions = window.initPageFunctions || [];
 // window.initPageFunctions.push(initProfilePage);
 
+}
+
+async function deleteProfile(event)
+{
+    event.preventDefault();
+
+    if (confirm('Are you sure you want to delete your account?'))
+    {
+        try
+        {
+            const response = await fetch('/api/me/delete/', {
+                method: 'POST',
+                credentials: 'include',
+                headers: getRequestHeaders()
+            });
+        
+            if (!response.ok)
+                throw new Error(`HTTP error! status: ${response.status}`);
+
+            const data = await response.json();
+
+            if (data.non_field_errors || data.error)
+            {
+                alert(data.non_field_errors || data.error);
+            }
+            else
+            {
+                alert('Account deleted successfully');
+                sessionStorage.clear();
+                window.location.href = '/';
+            }
+        }
+        catch (error)
+        {
+            console.error('Error:', error);
+        }
+    }
+}

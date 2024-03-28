@@ -18,15 +18,15 @@ from django.db import models
 #     blocklist = models.ManyToManyField('self', blank=True)
 #     tournaments = models.ManyToManyField('Tournament', blank=True)
 #     is_oauth = models.BooleanField(default=False)
-    
+
 #     def in_active_game(self):
 #         return Game.objects.filter(models.Q(player1=self) | models.Q(player2=self)).filter(status='in progress').exists()
-    
+
 
 # class Game(models.Model):
 #     def __str__(self):
 #         return f"{self.player1} vs {self.player2}"
-    
+
 #     game_id = models.AutoField(primary_key=True)
 #     player1 = models.ForeignKey(User, on_delete=models.CASCADE, related_name='player1')
 #     player2 = models.ForeignKey(User, on_delete=models.CASCADE, related_name='player2')
@@ -49,7 +49,7 @@ from django.db import models
 #     start_time = models.DateTimeField(auto_now_add=True)
 #     state = models.JSONField(default=dict)
 #     nb_players = models.IntegerField()
-    
+
 #     def initialize_state(self):
 #         state = {}
 #         state['quarter-finals'] = []
@@ -60,62 +60,76 @@ from django.db import models
 #         self.state = state
 #         self.save()
 
+
 class GetUserStats(APIView):
     """
     /api/profile/stats/<str:username>
-    Returns all game played by the user, list of tournaments finished, data containing the number of wins, losses, and the number of games played; the number of tournaments won, lost, and the number of tournaments played; 
+    Returns all game played by the user, list of tournaments finished, data containing the number of wins, losses, and the number of games played; the number of tournaments won, lost, and the number of tournaments played;
     """
+
     permission_classes = [IsAuthenticated]
 
     def get(self, request, username):
         try:
             user = User.objects.get(username=username)
         except User.DoesNotExist:
-            return Response({'message': 'User not found'}, status=status.HTTP_404_NOT_FOUND)
+            return Response(
+                {"message": "User not found"}, status=status.HTTP_404_NOT_FOUND
+            )
 
-        #finished games
-        games = Game.objects.filter(models.Q(player1=user) | models.Q(player2=user)).filter(status='finished')
+        # finished games
+        games = Game.objects.filter(
+            models.Q(player1=user) | models.Q(player2=user)
+        ).filter(status="finished")
         games_data = []
         for game in games:
-            games_data.append({
-                'game_id': game.game_id,
-                'player1': game.player1.username,
-                'player2': game.player2.username,
-                'score_player1': game.score_player1,
-                'score_player2': game.score_player2,
-                'winner': game.winner.username,
-                'start_time': game.start_time,
-                'end_time': game.end_time,
-                'tournament': game.tournament.name if game.tournament else None,
-                'round_name': game.round_name,
-            })
-        #finished tournaments
-        tournaments = Tournament.objects.filter(participants=user).filter(state__status='finished')
+            games_data.append(
+                {
+                    "game_id": game.game_id,
+                    "player1": game.player1.username,
+                    "player2": game.player2.username,
+                    "score_player1": game.score_player1,
+                    "score_player2": game.score_player2,
+                    "winner": game.winner.username,
+                    "start_time": game.start_time,
+                    "end_time": game.end_time,
+                    "tournament": game.tournament.name if game.tournament else None,
+                    "round_name": game.round_name,
+                }
+            )
+        # finished tournaments
+        tournaments = Tournament.objects.filter(participants=user).filter(
+            state__status="finished"
+        )
         tournaments_data = []
         for tournament in tournaments:
-            tournaments_data.append({
-                'id': tournament.id,
-                'name': tournament.name,
-                'state': tournament.state,
-            })
+            tournaments_data.append(
+                {
+                    "id": tournament.id,
+                    "name": tournament.name,
+                    "state": tournament.state,
+                }
+            )
 
-        #stats
+        # stats
         game_stats = {
-            'wins': games.filter(winner=user).count(),
-            'losses': games.exclude(winner=user).count(),
-            'games_played': games.count(),
+            "wins": games.filter(winner=user).count(),
+            "losses": games.exclude(winner=user).count(),
+            "games_played": games.count(),
         }
 
         tournament_stats = {
-            'wins': tournaments.filter(state__winner=user.id).count(),
-            'losses': tournaments.exclude(state__winner=user.id).count(),
-            'tournaments_played': tournaments.count(),
+            "wins": tournaments.filter(state__winner=user.id).count(),
+            "losses": tournaments.exclude(state__winner=user.id).count(),
+            "tournaments_played": tournaments.count(),
         }
 
-        return Response({'games': games_data, 'tournaments': tournaments_data, 'game_stats': game_stats, 'tournament_stats': tournament_stats}, status=status.HTTP_200_OK)
-    
-
-
-
-
-
+        return Response(
+            {
+                "games": games_data,
+                "tournaments": tournaments_data,
+                "game_stats": game_stats,
+                "tournament_stats": tournament_stats,
+            },
+            status=status.HTTP_200_OK,
+        )

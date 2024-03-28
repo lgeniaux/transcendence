@@ -64,6 +64,7 @@ function displayCreateTournamentForm() {
     initTournamentCreateButton();
 
 }
+
 async function createTournament() {
     const tournamentName = document.getElementById('tournamentNameInput').value;
     const nb_players_option = document.getElementById('numberOfPlayers');
@@ -223,7 +224,6 @@ async function updateTournamentBracket(state) {
                 const score1 = match.querySelector('.score-p1 h4');
                 const score2 = match.querySelector('.score-p2 h4');
 
-                // Accessing the specific round and match data from the state
                 const game = state.state[round_name] && state.state[round_name][i];
                 if (game && game.status === "finished") {
                     player1.innerText = game.player1;
@@ -314,7 +314,7 @@ export async function init() {
             const message = JSON.parse(event.data);
             console.log('Live message:', message);
             if (message) {
-                displayTournamentView();
+                displayTournamentView(game=undefined, true);
             }
         }
     }
