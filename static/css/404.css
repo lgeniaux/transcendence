@@ -12,9 +12,9 @@
 .error404 h1
 {
     font-family: 'Micro 5';
-    font-size: 500px;
+    font-size: 300px;
     color: white;
-    margin: 50px;
+    margin: 40px;
 }
 
 .error404 h2
@@ -22,7 +22,7 @@
     font-family: 'Micro 5';
     font-size: 100px;
     color: white;
-    margin: 50px;
+    margin: 40px;
 }
 
 .error404 .btn

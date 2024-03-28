@@ -56,7 +56,7 @@
 	border-radius: 8px;
 	transition: opacity 0.3s;
 	opacity: 0;
-	z-index: 1; /* Assure que le pseudo-élément est derrière le contenu du bouton */
+	z-index: 1;
 }
 
 .chatbox .collapseBtn:hover::before
@@ -73,8 +73,9 @@
 	border-radius: 8px 8px 0px 0px;
 	padding: 5px;
 	border: none;
-	position: relative; /* Active le z-index */
-	z-index: 2; /* Plus élevé que celui du pseudo-élément pour rester au premier plan */
+	position: relative;
+	z-index: 2;
+	transition: none;
 }
 
 .chatbox .collapse
@@ -83,6 +84,12 @@
 	background-color: black;
 	padding: 10px;
 	padding-top: 0px;
+	transition: none;
+}
+
+.chatbox #chatboxCollapse.show
+{
+	transition: none;
 }
 
 .chatbox .chatIcon
@@ -103,15 +110,8 @@
 	margin: 10px 0;
 }
 
-.message-container.sent {
-    justify-content: flex-end;
-}
-
-.message-container.received {
-    justify-content: flex-start;
-}
-
-.message-sent, .message-received {
+.message-sent, .message-received
+{
     background-color: #53bdff;
     color: white;
     padding: 5px 10px;
@@ -124,4 +124,9 @@
 {
     background-color: #fff;
     color: black;
+}
+
+.message-container.sent
+{
+    justify-content: flex-end;
 }

@@ -15,23 +15,17 @@
     margin-left: 10px;
     background: transparent;
     border: none;
-    transition: background-color 0.3s; /* Ajoute une transition sur la couleur de fond */
+    transition: background-color 0.3s;
 }
 
 .sidePanel .navbar-toggler:hover
 {
-    background-color: #3333333c; /* Change la couleur de fond au survol */
+    background-color: #3333333c;
 }
 
 .sidePanel .offcanvas
 {
-	transition: transform 0.3s ease; /* Ajoute une transition de 0.3s pour la transformation */
-	transform: translateX(-100%); /* Déplace le offcanvas complètement hors de l'écran par défaut */
-}
-
-.sidePanel .offcanvas.show
-{
-	transform: translateX(0); /* Déplace le offcanvas vers la droite pour le faire apparaître à l'écran */
+	transition: none;
 }
 
 .sidePanel .offcanvas-title
