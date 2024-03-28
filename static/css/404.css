@@ -1,0 +1,44 @@
+@font-face
+{
+	font-family: 'Micro 5';
+	src: url('/static/fonts/Micro5-Regular.ttf') format('truetype');
+}
+.error404
+{
+    height: 100%;
+
+}
+
+.error404 h1
+{
+    font-family: 'Micro 5';
+    font-size: 500px;
+    color: white;
+    margin: 50px;
+}
+
+.error404 h2
+{
+    font-family: 'Micro 5';
+    font-size: 100px;
+    color: white;
+    margin: 50px;
+}
+
+.error404 .btn
+{
+    background-color: #FFB800;
+	font-size: xxx-large;
+	font-family: 'Fugaz One';
+	border: 8px solid black;
+    border-radius: 20px;
+    transition: background-color 0.3s ease, border-radius 0.3s ease;
+	padding: 20px;
+}
+
+.error404 .btn:hover
+{
+    background-color: #ffc226;
+    border-radius: 5px;
+}
+
