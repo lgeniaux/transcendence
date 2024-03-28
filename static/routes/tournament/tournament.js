@@ -1,4 +1,4 @@
-async function inviteToTournament(username, tournamentId) {
+window.inviteToTournament = async(username, tournamentId) =>{
     const authToken = sessionStorage.getItem('authToken');
     const headers = {
         'Accept': 'application/json',
@@ -25,8 +25,6 @@ async function inviteToTournament(username, tournamentId) {
         console.error('Failed to invite user:', error);
     }
 }
-
-
 
 function displayCreateTournamentForm() {
     // append the create-tournament.html to the html of the tournament page
@@ -137,7 +135,7 @@ async function fetchTournamentState() {
 
 
 async function removeQuarterFinals() {
-    const quarterFinals = document.getElementsByClassName('quarterFinals');
+    const quarterFinals = document.getElementsByClassName('quarter-finals');
     if (quarterFinals.length > 0) {
         quarterFinals[0].remove();
     }
@@ -202,6 +200,43 @@ function goToGame(gameId) {
     window.location.href = '/game';
 }
 
+async function updateTournamentBracket(state) {
+    const tournamentBracket = document.getElementsByClassName('tournament-bracket')[0];
+    if (!tournamentBracket) {
+        console.error('Tournament bracket not found');
+        return;
+    }
+
+    // Define all round names that you expect in the tournament
+    const roundNames = ['quarter-finals', 'semi-finals', 'finals'];
+
+    // Iterate over each round name
+    for (let round_name of roundNames) {
+        // Since round_name is used as a class, find all elements with this class
+        const rounds = document.getElementsByClassName(round_name);
+        for (let round of rounds) {
+            const matches = round.getElementsByClassName('match');
+            for (let i = 0; i < matches.length; i++) {
+                const match = matches[i];
+                const player1 = match.querySelector('#player1');
+                const player2 = match.querySelector('#player2');
+                const score1 = match.querySelector('.score-p1 h4');
+                const score2 = match.querySelector('.score-p2 h4');
+
+                // Accessing the specific round and match data from the state
+                const game = state.state[round_name] && state.state[round_name][i];
+                if (game && game.status === "finished") {
+                    player1.innerText = game.player1;
+                    player2.innerText = game.player2;
+                    score1.innerText = game.score_player1;
+                    score2.innerText = game.score_player2;
+                }
+            }
+        }
+    }
+}
+
+
 async function displayTournamentView() {
     const state = await fetchTournamentState();
     if (!state) {
@@ -229,24 +264,10 @@ async function displayTournamentView() {
     }
     if (state.state.status === "in progress") {
         // if there is a game for me to play, call goToGame
-        // remove potential alert
-        const alert = document.getElementById('game-alert');
-        if (alert) {
-            alert.remove();
-        }
+
         if (state.game_to_play) {
             // display alert that the game is ready and wait for the user to click on it to go to the game the alert zill be added as the firs tdiv inside the <div class="tournament"> element
-            const alertHTML = `
-            <div class="row justify-content-evenly alert alert-success alert-dismissible fade show" role="alert">
-                <strong>You have a game to play for the ${state.state.round_name}</strong>
-                <button type="button" class="btn btn-success btn-sm" onclick="goToGame(${state.game_to_play})">Go to Game</button>
-            </div>
-            `;
-            const alert = document.createElement('div');
-            alert.id = 'game-alert';
-            alert.innerHTML = alertHTML;
-            tournamentBracket = document.getElementsByClassName('tournament-bracket')[0]
-            tournamentBracket.prepend(alert);
+            goToGame(state.game_to_play);
         }
         
     }
@@ -260,13 +281,11 @@ async function displayTournamentView() {
         `;
         tournamentContainer.innerHTML += winnerHTML;
     }
-    else {
-        users = await fetchAllUsers();
+    else{
+        const users = await fetchAllUsers();
     }
-    
-
+    updateTournamentBracket(state);   
 }
-
 
 export async function init() {
     const tournamentId = sessionStorage.getItem('currentTournamentId');

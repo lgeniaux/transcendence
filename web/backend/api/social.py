@@ -25,7 +25,7 @@ from django.db.models import Q
 
 User = get_user_model()
 class BlockOrUnblockUserSerializer(serializers.Serializer):
-    username = serializers.CharField(max_length=50)
+    username = serializers.CharField(max_length=20)
     action = serializers.ChoiceField(choices=["block", "unblock"])
 
     def validate(self, data):

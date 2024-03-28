@@ -4,6 +4,16 @@
 	src: url('/static/fonts/FugazOne-Regular.ttf') format('truetype');
 }
 
+
+.vertical-line {
+    height: 40px; /* Adjust as necessary */
+    width: 1px; /* Thin line */
+    background-color: #000; /* Black, adjust color as needed */
+    margin: 0 20px; /* Space around the line */
+}
+
+
+
 .tournament
 {
 	height: 800px;
