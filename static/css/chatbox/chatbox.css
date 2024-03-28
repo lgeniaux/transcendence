@@ -91,32 +91,37 @@
 	margin: 5px;
 }
 
+.chatbox .badge
+{
+	margin-left: auto;
+}
+
 .message-container
 {
-    width: 100%; /* Assure que le conteneur du message occupe toute la largeur */
-    display: flex; /* Utilise Flexbox pour aligner les messages à gauche ou à droite */
-	margin: 10px 0; /* Marge autour des messages */
+    width: 100%;
+    display: flex;
+	margin: 10px 0;
 }
 
 .message-container.sent {
-    justify-content: flex-end; /* Alignement des messages envoyés à droite */
+    justify-content: flex-end;
 }
 
 .message-container.received {
-    justify-content: flex-start; /* Alignement des messages reçus à gauche (valeur par défaut) */
+    justify-content: flex-start;
 }
 
 .message-sent, .message-received {
-    background-color: #53bdff; /* Bleu clair pour les messages envoyés */
-    color: white; /* Texte blanc pour contraste */
-    padding: 5px 10px; /* Padding autour du texte du message */
-    border-radius: 10px; /* Bords arrondis */
-    max-width: 80%; /* Limite la largeur maximale du message pour l'esthétique */
-    word-wrap: break-word; /* Empêche le débordement du texte */
+    background-color: #53bdff;
+    color: white;
+    padding: 5px 10px;
+    border-radius: 10px;
+    max-width: 80%;
+    word-wrap: break-word;
 }
 
 .message-received
 {
-    background-color: #fff; /* Fond blanc pour les messages reçus */
-    color: black; /* Texte noir pour contraste */
+    background-color: #fff;
+    color: black;
 }
