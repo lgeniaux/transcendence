@@ -113,9 +113,6 @@ function endGame(score, gameId, headers) {
         return response.json();
     }).then(data => {
         console.log('Game ended:', data);
-        const redirect = sessionStorage.getItem('endGameRedirect');
-        sessionStorage.removeItem('endGameRedirect');
-        navigate(redirect);
     });
 }
 

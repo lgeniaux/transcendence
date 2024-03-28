@@ -93,7 +93,15 @@ async function updateProfile(event)
     }
 	catch (error)
 	{
-        console.error('Error:', error);dashboard.js:287 Error fetching tournaments: name="old_password"]').value;
+        console.error('Error:', error);
+    }
+}
+
+async function changePassword(event)
+{
+    event.preventDefault();
+
+    let old_password = document.querySelector('[name="old_password"]').value;
     let new_password = document.querySelector('[name="new_password"]').value;
     let confirm_password = document.querySelector('[name="confirm_password"]').value;
 
@@ -148,7 +156,7 @@ async function deleteProfile(event)
                 credentials: 'include',
                 headers: getRequestHeaders()
             });
-            dashboard.js:287 Error fetching tournaments: 
+        
             if (!response.ok)
                 throw new Error(`HTTP error! status: ${response.status}`);
 

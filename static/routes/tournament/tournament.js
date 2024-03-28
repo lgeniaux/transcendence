@@ -198,7 +198,6 @@ async function fetchAllUsers() {
 
 function goToGame(gameId) {
     sessionStorage.setItem('currentGameId', gameId);
-    sessionStorage.setItem('endGameRedirect', '/tournament');
     window.location.href = '/game';
 }
 
