@@ -40,12 +40,10 @@ function getCSRFToken()
     return csrfToken;
 }
 
-function getAuthHeaders()
+function revokeAuthToken()
 {
-    return {
-        'Content-Type': 'application/json',
-        'Authorization': `Token ${localStorage.getItem('authToken')}`
-    };
+    sessionStorage.removeItem('authToken');
+    window.location.href = '/login';
 }
 
 function getRequestHeaders()
