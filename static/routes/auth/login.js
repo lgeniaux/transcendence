@@ -41,7 +41,7 @@ async function loginUser()
             window.location.href = '/dashboard';
         }
         else
-            showLoginError(data.detail);
+            alert(detail.message)
 
     } 
     catch (error)
@@ -73,12 +73,4 @@ async function logoutUser()
     {
         console.error('Error:', error);
     }
-}
-
-function showLoginError(message)
-{
-    const loginAlert = document.getElementById('loginAlert');
-
-    if (loginAlert)
-        loginAlert.innerHTML = message;
 }

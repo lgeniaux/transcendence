@@ -50,6 +50,15 @@ async function registerUser() {
             body: formData
         });
 
+        const data = await response.json();
+
+        if (data.detail === "Success") {
+            window.location.href = '/login';
+        }
+        else {
+            alert(data.message);
+        }
+
         // Rest of the code remains the same
     } catch (error) {
         console.error('Error:', error);
