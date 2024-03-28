@@ -125,6 +125,7 @@ class Tournament(models.Model):
     def check_round_completion(self):
         if self.state['status'] != 'in progress':
             return
+        self.update_state()
 
         current_round = self.state['round_name']
         current_round_games = self.state[current_round]
@@ -179,9 +180,22 @@ class Tournament(models.Model):
         self.save()
         broadcast_to_tournament_group(self.id, f"{next_round} has started.")
 
+    def update_state(self):
+        # resync tournament state with the actual games
+        if self.state['status'] != 'in progress':
+            return
         
+        for round_name in ['quarter-finals', 'semi-finals', 'finals']:
+            for game_data in self.state[round_name]:
+                game = Game.objects.get(game_id=game_data['game_id'])
+                game_data['status'] = game.status
+                game_data['score_player1'] = game.score_player1
+                game_data['score_player2'] = game.score_player2
+                game_data['winner'] = game.winner.username if game.winner else None
+        self.save()
 
 
+    
 class TournamentInvitation(models.Model):
     tournament = models.ForeignKey(Tournament, on_delete=models.CASCADE)
     participant = models.ForeignKey(User, on_delete=models.CASCADE)

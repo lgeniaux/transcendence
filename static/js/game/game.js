@@ -1,9 +1,13 @@
 import { launchGame } from "/static/game/js/main.js";
 
-function displayGameView(game) {
-    console.log('Displaying game:', game);
+function displayGameView(game, fetch = false) {
+    if (fetch) {
+        game = getGameStatus();
+    }
+
     var player = game.player;
     game = game.game;
+    console.log('Displaying game:', game);
     if (game.status === 'waiting to start' && player === 'player2') {
         document.getElementById("game").removeEventListener("click", startGame);
         // display a view saying "Game is ready, you are playing as the guest so you must go play on the computer {username player1}"
@@ -183,6 +187,7 @@ export async function init() {
                     console.log('Live game:', message);
                     if (message.message === 'Game has been reset' || message.message === 'Game has ended') {
                         alert(message.message);
+                        displayGameView(game, true);
                     }
                 };
 
