@@ -553,7 +553,8 @@ def test_game(client, users_with_games):
 
     # Player 1 check profile stats
     response = client.get(
-        base_url + f"/profile/stats/{users[0]['username']}/",
+        base_url + f"/profile/stats/",
+        {"username": users[0]['username']},
         HTTP_AUTHORIZATION="Token " + player1_token,
     )
     print(response.json())
@@ -621,7 +622,8 @@ def test_game(client, users_with_games):
 
     # Player 1 check profile stats
     response = client.get(
-        base_url + f"/profile/stats/{users[0]['username']}/",
+        base_url + f"/profile/stats/",
+        {"username": users[0]['username']},
         HTTP_AUTHORIZATION="Token " + player1_token,
     )
     print(response.json())
@@ -631,7 +633,8 @@ def test_game(client, users_with_games):
 
     # Player 1 check profile stats of player 2
     response = client.get(
-        base_url + f"/profile/stats/{users[1]['username']}/",
+        base_url + f"/profile/stats/",
+        {"username": users[1]['username']},
         HTTP_AUTHORIZATION="Token " + player1_token,
     )
     print(response.json())
