@@ -50,6 +50,15 @@ class CodeForToken(APIView):
                     if created:
                         user.is_oauth = True
                         user.save()
+                    else:
+                        if not user.is_oauth:
+                            return Response(
+                                {
+                                    "detail": "User already exists with this email. Please login using your password."
+                                },
+                                status=status.HTTP_400_BAD_REQUEST,
+                            )
+
                     token, _ = Token.objects.get_or_create(user=user)
                     return Response(
                         {"detail": "Success", "auth_token": token.key},
