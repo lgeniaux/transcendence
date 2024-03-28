@@ -19,6 +19,7 @@ async function displayGameView(game, fetch = false) {
     }
     else if (game.status === 'waiting to start' && player === 'player1') {
         window.properties = await createGame();
+        document.getElementById("game").addEventListener("click", startGame);
     }
     else if (game.status === 'finished') {
         document.getElementById("game").removeEventListener("click", startGame);
@@ -204,6 +205,5 @@ export async function init() {
             console.error('Error getting game status:', error);
         });
     }
-    document.getElementById("game").addEventListener("click", startGame);
 
 }
