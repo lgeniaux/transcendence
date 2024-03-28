@@ -13,6 +13,8 @@ services:
       
   redis:
     image: "redis:latest"
+    volumes:
+      - redis:/data
     networks:
       - transcendence
 
@@ -57,6 +59,7 @@ networks:
 volumes:
   postgres:
   avatars:
+  redis:
   static:
     driver: local
     driver_opts:
