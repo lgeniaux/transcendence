@@ -53,8 +53,8 @@ class UserDelete(APIView):
     permissions_classes = [permissions.IsAuthenticated]
 
     def post(self, request, *args, **kwargs):
-        request.user.username = "deleted_user_" + str(random.randint(0, 10000))
-        request.user.email = "deleted_user_" + str(random.randint(0, 10000))
+        request.user.username = "deleted_" + str(random.randint(0, 10000))
+        request.user.email = "deleted_" + str(random.randint(0, 10000))
         request.user.is_active = False
         request.user.set_password(None)
         request.user.auth_token.delete()
