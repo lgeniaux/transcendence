@@ -26,7 +26,7 @@ class CodeForToken(APIView):
                 data={
                     "grant_type": "authorization_code",
                     "client_id": "u-s4t2ud-4c5c2185a70974ac0cfdefacbe289d7ec81936940b6980d71e752c16ec1c5d17",  # a changer et mettre dans le .env
-                    "client_secret": "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",  # MEGA IMPORTANT DE NE PAS LE METTRE DANS LE CODE
+                    "client_secret": "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",  # MEGA IMPORTANT DE NE PAS LE METTRE DANS LE CODE
                     "code": code,
                     "redirect_uri": redirect_uri,
                 },
