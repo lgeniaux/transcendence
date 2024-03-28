@@ -96,24 +96,28 @@ async function startGame() {
         results = await launchGame("Left player", "Right player", window.properties);
     }
     score = results.score1 + "-" + results.score2;
-    endGame(score, gameId, headers);
+    await endGame(score, gameId, headers);
 }
 
-function endGame(score, gameId, headers) {
-    const data = {
-        game_id: gameId,
-        score: score
-    }
-
-    fetch('/api/game/end/', {
+async function endGame(score, gameId, headers) {
+    const r = await fetch('/api/game/end/', {
         method: 'POST',
         headers,
-        body: JSON.stringify(data)
-    }).then(response => {
-        return response.json();
-    }).then(data => {
-        console.log('Game ended:', data);
+        body: JSON.stringify({ game_id: gameId, score })
     });
+
+    if (!r.ok) {
+        alert("There was an error ending the game");
+        return;
+    }
+    const redirection = sessionStorage.getItem('endGameRedirect');
+    if (redirection) {
+        sessionStorage.removeItem('endGameRedirect');
+        window.location = redirection;
+    }
+    else {
+        window.location = '/';
+    }
 }
 
 async function getGame(gameId, headers) {

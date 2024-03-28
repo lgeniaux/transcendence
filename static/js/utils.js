@@ -78,6 +78,7 @@ async function getFileContent(url)
     }
 }
 
+
 function initLogoutButton()
 {
     const logoutButton = document.getElementById('logoutBtn');
