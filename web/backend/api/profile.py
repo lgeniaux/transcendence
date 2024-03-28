@@ -10,6 +10,7 @@ from .serializers import UserSerializer, ChangePasswordSerializer, UserChangeSer
 import requests
 import random
 
+
 class UserProfile(APIView):
     permission_classes = [permissions.IsAuthenticated]
 
@@ -23,26 +24,34 @@ class UserProfile(APIView):
             serializer.save()
             return Response(serializer.data, status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-        
-    
+
+
 class ChangePassword(APIView):
     permission_classes = [permissions.IsAuthenticated]
 
     def put(self, request, *args, **kwargs):
         if request.user.is_oauth:
-            return Response({"detail": "You cannot change the password of an oauth user."}, status=status.HTTP_400_BAD_REQUEST)
+            return Response(
+                {"detail": "You cannot change the password of an oauth user."},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
         serializer = ChangePasswordSerializer(data=request.data)
         if serializer.is_valid():
             old_password = serializer.validated_data.get("old_password")
             if not request.user.check_password(old_password):
-                return Response({"old_password": ["Wrong password."]}, status=status.HTTP_400_BAD_REQUEST)
+                return Response(
+                    {"old_password": ["Wrong password."]},
+                    status=status.HTTP_400_BAD_REQUEST,
+                )
             request.user.set_password(serializer.data.get("new_password"))
             request.user.save()
             return Response(status=status.HTTP_204_NO_CONTENT)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-    
+
+
 class UserDelete(APIView):
     permissions_classes = [permissions.IsAuthenticated]
+
     def post(self, request, *args, **kwargs):
         request.user.username = "deleted_user_" + str(random.randint(0, 10000))
         request.user.email = "deleted_user_" + str(random.randint(0, 10000))
@@ -50,5 +59,6 @@ class UserDelete(APIView):
         request.user.set_password(None)
         request.user.auth_token.delete()
         request.user.save()
-        return Response({"detail": "User successfully deleted"}, status=status.HTTP_200_OK)
-
+        return Response(
+            {"detail": "User successfully deleted"}, status=status.HTTP_200_OK
+        )
