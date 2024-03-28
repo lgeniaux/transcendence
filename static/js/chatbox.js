@@ -217,7 +217,17 @@ async function cb_fetchAllUsers()
         });
 
         if (!response.ok)
+        {
+            if (response.status === 401)
+            {
+                const data = await response.json();
+
+                if (data.detail === 'Invalid token.')
+                    revokeAuthToken();
+            }
+
             throw new Error('Erreur lors de la récupération des utilisateurs');
+        }
 
         const data = await response.json();
 
