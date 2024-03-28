@@ -1,7 +1,7 @@
 from django.urls import path
-from .views import GameList, UserRegistrationView, UserLogin, UserLogout, UserDelete
+from .views import GameList, UserRegistrationView, UserLogin, UserLogout
 from .oauth import CodeForToken
-from .profile import UserProfile, ChangePassword
+from .profile import UserProfile, ChangePassword, UserDelete
 from .social import AddOrDeleteFriend, GetUsersList, BlockOrUnblockUser, GetUserNotifications, ManageInvitationNotification, InvitePlayerToGame
 # import notifications.consumers
 from notifications import consumers 

@@ -134,6 +134,7 @@ class GetTournamentState(APIView):
          tournament_id = kwargs['tournament_id']
          try:
             tournament = Tournament.objects.get(id=tournament_id)
+            tournament.update_state()
             # game_to_play is the game id that the user have to play
             game_to_play = None
             if tournament.state['status'] == 'in progress':

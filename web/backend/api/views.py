@@ -3,7 +3,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from .models import Game
-from .serializers import GameSerializer, UserRegistrationSerializer, UserLoginSerializer, UserDeleteSerializer
+from .serializers import GameSerializer, UserRegistrationSerializer, UserLoginSerializer
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import User
 from django.db import IntegrityError
@@ -76,21 +76,3 @@ class UserLogout(APIView):
     
 
 
-class UserDelete(APIView):
-    authentication_classes = [TokenAuthentication]
-    def post(self, request, *args, **kwargs):
-
-        if request.user.is_authenticated:
-            serializer = UserDeleteSerializer(data=request.data)
-            if  serializer.is_valid():
-                request.user.username = "deleted_user_" + str(random.randint(0, 100000))
-                request.user.email = "deleted_user_" + str(random.randint(0, 100000))
-                request.user.is_active = False
-                request.user.set_password(None)
-                request.user.auth_token.delete()
-                request.user.save()
-                return Response({"detail": "User successfully deleted"}, status=status.HTTP_200_OK)
-            else:
-                return Response({"detail": "Invalid password"}, status=status.HTTP_401_UNAUTHORIZED)
-        return Response({"detail": "You are not logged in"}, status=status.HTTP_401_UNAUTHORIZED)
-    

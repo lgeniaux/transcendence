@@ -14,7 +14,7 @@ class UserSerializer(serializers.ModelSerializer):
         fields = ['id', 'username', 'email', 'avatar', 'online_status', 'is_oauth']
 
 class UserChangeSerializer(serializers.ModelSerializer):
-    username = serializers.CharField(required=False)
+    username = serializers.CharField(required=False, max_length=20)
     avatar = serializers.ImageField(required=False)
 
     class Meta:
@@ -141,13 +141,3 @@ class ChangePasswordSerializer(serializers.Serializer):
             raise serializers.ValidationError("Password must contain at least one special character.")
         return value
     
-class UserDeleteSerializer(serializers.Serializer):
-    password = serializers.CharField(style={'input_type': 'password'}, write_only=True, required=False)
-    
-    def validate_password(self, value):
-        # if user is oauth user, then password is not required
-        if self.context['request'].user.is_oauth:
-            return value
-        if not self.context['request'].user.check_password(value):
-            raise serializers.ValidationError("Invalid password")
-        return value

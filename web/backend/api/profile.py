@@ -8,7 +8,7 @@ from rest_framework.authentication import TokenAuthentication
 from rest_framework import permissions
 from .serializers import UserSerializer, ChangePasswordSerializer, UserChangeSerializer
 import requests
-
+import random
 
 class UserProfile(APIView):
     permission_classes = [permissions.IsAuthenticated]
@@ -40,3 +40,16 @@ class ChangePassword(APIView):
             request.user.save()
             return Response(status=status.HTTP_204_NO_CONTENT)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+class UserDelete(APIView):
+    permissions_classes = [permissions.IsAuthenticated]
+    def post(self, request, *args, **kwargs):
+        print("Deleting user")
+        request.user.username = "deleted_user_" + str(random.randint(0, 10000))
+        request.user.email = "deleted_user_" + str(random.randint(0, 10000))
+        request.user.is_active = False
+        request.user.set_password(None)
+        request.user.auth_token.delete()
+        request.user.save()
+        return Response({"detail": "User successfully deleted"}, status=status.HTTP_200_OK)
+

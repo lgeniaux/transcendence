@@ -182,15 +182,17 @@ class Tournament(models.Model):
 
     def update_state(self):
         # resync tournament state with the actual games
-        if self.state['status'] != 'in progress':
-            return
-        
+        print("Updating tournament state")
         for round_name in ['quarter-finals', 'semi-finals', 'finals']:
             for game_data in self.state[round_name]:
                 game = Game.objects.get(game_id=game_data['game_id'])
                 game_data['status'] = game.status
                 game_data['score_player1'] = game.score_player1
                 game_data['score_player2'] = game.score_player2
+                game_data['player1'] = game.player1.username
+                print(game.player1.username)
+                print(game.player2.username)
+                game_data['player2'] = game.player2.username
                 game_data['winner'] = game.winner.username if game.winner else None
         self.save()
 
