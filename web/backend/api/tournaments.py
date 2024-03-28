@@ -58,7 +58,7 @@ def invite_participant_to_tournament(tournament, participant_username, sender_us
 
 class TournamentSerializer(serializers.ModelSerializer):
     nb_players = serializers.IntegerField()
-    name = serializers.CharField(max_length=50)
+    name = serializers.CharField(max_length=20)
 
     class Meta:
         model = Tournament

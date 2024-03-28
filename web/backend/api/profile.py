@@ -44,7 +44,6 @@ class ChangePassword(APIView):
 class UserDelete(APIView):
     permissions_classes = [permissions.IsAuthenticated]
     def post(self, request, *args, **kwargs):
-        print("Deleting user")
         request.user.username = "deleted_user_" + str(random.randint(0, 10000))
         request.user.email = "deleted_user_" + str(random.randint(0, 10000))
         request.user.is_active = False
