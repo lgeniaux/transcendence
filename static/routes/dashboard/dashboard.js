@@ -244,21 +244,23 @@ function displayTournaments(tournaments) {
 
     if (tournamentsList) {
         tournaments.forEach(tournament => {
-            const tournamentCard = document.createElement('div');
-            tournamentCard.className = 'card bg-dark text-white mb-3';
-            tournamentCard.setAttribute('role', 'button');
-            tournamentCard.setAttribute('tabindex', '0');
-            tournamentCard.setAttribute('data-spa', '/tournament');
-            tournamentCard.setAttribute('data-spa-id', tournament.id);
-            tournamentCard.innerHTML = `
-                <div class="card-body d-flex justify-content-between align-items-center">
-                    <h5 class="card-title mb-0">${tournament.name}</h5>
-                    <span class="badge bg-success rounded-pill">${tournament.state.status}</span>
-                </div>
-            `;
+            if (tournament.state.status !== 'finished') {
+                const tournamentCard = document.createElement('div');
+                tournamentCard.className = 'card bg-dark text-white mb-3';
+                tournamentCard.setAttribute('role', 'button');
+                tournamentCard.setAttribute('tabindex', '0');
+                tournamentCard.setAttribute('data-spa', '/tournament');
+                tournamentCard.setAttribute('data-spa-id', tournament.id);
+                tournamentCard.innerHTML = `
+                    <div class="card-body d-flex justify-content-between align-items-center">
+                        <h5 class="card-title mb-0">${tournament.name}</h5>
+                        <span class="badge bg-success rounded-pill">${tournament.state.status}</span>
+                    </div>
+                `;
 
-            // The click event listener is handled in your main.js, so no need to add it here
-            tournamentsList.appendChild(tournamentCard);
+                // The click event listener is handled in your main.js, so no need to add it here
+                tournamentsList.appendChild(tournamentCard);
+            }
         });
     }
 }

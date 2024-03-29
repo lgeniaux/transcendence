@@ -102,6 +102,16 @@ function observeForm(webSocket)
 // Fonction pour envoyer un message via WebSocket
 function sendMessageViaWebSocket(webSocket, message, targetUsername)
 {
+    //handle the case where a malicious user tries to send a NULL message
+    if (!message)
+        return false;
+    //limit the message size at 250 characters
+    if (message.length > 250)
+    {
+        alert('Message too long. Maximum 250 characters allowed');
+        return false;
+    }
+
     if (webSocket.readyState === WebSocket.OPEN)
 	{
         webSocket.send(JSON.stringify({
@@ -109,6 +119,12 @@ function sendMessageViaWebSocket(webSocket, message, targetUsername)
             type: 'message',
             username: targetUsername
         }));
+        return true;
+    }
+    else
+    {
+        console.error('WebSocket is not open. Cannot send message');
+        return false;
     }
 }
 
@@ -147,8 +163,8 @@ function attachFormSubmitListener(webSocket)
 
         if (message)
 		{
-            sendMessageViaWebSocket(webSocket, message, targetUsername);
-            displayMessage(message, 'Moi', true);
+            if (sendMessageViaWebSocket(webSocket, message, targetUsername))
+                displayMessage(message, 'Moi', true);
             messageInput.value = '';
         }
     });

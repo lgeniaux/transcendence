@@ -315,7 +315,8 @@ export async function init() {
             const message = JSON.parse(event.data);
             console.log('Live message:', message);
             if (message) {
-                displayTournamentView(game=undefined, true);
+                const game = undefined;
+                displayTournamentView(game, true);
             }
         }
     }

@@ -18,11 +18,9 @@ class Paddle {
 
 		window.addEventListener('keydown', (event) => {
 			if (event.code == keys.up) {
-				event.preventDefault();
 				this.Up = true;
 			}
 			else if (event.code == keys.down) {
-				event.preventDefault();
 				this.Down = true;
 			}
 		});
