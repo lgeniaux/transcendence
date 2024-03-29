@@ -55,6 +55,13 @@ export const routes = {
         js: '/static/routes/stats/stats.js',
         requires_auth: true
     },
+    '/old_stats': { // to remove
+        html: 'static/routes/stats/old_stats.html'
+    },
+    '/gpdr': {
+        html: 'static/html/gpdr',
+        css: 'static/css/gpdr'
+    },
     '/404': {
         html: '/static/html/404.html',
         css: '/static/css/404.css',
