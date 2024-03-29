@@ -26,9 +26,10 @@ body {
 	opacity: 0;
 }
 
-#game{
+#game
+{
 	position: relative;
-	left: 5vw;
+	margin: 0 auto;
 	margin-top: 5vh;
 	width: 90vw;
 	height: 75vh;
@@ -78,12 +79,18 @@ body {
 	z-index: 3;
 }
 
-.tutorial .player1
+#game .tutorial .player1
 {
 	color: #FFB800;
 }
 
-.tutorial .player2
+#game .tutorial .player2
 {
 	color: #E34400;
+}
+
+#game .score
+{
+	margin: 0 auto;
+	margin-left: 60px;
 }
