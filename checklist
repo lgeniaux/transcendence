@@ -83,16 +83,9 @@ Data Management, and Account Deletion"
 
 ================================================================================================
 - Add register policy in front end
-- Add stats (Charts comparant le user et la moyenne des autres users) API + front
-- Avatars
 - privacy policy (vince)
-- Data portability
-- Check local game
-- check tournament live update
 - check chat (big messages, null messages)
-- docker prod setup
-- nginx prod setup
-- gunicorn / daphne prod setup
+
 - check for duplicate usernames/emails after delete / modify account
 - check code for remote auth
 - Remove all private keys / secrets
@@ -101,10 +94,22 @@ Data Management, and Account Deletion"
 - Check for XSS / SQL injections (innerHTML !!!!!)
 - Check for all inputs sanitization server-side
 - Validite des tokens (rgpd ?)
+
+
+
+- Add stats (Charts comparant le user et la moyenne des autres users) API + front
 - Nom tournoi validation
+- Check local game
 
 
+
+- docker prod setup
+- Data portability
+- Avatars
+- nginx prod setup
+- gunicorn / daphne prod setup
 
 ================DONE - TO CHECK================
 - Handle active games when user delete account 
 - Use logout doesnt fetch the api (delete token from the db)
+- check tournament live update (little problem)
