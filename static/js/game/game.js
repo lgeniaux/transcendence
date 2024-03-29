@@ -12,13 +12,14 @@ async function displayGameView(game, fetch = false) {
         document.getElementById("game").removeEventListener("click", startGame);
         // display a view saying "Game is ready, you are playing as the guest so you must go play on the computer {username player1}"
         document.getElementById("game").innerHTML = `
-            <div class="alert alert-info" role="alert">
-                Game is ready, you are playing as the guest so you must go play on <strong>${game.player1}</strong>'s computer.
-            </div>
+        <div class="alert alert-info" role="alert">
+        Game is ready, you are playing as the guest so you must go play on <strong>${game.player1}</strong>'s computer.
+        </div>
         `;
     }
     else if (game.status === 'waiting to start' && player === 'player1') {
         window.properties = await createGame();
+        // displayTutorial();
         document.getElementById("game").addEventListener("click", startGame);
     }
     else if (game.status === 'finished') {
@@ -96,6 +97,7 @@ async function startGame() {
     }
     score = results.score1 + "-" + results.score2;
     endGame(score, gameId, headers);
+
 }
 
 async function endGame(score, gameId, headers) {

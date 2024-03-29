@@ -150,6 +150,7 @@ async function createGame() {
 			createEventListeners(properties, meshes.ball, meshes.paddleL, meshes.paddleR, rules, visibleHeight);
 			renderOnce(properties);
 			resolve(properties);
+			displayTutorial();
 		});
 	}));
 }
@@ -173,8 +174,17 @@ async function launchGame(player1 = "Left player", player2 = "Right player", pro
 		properties.promise = resolve;
 		
 		requestAnimationFrame(() => render(properties));
+		document.querySelector('#endScreen').style.opacity = '0';
 	});
+
 }
 
+function displayTutorial()
+{
+    loadContent('static/html/game/tutorial.html', '#endScreen', 'tutorial');
+	document.querySelector('#endScreen').style.opacity = '1';
+}
+
+
 //window.propreties = await createGame();
-export { launchGame, createGame };
+export { launchGame, createGame, displayTutorial };

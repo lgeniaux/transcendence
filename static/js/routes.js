@@ -25,7 +25,7 @@ export const routes = {
     },
     '/duel': {
         html: '/static/game/import.html',
-        js: '/static/js/game.js',
+        js: '/static/js/duel.js',
         importmap: true,
         css: '/static/css/game.css',
         requires_auth: true

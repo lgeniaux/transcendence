@@ -26,9 +26,10 @@ body {
 	opacity: 0;
 }
 
-#game{
+#game
+{
 	position: relative;
-	left: 5vw;
+	margin: 0 auto;
 	margin-top: 5vh;
 	width: 90vw;
 	height: 75vh;
@@ -72,8 +73,24 @@ body {
 	border-radius: 20px;
 	padding: 30px;
 	font-size: calc(2vh + 2vw);
-	color: #FFFFFFFF;
+	color: white;
 	font-family: 'Courier New', Courier, monospace;
 	text-align: center;
 	z-index: 3;
+}
+
+#game .tutorial .player1
+{
+	color: #FFB800;
+}
+
+#game .tutorial .player2
+{
+	color: #E34400;
+}
+
+#game .score
+{
+	margin: 0 auto;
+	margin-left: 60px;
 }
