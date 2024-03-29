@@ -79,6 +79,34 @@ async function getFileContent(url)
 }
 
 
+
+async function logoutUser()
+{
+    try
+    {
+        const response = await fetch('/api/logout-user/', {
+            method: 'POST',
+            credentials: 'include',
+            headers: getRequestHeaders()
+        });
+
+        if (response.ok)
+        {
+            sessionStorage.removeItem('authToken');
+            window.location.href = '/login';
+        }
+        else
+            console.error('Failed to logout.');
+
+    }
+    catch (error)
+    {
+        console.error('Error:', error);
+    }
+}
+
+
+
 function initLogoutButton()
 {
     const logoutButton = document.getElementById('logoutBtn');
@@ -87,16 +115,14 @@ function initLogoutButton()
     if (logoutButton)
     {
         logoutButton.addEventListener('click', function() {
-            sessionStorage.removeItem('authToken'); // Supprime le token d'authentification
-            window.location.href = '/login'; // Redirige l'utilisateur vers la page de connexion
+            logoutUser();
         });
     }
 
     if (sidePanelLogoutButton)
     {
         sidePanelLogoutButton.addEventListener('click', function() {
-            sessionStorage.removeItem('authToken'); // Supprime le token d'authentification
-            window.location.href = '/login'; // Redirige l'utilisateur vers la page de connexion
+            logoutUser();
         });
     }
 }
