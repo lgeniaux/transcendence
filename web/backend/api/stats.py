@@ -7,7 +7,8 @@ from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
 from .models import Tournament, User, Game
 from django.db import models
-
+from django.db.models import Q, F, Case, When, Avg
+import pdb
 
 # class User(AbstractUser):
 #     username = models.CharField(max_length=50, unique=True)
@@ -60,79 +61,59 @@ from django.db import models
 #         self.state = state
 #         self.save()
 
+User = get_user_model()
 
 class GetUserStats(APIView):
     """
-    /api/profile/stats/
-    params: username
-    Returns all game played by the user, list of tournaments finished, data containing the number of wins, losses, and the number of games played; the number of tournaments won, lost, and the number of tournaments played;
+    /api/stats/<username>/fetch/
+    Returns a JSON containing user stats.
     """
-
     permission_classes = [IsAuthenticated]
 
-    def get(self, request, username):
+    def get(self, request, *args, **kwargs):
         try:
-            user = User.objects.get(username=username)
+            fetched_user = User.objects.get(username=kwargs['username'])
+            # Filter games by status "finished"
+            finished_games = Game.objects.filter(
+                (Q(player1=fetched_user) | Q(player2=fetched_user)) & Q(status='finished')
+            )
+            
+            user_stats = {
+                'tournaments_played': fetched_user.tournaments.filter(state__status='finished').count(),
+                'tournaments_won': fetched_user.tournaments.filter(state__winner=fetched_user.username, state__status='finished').count(),
+                'games_played': finished_games.count(),
+                'games_won': finished_games.filter(winner=fetched_user).count(),
+            }
+
+            # Calculate average scored value
+            user_stats['average_scored_value'] = finished_games.annotate(
+                score=Case(
+                    When(player1=fetched_user, then=F('score_player1')),
+                    When(player2=fetched_user, then=F('score_player2')),
+                    default=0
+                )
+            ).aggregate(Avg('score'))['score__avg'] or 0
+
+            # Calculate average opponent score
+            user_stats['average_opponent_score'] = finished_games.annotate(
+                opponent_score=Case(
+                    When(player1=fetched_user, then=F('score_player2')),
+                    When(player2=fetched_user, then=F('score_player1')),
+                    default=0
+                )
+            ).aggregate(Avg('opponent_score'))['opponent_score__avg'] or 0
+
+            game_ids_history = list(finished_games.values_list('game_id', flat=True))
+            tournament_ids_history = list(fetched_user.tournaments.filter(state__status='finished').values_list('id', flat=True))
+
+            return Response({
+                'user_stats': user_stats, 
+                'game_ids_history': game_ids_history, 
+                'tournament_ids_history': tournament_ids_history
+            })
+
         except User.DoesNotExist:
-            return Response(
-                {"message": "User not found"}, status=status.HTTP_404_NOT_FOUND
-            )
-
-        # finished games
-        games = Game.objects.filter(
-            models.Q(player1=user) | models.Q(player2=user)
-        ).filter(status="finished")
-        games_data = []
-        for game in games:
-            games_data.append(
-                {
-                    "game_id": game.game_id,
-                    "player1": game.player1.username,
-                    "player2": game.player2.username,
-                    "score_player1": game.score_player1,
-                    "score_player2": game.score_player2,
-                    "winner": game.winner.username,
-                    "start_time": game.start_time,
-                    "end_time": game.end_time,
-                    "tournament": game.tournament.name if game.tournament else None,
-                    "tournament_id": game.tournament.id if game.tournament else None,
-                    "round_name": game.round_name,
-                }
-            )
-        # finished tournaments
-        tournaments = Tournament.objects.filter(participants=user).filter(
-            state__status="finished"
-        )
-        tournaments_data = []
-        for tournament in tournaments:
-            tournaments_data.append(
-                {
-                    "id": tournament.id,
-                    "name": tournament.name,
-                    "winner": tournament.state["winner"],
-                    "start_time": tournament.start_time,
-                }
-            )
-
-        # stats
-        game_stats = {
-            "wins": games.filter(winner=user).count(),
-            "losses": games.exclude(winner=user).count(),
-            "games_played": games.count(),
-        }
-
-        tournament_stats = {
-            "wins": tournaments.filter(state__winner=user.id).count(),
-            "losses": tournaments.exclude(state__winner=user.id).count(),
-            "tournaments_played": tournaments.count(),
-        }
-
-        return Response(
-            {
-                "games": games_data,
-                "tournaments": tournaments_data,
-                "game_stats": game_stats,
-                "tournament_stats": tournament_stats,
-            },
-            status=status.HTTP_200_OK,
-        )
+            return Response({'error': 'User does not exist'}, status=status.HTTP_404_NOT_FOUND)
+        
+        except Exception as e:
+            return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
