@@ -219,31 +219,66 @@ def test_logout(client, created_users):
 
 
 @pytest.mark.django_db
-def test_delete_user(client, created_users):
-    # Test case 1: bad token
-    response = client.post(
-        base_url + "/logout-user/",
-        HTTP_AUTHORIZATION="Token " + created_users[0]["token"],
+def test_delete_user(client, users_with_games):
+    game_id, users = users_with_games
+
+    response = client.get(
+        base_url + f"/game/get-status/{game_id}/",
+        HTTP_AUTHORIZATION="Token " + users[0]["token"],
     )
+    print(response.json())
+    assert response.status_code == status.HTTP_200_OK
+
+
     response = client.post(
         base_url + "/me/delete/",
-        HTTP_AUTHORIZATION=f'Token {created_users[0]["token"]}',
+        HTTP_AUTHORIZATION=f'Token badtoken',
     )
     assert response.status_code == status.HTTP_401_UNAUTHORIZED
 
     # Test case 2: good token
     response = client.post(
         base_url + "/me/delete/",
-        HTTP_AUTHORIZATION=f'Token {created_users[1]["token"]}',
+        HTTP_AUTHORIZATION=f'Token {users[1]["token"]}',
     )
     assert response.status_code == status.HTTP_200_OK
 
     # Test case 3: already deleted
     response = client.post(
         base_url + "/me/delete/",
-        HTTP_AUTHORIZATION=f'Token {created_users[1]["token"]}',
+        HTTP_AUTHORIZATION=f'Token {users[1]["token"]}',
     )
     assert response.status_code == status.HTTP_401_UNAUTHORIZED
+
+    # Check if the game is deleted
+    response = client.get(
+        base_url + f"/game/get-status/{game_id}/",
+        HTTP_AUTHORIZATION="Token " + users[0]["token"],
+    )
+    print(response.json())
+    assert response.status_code == status.HTTP_200_OK
+    assert response.json()["game"]["status"] == "finished"
+    assert response.json()["game"]["winner"] == users[0]["username"]
+
+    # Reregister the user
+    response = client.post(
+        base_url + "/register-user/",
+        {
+            "email": users[1]["email"],
+            "username": users[1]["username"],
+            "password": users[1]["password"],
+        },
+    )
+    assert response.status_code == status.HTTP_201_CREATED
+
+    # Using the token of the deleted user
+    response = client.get(
+        base_url + f"/game/get-status/{game_id}/",
+        HTTP_AUTHORIZATION="Token " + users[1]["token"],
+    )
+    print(response.json())
+    assert response.status_code == status.HTTP_401_UNAUTHORIZED
+    
 
 
 # ========== CHANGE PASSWORD TESTS ==========
