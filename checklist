@@ -101,9 +101,10 @@ Data Management, and Account Deletion"
 - Check for XSS / SQL injections (innerHTML !!!!!)
 - Check for all inputs sanitization server-side
 - Validite des tokens (rgpd ?)
-- Use logout doesnt fetch the api (delete token from the db)
+- Nom tournoi validation
 
 
 
 ================DONE - TO CHECK================
 - Handle active games when user delete account 
+- Use logout doesnt fetch the api (delete token from the db)
