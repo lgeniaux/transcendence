@@ -21,14 +21,19 @@ async function getUserInfos(auth_token = null) {
 	.catch(error => console.error('Error:', error));
 }
 
-const userInfos = await getUserInfos(sessionStorage.getItem('authToken')).catch(error => console.error('Error:', error));
-if (userInfos && userInfos.username) {
-    let properties = await createGame();
-    // TODO: wait for user to press the start button
-	console.log(await launchGame(userInfos.username, "Guest", properties));
+async function startGame() {
+    properties = window.properties;
+    setTimeout(() => {
+        for (let i = 0; i < document.getElementsByClassName("score").length; i++) {
+            document.getElementsByClassName("score")[i].style.opacity = 1;
+        }
+    }, 3000);
+    const userInfos = await getUserInfos(sessionStorage.getItem('authToken')).catch(error => console.error('Error:', error));
+    if (userInfos && userInfos.username)
+        await launchGame(userInfos.username, "Guest", properties)
+    else
+        await launchGame("Left player", "Right player", properties);
 }
-else {
-    let properties = await createGame();
-    // TODO: wait for user to press the start button
-	console.log(await launchGame("Left player", "Right player", properties));
-}
+
+window.properties = await createGame();
+document.getElementById("game").addEventListener("click", startGame);
