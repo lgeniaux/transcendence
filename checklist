@@ -102,4 +102,8 @@ Data Management, and Account Deletion"
 - Check for all inputs sanitization server-side
 - Validite des tokens (rgpd ?)
 - Use logout doesnt fetch the api (delete token from the db)
-- Handle active games when user delete account
+
+
+
+================DONE - TO CHECK================
+- Handle active games when user delete account 

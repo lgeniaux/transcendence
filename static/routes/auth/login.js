@@ -50,27 +50,3 @@ async function loginUser()
     }
 }
 
-async function logoutUser()
-{
-    try
-    {
-        const response = await fetch('/api/logout-user/', {
-            method: 'POST',
-            credentials: 'include', // Nécessaire pour les requêtes affectant l'état de session
-            headers: getRequestHeaders()
-        });
-
-        if (response.ok)
-        {
-            sessionStorage.removeItem('authToken');
-            window.location.href = '/login';
-        }
-        else
-            console.error('Failed to logout.');
-
-    }
-    catch (error)
-    {
-        console.error('Error:', error);
-    }
-}

@@ -53,6 +53,10 @@ class UserDelete(APIView):
     permissions_classes = [permissions.IsAuthenticated]
 
     def post(self, request, *args, **kwargs):
+        if not request.user.is_active:
+            return Response(
+                {"detail": "User is not an active account"}, status=status.HTTP_400_BAD_REQUEST
+            )
         request.user.update_games_after_account_deletion()
         request.user.update_notifications_after_account_deletion()
         request.user.username = "deleted_" + str(random.randint(0, 10000))
