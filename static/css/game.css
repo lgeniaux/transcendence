@@ -72,8 +72,18 @@ body {
 	border-radius: 20px;
 	padding: 30px;
 	font-size: calc(2vh + 2vw);
-	color: #FFFFFFFF;
+	color: white;
 	font-family: 'Courier New', Courier, monospace;
 	text-align: center;
 	z-index: 3;
+}
+
+.tutorial .player1
+{
+	color: #FFB800;
+}
+
+.tutorial .player2
+{
+	color: #E34400;
 }
