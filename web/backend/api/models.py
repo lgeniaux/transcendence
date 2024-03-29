@@ -34,6 +34,42 @@ class User(AbstractUser):
             .exists()
         )
 
+    def update_games_after_account_deletion(self):
+        # every game != finished where the user is involved automatilcally set the other player as winner
+        games = Game.objects.filter(
+            models.Q(player1=self) | models.Q(player2=self)
+        ).exclude(
+            status="finished"
+        )
+        for game in games:
+            if game.player1 == self:
+                game.winner = game.player2
+                game.score_player1 = 0
+                game.score_player2 = 5
+            else:
+                game.winner = game.player1
+                game.score_player1 = 5
+                game.score_player2 = 0
+            game.status = "finished"
+            game.save()
+    
+    def update_notifications_after_account_deletion(self):
+        # every notification where the server is waiting for a response is set as denied
+        notifications = Notification.objects.filter(
+            recipient=self
+        ).exclude(
+            notification_type="friend-request"
+        )
+        for notification in notifications:
+            notification.data["status"] = "denied"
+            notification.save()
+
+        
+
+        
+
+        
+
 
 class Game(models.Model):
     def __str__(self):
@@ -231,7 +267,6 @@ class Tournament(models.Model):
 
     def update_state(self):
         # resync tournament state with the actual games
-        print("Updating tournament state")
         for round_name in ["quarter-finals", "semi-finals", "finals"]:
             for game_data in self.state[round_name]:
                 game = Game.objects.get(game_id=game_data["game_id"])

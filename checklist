@@ -92,7 +92,7 @@ Data Management, and Account Deletion"
 - check chat (big messages, null messages)
 - docker prod setup
 - nginx prod setup
-- gunicorn / dapne prod setup
+- gunicorn / daphne prod setup
 - check for duplicate usernames/emails after delete / modify account
 - check code for remote auth
 - Remove all private keys / secrets
@@ -100,3 +100,6 @@ Data Management, and Account Deletion"
 - Correction blanche
 - Check for XSS / SQL injections (innerHTML !!!!!)
 - Check for all inputs sanitization server-side
+- Validite des tokens (rgpd ?)
+- Use logout doesnt fetch the api (delete token from the db)
+- Handle active games when user delete account
