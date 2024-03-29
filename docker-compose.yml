@@ -22,7 +22,9 @@ services:
   web:
     build: ./web
     user: django
-    command: gunicorn backend.transcendence.wsgi:application --bind 0.0.0.0:8000
+    command: sh -c "pwd && ls && exec gunicorn backend.transcendence.wsgi:application --bind 0.0.0.0:8000"
+
+
     volumes:
       - staticfiles:/usr/src/app/staticfiles
       - mediafiles:/usr/src/app/media
@@ -39,6 +41,8 @@ services:
       - POSTGRES_USER=${POSTGRES_USER}
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
       - DJANGO_SECRET_KEY=${DJANGO_SECRET_KEY}
+      - PYTHONPATH=/usr/src/app/backend
+
 
   nginx:
     image: nginx:latest
@@ -47,11 +51,11 @@ services:
       - ./nginx/ssl:/etc/nginx/ssl
       - staticfiles:/usr/share/nginx/html/static
       - mediafiles:/usr/share/nginx/html/media
-      - frontend:/usr/share/nginx/html
+      - ./web/frontend:/usr/share/nginx/html
     networks:
       - transcendence
     ports:
-      - "8443:443"
+      - "443:443"
     depends_on:
       - web
 
@@ -69,5 +73,5 @@ volumes:
     driver: local
     driver_opts:
       type: none
-      device: ./frontend
+      device: ./web/frontend
       o: bind
