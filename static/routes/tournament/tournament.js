@@ -1,11 +1,14 @@
-window.inviteToTournament = async(username, tournamentId) =>{
+export async function inviteToTournament(username, tournamentId)
+{
     const authToken = sessionStorage.getItem('authToken');
     const headers = {
         'Accept': 'application/json',
         'Content-Type': 'application/json',
         'Authorization': `Token ${authToken}`
     };
-    try {
+
+    try
+    {
         fetch('/api/tournament/invite/', {
             method: 'POST',
             headers,
@@ -13,12 +16,10 @@ window.inviteToTournament = async(username, tournamentId) =>{
         }).then(response => {
             return response.json();
         }).then(data => {
-            if (data.success) {
+            if (data.success)
                 console.log('User invited successfully');
-            }
-            else {
+            else
                 console.log('Failed to invite user:');
-            }
         });
     }
     catch (error) {
@@ -26,7 +27,8 @@ window.inviteToTournament = async(username, tournamentId) =>{
     }
 }
 
-function displayCreateTournamentForm() {
+function displayCreateTournamentForm()
+{
     // append the create-tournament.html to the html of the tournament page
     const overlayHTML = `
         <div id="createTournamentOverlay" class="d-flex justify-content-center align-items-center" tabindex="-1" style="position: fixed; inset: 0; background-color: rgba(0, 0, 0, 0.5); z-index: 1050;">
@@ -65,14 +67,16 @@ function displayCreateTournamentForm() {
 
 }
 
-async function createTournament() {
+async function createTournament()
+{
     const tournamentName = document.getElementById('tournamentNameInput').value;
     const nb_players_option = document.getElementById('numberOfPlayers');
     const nb_players = nb_players_option.options[nb_players_option.selectedIndex].value;
 
     const data = { name: tournamentName, nb_players: nb_players };
 
-    try {
+    try
+    {
         const response = await fetch('/api/tournament/create-tournament/', {
             method: 'POST',
             headers: {
@@ -92,23 +96,29 @@ async function createTournament() {
         removeCreateTournamentOverlay();
 
         displayTournamentView();
-    } catch (error) {
+    }
+    catch (error)
+    {
         console.error('Failed to create tournament:', error.message);
     }
 }
 
-function removeCreateTournamentOverlay() {
+function removeCreateTournamentOverlay()
+{
     const overlay = document.getElementById('createTournamentOverlay');
-    if (overlay) {
+
+    if (overlay)
         overlay.remove(); // This completely removes the element from the DOM
-    }
 }
 
 
 
-function initTournamentCreateButton() {
+function initTournamentCreateButton()
+{
     const createTournamentButton = document.getElementById('createTournamentButton');
-    if (createTournamentButton && !createTournamentButton.initialized) {
+
+    if (createTournamentButton && !createTournamentButton.initialized)
+    {
         createTournamentButton.addEventListener('click', async (event) => {
             event.preventDefault();
             await createTournament();
@@ -117,8 +127,10 @@ function initTournamentCreateButton() {
     }
 }
 
-async function fetchTournamentState() {
-    try {
+async function fetchTournamentState()
+{
+    try
+    {
         const response = await fetch(`/api/tournament/${sessionStorage.getItem('currentTournamentId')}/state/`, {
             method: 'GET',
             headers: {
@@ -129,23 +141,29 @@ async function fetchTournamentState() {
         });
         if (!response.ok) throw new Error('Failed to fetch tournament state');
         return await response.json();
-    } catch (error) {
+    }
+    catch (error)
+    {
         alert('Failed to fetch tournament state');
     }
 }
 
 
-async function removeQuarterFinals() {
+async function removeQuarterFinals()
+{
     const quarterFinals = document.getElementsByClassName('quarter-finals');
-    if (quarterFinals.length > 0) {
+
+    if (quarterFinals.length > 0)
         quarterFinals[0].remove();
-    }
 }
 
 
-function displayInviteList(users) {
+function displayInviteList(users)
+{
     const inviteList = document.getElementById('invite-list');
-    if (!inviteList) {
+
+    if (!inviteList)
+    {
         console.error('Invite list not found');
         return;
     }
@@ -154,7 +172,8 @@ function displayInviteList(users) {
 
     users.forEach(user => {
         // if user is a friend, display the card
-        if (user.status == 'friends') {
+        if (user.status == 'friends')
+        {
             var userHTML = `
             <div class="card bg-dark text-white mb-3">
                 <div class="card-body">
@@ -196,11 +215,14 @@ async function fetchAllUsers() {
     }
 }
 
-function goToGame(gameId) {
+export function goToGame(gameId)
+{
     sessionStorage.setItem('currentGameId', gameId);
     sessionStorage.setItem('endGameRedirect', '/tournament');
     window.location.href = '/game';
 }
+
+window.goToGame = goToGame;
 
 async function updateTournamentBracket(state) {
     const tournamentBracket = document.getElementsByClassName('tournament-bracket')[0];
@@ -213,7 +235,8 @@ async function updateTournamentBracket(state) {
     const roundNames = ['quarter-finals', 'semi-finals', 'finals'];
 
     // Iterate over each round name
-    for (let round_name of roundNames) {
+    for (let round_name of roundNames)
+    {
         // Since round_name is used as a class, find all elements with this class
         const rounds = document.getElementsByClassName(round_name);
         for (let round of rounds) {
@@ -238,11 +261,12 @@ async function updateTournamentBracket(state) {
 }
 
 
-async function displayTournamentView() {
+async function displayTournamentView()
+{
     const state = await fetchTournamentState();
-    if (!state) {
+
+    if (!state)
         return;
-    }
 
     const tournamentContainer = document.getElementById('tournament-container');
     if (!tournamentContainer) {
@@ -263,16 +287,14 @@ async function displayTournamentView() {
             inviteList[0].remove();
         }
     }
-    if (state.state.status === "in progress") {
-        // if there is a game for me to play, call goToGame
-
-        if (state.game_to_play) {
-            // display alert that the game is ready and wait for the user to click on it to go to the game the alert zill be added as the firs tdiv inside the <div class="tournament"> element
+    if (state.state.status === "in progress")
+    {
+        if (state.game_to_play)
             goToGame(state.game_to_play);
-        }
         
     }
-    else if (state.state.status === "finished") {
+    else if (state.state.status === "finished")
+    {
         // display the winner of the tournament
         const winner = state.state.winner;
         const winnerHTML = `
@@ -282,19 +304,24 @@ async function displayTournamentView() {
         `;
         tournamentContainer.innerHTML += winnerHTML;
     }
-    else{
+    else
+    {
         const users = await fetchAllUsers();
     }
     updateTournamentBracket(state);   
 }
 
-export async function init() {
+export async function init()
+{
     const tournamentId = sessionStorage.getItem('currentTournamentId');
-    if (!tournamentId) {
+
+    if (!tournamentId)
+    {
         displayCreateTournamentForm();
         initTournamentCreateButton();
     }
-    else {
+    else
+    {
         const authToken = sessionStorage.getItem('authToken');
         const ws = new WebSocket(`ws://${window.location.host}/ws/tournament/${authToken}/${tournamentId}/`);
 

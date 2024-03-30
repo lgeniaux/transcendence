@@ -1,10 +1,12 @@
+import { loadContent, getRequestHeaders, initLogoutButton } from './utils.js';
+
 export async function loadNavbar()
 {
     try
     {
         // Charger les composants spécifiques de la navbar
-        await loadContent('/static/html/navbar/sidepanel.html', '#sidePanel', 'barre de navigation');
-        await loadContent('/static/html/navbar/profilemodal.html', '#profileModal', 'bouton de profil');
+        await loadContent('/static/html/navbar/sidepanel.html', '#sidePanel');
+        await loadContent('/static/html/navbar/profilemodal.html', '#profileModal');
         await loadUsernameIntoModal();
         initLogoutButton();
     }
@@ -14,7 +16,7 @@ export async function loadNavbar()
     }
 }
 
-export async function loadUsernameIntoModal()
+async function loadUsernameIntoModal()
 {
     try
 	{

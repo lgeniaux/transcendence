@@ -1,17 +1,21 @@
 import { routes } from './routes.js';
 
-export async function navigate(path) {
+export async function navigate(path)
+{
     if (window.ws)
         window.ws.close();
+
     const finalPath = getRedirectPath(path);
     const route = routes[finalPath];
 
-    if (!route) {
+    if (!route)
+    {
         console.error('Route not found:', finalPath);
         return;
     }
 
-    if (window.location.pathname !== finalPath) {
+    if (window.location.pathname !== finalPath)
+    {
         window.history.pushState({}, '', finalPath);
     }
 
@@ -42,7 +46,8 @@ export async function navigate(path) {
     }
 }
 
-function getRedirectPath(path) {
+function getRedirectPath(path)
+{
     if (!routes[path])
         return '/404';
     if ((path === '/' || path === '/login' || path === '/register') && isAuthenticated())
@@ -52,7 +57,8 @@ function getRedirectPath(path) {
     return path;
 }
 
-export function handleNavigationClick(event) {
+export function handleNavigationClick(event)
+{
     let target = event.target.closest('[data-spa]');
 
     if (target && target.dataset.spa) {
