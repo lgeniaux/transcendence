@@ -27,6 +27,12 @@
     margin: 20px;
 }
 
+.stats .game-card, .stats .tournament-card
+{
+    background-color: beige;
+    color: black;
+}
+
 .stats .col
 {
     display: flex;
@@ -35,12 +41,8 @@
     justify-content: center;
 }
 
-.stats .game-card
-{
-    background-color: beige;
-    color: black;
-}
 
+/* graphs */
 .stats .graph-container
 {
     height: 200px;
@@ -58,6 +60,8 @@
     bottom: 0;
 }
 
+
+/*  */
 .stats .vr
 {
     border-left: 1px solid black;

@@ -1,8 +1,12 @@
 async function fetchStats()
 {
-    try{
+    try
+    {
         const username = sessionStorage.getItem('currentStatsUsername');
-        if (!username) throw new Error('No username provided');
+
+        if (!username)
+            throw new Error('No username provided');
+
         const response = await fetch(`/api/stats/${username}/fetch/`, {
             method: 'GET',
             headers: {
@@ -11,10 +15,14 @@ async function fetchStats()
                 'Content-Type': 'application/json'
             }
         });
-        if (!response.ok) throw new Error('Failed to fetch stats');
+
+        if (!response.ok)
+            throw new Error('Failed to fetch stats');
+
         return await response.json();
     }
-    catch(error){
+    catch(error)
+    {
         console.error(error);
     }
 }
@@ -22,6 +30,8 @@ async function fetchStats()
 export async function init()
 {
     // await fetchStats();
+
+    // Example
     changeGraphPercentage('casual', 70);
     changeGraphPercentage('tournament', 45);
     displayGameHistory('vimercie', 'kolargole', 'Victory', '5 - 3');
@@ -37,9 +47,9 @@ function displayGameHistory(player1Name, player2Name, gameOutcome, score)
             <div class="card-header text-center">${gameOutcome}</div>
             <div class="card-body">
                 <div class="row justify-content-between">
-                    <div class="col-auto">${player1Name}</div>
-                    <div class="col-auto">${score}</div>
-                    <div class="col-auto">${player2Name}</div>
+                    <div class="col-1 text-center">${player1Name}</div>
+                    <div class="col-10 text-center">${score}</div>
+                    <div class="col-1 text-center">${player2Name}</div>
                 </div>
             </div>
         </div>
@@ -56,9 +66,10 @@ function displayTournamentHistory(playerName, outcome, round)
         <div class="tournament-card card">
             <div class="card-header text-center">${outcome}</div>
             <div class="card-body">
-                <div class="row justify-content-between">
-                    <div class="col-auto">${playerName}</div>
-                    <div class="col-auto">Round ${round}</div>
+                <div class="row">
+                    <div class="activePlayer col-1 text-center">${playerName}</div>
+                    <div class="col-10 text-center">Round ${round}</div>
+                    <div class="col-1 text-center"></div>
                 </div>
             </div>
         </div>
@@ -66,7 +77,6 @@ function displayTournamentHistory(playerName, outcome, round)
 
     tournamentHistory.innerHTML = template;
 }
-
 
 function changeGraphPercentage(section, percentage)
 {
