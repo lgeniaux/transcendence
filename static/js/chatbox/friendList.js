@@ -49,52 +49,44 @@ async function cb_fetchAllUsers()
 
 async function cb_displayUsers(users)
 {
-	let usersList = document.getElementById('chatboxContainer');
-	usersList.innerHTML = ''; // Réinitialiser le contenu de la liste
-	
-	if (users.length === 0) {
-		usersList.innerHTML = "<p>Aucun ami pour le moment</p>";
-		return;
-	}
-	
-	users.forEach(user => {
-		// Utilisation du username pour générer un ID unique pour chaque élément de menu
-		let dropdownId = `dropdown-${user.username}`;
-		let avatarSrc = user.avatar ? user.avatar : 'static/img/person-fill.svg';
-        let userHTML = '';
+    let usersList = document.getElementById('chatboxContainer');
+    usersList.innerHTML = ''; // Réinitialiser le contenu de la liste
 
-        console.log(user);
-        if (user.online_status)
-        {
-		    userHTML = `
-			<button class="user dropdown-toggle" type="button" data-username="${user.username}" data-bs-toggle="dropdown" aria-expanded="false" id="${dropdownId}">
-				<div id="profilePicture"><img src="${avatarSrc}" alt="User avatar" class="avatar"></div>
-				<div>${user.username}</div>
-                <span class="badge bg-success">Online</span>
-			</button>
-			<div class="dropdown-menu dropdown-menu-end action-buttons-container" aria-labelledby="${dropdownId}">
-				${getChatboxActionButtonsHtml(user)}
-			</div>
-		`;
-        }
-        else
-        {
-		    userHTML = `
-			<button class="user dropdown-toggle" type="button" data-username="${user.username}" data-bs-toggle="dropdown" aria-expanded="false" id="${dropdownId}">
-				<div id="profilePicture"><img src="${avatarSrc}" alt="User avatar" class="avatar"></div>
-				<div>${user.username}</div>
-                <span class="badge bg-danger">Offline</span>
-			</button>
-			<div class="dropdown-menu dropdown-menu-end action-buttons-container" aria-labelledby="${dropdownId}">
-				${getChatboxActionButtonsHtml(user)}
-			</div>
-		`;
-        }
-            
+    if (users.length === 0) {
+        usersList.innerHTML = "<p>Aucun ami pour le moment</p>";
+        return;
+    }
 
-		usersList.innerHTML += userHTML;
-	});
+    users.forEach(user => {
+        const userHtml = getUserHtml(user);
+        displayUser(userHtml, usersList);
+    });
 }
+
+function displayUser(userHtml, usersList)
+{
+    usersList.innerHTML += userHtml;
+}
+
+function getUserHtml(user)
+{
+    const dropdownId = `dropdown-${user.username}`;
+    const avatarSrc = user.avatar || 'static/img/person-fill.svg';
+    const onlineStatusClass = user.online_status ? 'bg-success' : 'bg-danger';
+    const onlineStatusText = user.online_status ? 'Online' : 'Offline';
+
+    return `
+        <button class="user dropdown-toggle" type="button" data-username="${user.username}" data-bs-toggle="dropdown" aria-expanded="false" id="${dropdownId}">
+            <div id="profilePicture"><img src="${avatarSrc}" alt="User avatar" class="avatar"></div>
+            <div>${user.username}</div>
+            <span class="badge ${onlineStatusClass}">${onlineStatusText}</span>
+        </button>
+        <div class="dropdown-menu dropdown-menu-end action-buttons-container" aria-labelledby="${dropdownId}">
+            ${getChatboxActionButtonsHtml(user)}
+        </div>
+    `;
+}
+
 
 function getChatboxActionButtonsHtml(user, actionContainerId)
 {

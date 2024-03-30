@@ -1,15 +1,15 @@
-// login.js
+import { getRequestHeaders } from '../../js/utils.js';
 
 // Function to initialize the login form
-export async function init()
+export function init()
 {
     var loginBtn = document.getElementById('loginBtn');
 
     if (loginBtn)
     {
-        loginBtn.addEventListener('click', function (event) {
+        loginBtn.addEventListener('click', async function (event) {
             event.preventDefault();
-            loginUser();
+            await loginUser();
         });
     }
 
@@ -41,7 +41,7 @@ async function loginUser()
             window.location.href = '/dashboard';
         }
         else
-            alert(detail.message)
+            alert(data.message);
 
     } 
     catch (error)
