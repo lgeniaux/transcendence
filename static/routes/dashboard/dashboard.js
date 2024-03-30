@@ -152,6 +152,8 @@ export async function manageInvite(notificationId, action)
     }
 }
 
+window.manageInvite = manageInvite;
+
 function getActionButtonsNotification(notification)
 {
     let buttonsHtml = '';
@@ -159,8 +161,8 @@ function getActionButtonsNotification(notification)
     if (notification.notification_type === 'tournament-invite')
     {
         buttonsHtml = `
-            <button class="btn btn-success" onclick="manageInvite(${notification.id}, 'accept')">Accept</button>
-            <button class="btn btn-danger" onclick="manageInvite(${notification.id}, 'deny')">Deny</button>
+            <button class="btn btn-success" onclick="window.manageInvite(${notification.id}, 'accept')">Accept</button>
+            <button class="btn btn-danger" onclick="window.manageInvite(${notification.id}, 'deny')">Deny</button>
         `;
     }
     else if (notification.notification_type === 'game-start')
@@ -172,8 +174,8 @@ function getActionButtonsNotification(notification)
     else if (notification.notification_type === 'game-invite')
     {
         buttonsHtml = `
-            <button class="btn btn-success" onclick="manageInvite(${notification.id}, 'accept')">Accept</button>
-            <button class="btn btn-danger" onclick="manageInvite(${notification.id}, 'deny')">Deny</button>
+            <button class="btn btn-success" onclick="window.manageInvite(${notification.id}, 'accept')">Accept</button>
+            <button class="btn btn-danger" onclick="window.manageInvite(${notification.id}, 'deny')">Deny</button>
         `;
     }
 

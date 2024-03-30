@@ -12,8 +12,6 @@ export function init()
             await loginUser();
         });
     }
-
-
 }
 
 async function loginUser()

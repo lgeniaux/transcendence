@@ -22,10 +22,13 @@ export async function inviteToTournament(username, tournamentId)
                 console.log('Failed to invite user:');
         });
     }
-    catch (error) {
+    catch (error)
+    {
         console.error('Failed to invite user:', error);
     }
 }
+
+window.inviteToTournament = inviteToTournament;
 
 function displayCreateTournamentForm()
 {
@@ -185,7 +188,7 @@ function displayInviteList(users)
                                 <p class="mb-0" id="status-${user.username}">Status: <span>${user.status}</span></p>
                             </div>
                         </div>
-                        <button onclick="inviteToTournament('${user.username}', ${sessionStorage.getItem('currentTournamentId')})" class="btn btn-outline-success btn-sm" type="button">Invite</button>
+                        <button onclick="window.inviteToTournament('${user.username}', ${sessionStorage.getItem('currentTournamentId')})" class="btn btn-outline-success btn-sm" type="button">Invite</button>
                     </div>
                 </div>
             </div>

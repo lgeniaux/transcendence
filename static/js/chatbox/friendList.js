@@ -2,12 +2,15 @@ import { getRequestHeaders, revokeAuthToken } from '../utils.js';
 
 export async function loadFriendList()
 {
-    try {
+    try
+    {
         const users = await cb_fetchAllUsers();
         await cb_displayUsers(users);
         attachClickEventToFriends();
         document.getElementById('chatboxHeader').innerText = 'Chat';
-    } catch (error) {
+    }
+    catch (error)
+    {
         console.error("Une erreur s'est produite lors du chargement des amis :", error);
     }
 }
@@ -51,6 +54,8 @@ async function cb_displayUsers(users)
 {
     let usersList = document.getElementById('chatboxContainer');
     usersList.innerHTML = ''; // Réinitialiser le contenu de la liste
+
+    users.sort((a, b) => b.online_status - a.online_status);
 
     if (users.length === 0) {
         usersList.innerHTML = "<p>Aucun ami pour le moment</p>";

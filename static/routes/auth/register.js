@@ -1,18 +1,16 @@
-import { getRequestHeaders } from "../../js/utils";
-
 export async function init()
 {
     var registerBtn = document.getElementById('registerBtn');
 
     if (registerBtn)
     {
-        registerBtn.addEventListener('click', function (event) {
+        registerBtn.addEventListener('click', async function (event) {
             event.preventDefault(); // Prevent default form submission
 
             if (!checkPassword())
                 return;
 
-            registerUser();
+            await registerUser();
         });
     }
 }
@@ -67,14 +65,4 @@ async function registerUser()
     {
         console.error('Error:', error);
     }
-}
-
-
-
-
-function showRegisterError(message)
-{
-    const alertHTML = `<div class="alert alert-danger" role="alert">${message}</div>`;
-
-    document.getElementById('registerAlert').innerHTML = alertHTML;
 }
