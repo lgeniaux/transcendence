@@ -6,7 +6,7 @@ export const routes = {
     '/login': {
         html: '/frontend/www/routes/auth/login.html',
         css: '/frontend/www/routes/auth/auth.css',
-        js: ['/frontend/www/routes/auth/oauth.js', '/frontend/www/routes/auth/login.js']
+        js: ['/frontend/www/routes/auth/login.js', '/frontend/www/routes/auth/oauth.js']
     },
     '/register': {
         html: '/frontend/www/routes/auth/register.html',

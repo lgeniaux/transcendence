@@ -1,5 +1,7 @@
 // oauth.js
 
+import { getRequestHeaders } from '../../js/utils.js';
+
 export async function init()
 {
     if (window.location.pathname === '/login')
