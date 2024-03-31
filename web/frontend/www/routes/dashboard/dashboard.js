@@ -1,11 +1,14 @@
+import { getRequestHeaders } from '../../js/utils.js';
 
-if (!window.allUsers) {
+if (!window.allUsers)
+{
     window.allUsers = [];
 }
 
 // Friends management
 
-export async function init() {
+export async function init()
+{
     initFriendsSearch();
     initNotifications();
     initTournamentsList();
@@ -35,7 +38,8 @@ async function fetchAllUsers()
     }
 }
 
-function initFriendsSearch() {
+function initFriendsSearch()
+{
     var input = document.getElementById('userSearch');
 
     if (input)
@@ -44,7 +48,8 @@ function initFriendsSearch() {
     fetchAllUsers();
 }
 
-function filterUsersByUsername(event) {
+function filterUsersByUsername(event)
+{
     const searchTerm = event.target.value
 
     const filteredUsers = allUsers.filter(user => user.username.includes(searchTerm));
@@ -52,7 +57,8 @@ function filterUsersByUsername(event) {
     displayUsers(filteredUsers);
 }
 
-function displayUsers(users) {
+function displayUsers(users)
+{
     var usersList = document.getElementById('users-list');
     usersList.innerHTML = '';
 
@@ -83,25 +89,40 @@ function displayUsers(users) {
     });
 }
 
+export async function updateDashboardInterface(username, newStatus)
+{
+    const statusTexts = {
+        'blocked': 'blocked',
+        'none': 'none',
+        'friends': 'friends',
+        'not friends yet': 'not friends yet'
+    };
 
-window.getActionButtonsHtml = (user) => {
+    const statusText = statusTexts[newStatus] || 'unknown';
+    document.getElementById(`status-${username}`).textContent = statusText;
+    document.getElementById(`actions-${username}`).innerHTML = getActionButtonsHtml({username: username, status: newStatus});
+}
+
+function getActionButtonsHtml(user)
+{
     let buttonsHtml = '';
 
     if (user.status === 'friends')
-        buttonsHtml += `<button class="btn btn-outline-danger btn-sm" type="button" onclick="handleUserAction('${user.username}', 'delete')">Delete</button>`;
+        buttonsHtml += `<button class="btn btn-outline-danger btn-sm" type="button" onclick="window.handleUserAction('${user.username}', 'delete')">Delete</button>`;
     else if (user.status === 'blocked')
         buttonsHtml += '<div class="badge bg-danger">Blocked</div>';
     else
-        buttonsHtml += `<button class="btn btn-outline-success btn-sm" type="button" onclick="handleUserAction('${user.username}', 'add')">Add</button>`;
+        buttonsHtml += `<button class="btn btn-outline-success btn-sm" type="button" onclick="window.handleUserAction('${user.username}', 'add')">Add</button>`;
 
     return buttonsHtml;
 }
 
 
 // Notifications
-
-window.manageInvite = async (notificationId, action) =>{
-    try {
+export async function manageInvite(notificationId, action)
+{
+    try
+    {
         const response = await fetch('/api/respond-to-invite/', {
             method: 'POST',
             credentials: 'include',
@@ -116,6 +137,7 @@ window.manageInvite = async (notificationId, action) =>{
         console.log('Response to invite:', data);
         // delete notification from DOM
         const notificationElement = document.querySelector(`.notification[data-notification-id="${notificationId}"]`);
+
         if (notificationElement.classList.contains('tournament-invite'))
             initTournamentsList();
 
@@ -124,44 +146,48 @@ window.manageInvite = async (notificationId, action) =>{
 
 
     }
-    catch (error) {
+    catch (error)
+    {
         console.error('Error responding to invite:', error);
     }
 }
 
+window.manageInvite = manageInvite;
 
-window.goToGame = async (gameId) =>{
-    sessionStorage.setItem('currentGameId', gameId);
-    sessionStorage.setItem('endGameRedirect', '/dashboard');
-    window.location = '/game';
-}
-
-function getActionButtonsNotification(notification) {
+function getActionButtonsNotification(notification)
+{
     let buttonsHtml = '';
 
-    if (notification.notification_type === 'tournament-invite') {
+    if (notification.notification_type === 'tournament-invite')
+    {
         buttonsHtml = `
-            <button class="btn btn-success" onclick="manageInvite(${notification.id}, 'accept')">Accept</button>
-            <button class="btn btn-danger" onclick="manageInvite(${notification.id}, 'deny')">Deny</button>
+            <button class="btn btn-success" onclick="window.manageInvite(${notification.id}, 'accept')">Accept</button>
+            <button class="btn btn-danger" onclick="window.manageInvite(${notification.id}, 'deny')">Deny</button>
         `;
-    } else if (notification.notification_type === 'game-start') {
+    }
+    else if (notification.notification_type === 'game-start')
+    {
         buttonsHtml = `
-            <button class="btn btn-success" onclick="goToGame(${notification.data.game_id})">PLAY</button>
+            <button class="btn btn-success" onclick="window.goToGame(${notification.data.game_id})">PLAY</button>
         `;
-    } else if (notification.notification_type === 'game-invite') {
+    }
+    else if (notification.notification_type === 'game-invite')
+    {
         buttonsHtml = `
-            <button class="btn btn-success" onclick="manageInvite(${notification.id}, 'accept')">Accept</button>
-            <button class="btn btn-danger" onclick="manageInvite(${notification.id}, 'deny')">Deny</button>
+            <button class="btn btn-success" onclick="window.manageInvite(${notification.id}, 'accept')">Accept</button>
+            <button class="btn btn-danger" onclick="window.manageInvite(${notification.id}, 'deny')">Deny</button>
         `;
     }
 
     return buttonsHtml; 
 }
 
-function displayNotification(notification) {
+function displayNotification(notification)
+{
     const notificationsList = document.querySelector('.notifications-list');
 
-    if (notificationsList) {
+    if (notificationsList)
+    {
         const notificationElement = document.createElement('div');
         notificationElement.className = 'notification' + ' ' + notification.notification_type;
         const dateString = new Date(notification.created_at).toLocaleString();
@@ -182,8 +208,10 @@ function displayNotification(notification) {
 }
 
 
-async function fetchAndDisplayStoredNotifications() {
-    try {
+async function fetchAndDisplayStoredNotifications()
+{
+    try
+    {
         const response = await fetch('/api/get-notifications/', {
             method: 'GET',
             credentials: 'include',
@@ -201,13 +229,15 @@ async function fetchAndDisplayStoredNotifications() {
             displayNotification(notification);
         });
     }
-    catch (error) {
+    catch (error)
+    {
         console.error('Error fetching notifications:', error);
     }
 }
 
 
-async function initNotifications() {
+async function initNotifications()
+{
     await fetchAndDisplayStoredNotifications(); // Fetch and display stored notifications on page load
 
     const auth_token = sessionStorage.getItem('authToken');
@@ -238,13 +268,16 @@ async function initNotifications() {
 
 // Tournaments
 
-function displayTournaments(tournaments) {
+function displayTournaments(tournaments)
+{
     const tournamentsList = document.querySelector('.tournaments-list');
     tournamentsList.innerHTML = '';
 
-    if (tournamentsList) {
+    if (tournamentsList)
+    {
         tournaments.forEach(tournament => {
-            if (tournament.state.status !== 'finished') {
+            if (tournament.state.status !== 'finished')
+            {
                 const tournamentCard = document.createElement('div');
                 tournamentCard.className = 'card bg-dark text-white mb-3';
                 tournamentCard.setAttribute('role', 'button');
@@ -265,10 +298,10 @@ function displayTournaments(tournaments) {
     }
 }
 
-
-
-async function initTournamentsList() {
-    try {
+async function initTournamentsList()
+{
+    try
+    {
         const response = await fetch('/api/tournament/get-tournaments/', {
             method: 'GET',
             credentials: 'include',
@@ -282,7 +315,8 @@ async function initTournamentsList() {
         console.log('Tournaments:', data);
         displayTournaments(data);
     }
-    catch (error) {
+    catch (error)
+    {
         console.error('Error fetching tournaments:', error);
     }
 }

@@ -55,6 +55,13 @@ export const routes = {
         js: '/frontend/www/routes/stats/stats.js',
         requires_auth: true
     },
+    '/old_stats': { // to remove
+        html: '/frontend/www/routes/stats/old_stats.html'
+    },
+    '/gpdr': {
+        html: '/frontend/www/html/gpdr',
+        css: '/frontend/www/css/gpdr'
+    },
     '/404': {
         html: '/frontend/www/html/404.html',
         css: '/frontend/www/css/404.css',

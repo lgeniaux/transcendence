@@ -1,3 +1,5 @@
+import { loadContent, getRequestHeaders, initLogoutButton } from './utils.js';
+
 export async function loadNavbar()
 {
     try
@@ -14,7 +16,7 @@ export async function loadNavbar()
     }
 }
 
-export async function loadUsernameIntoModal()
+async function loadUsernameIntoModal()
 {
     try
 	{

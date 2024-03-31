@@ -2,10 +2,11 @@
 
 import { navigate, handleNavigationClick, isAuthenticated } from './navigation.js';
 import { loadNavbar } from './navbar.js';
-import { loadChatbox } from './chatbox.js';
+import { loadChatbox } from './chatbox/chatbox.js';
 
 document.addEventListener('DOMContentLoaded', async () => {
-    if (isAuthenticated()) {
+    if (isAuthenticated())
+    {
         await loadNavbar();
         await loadChatbox();
     }
