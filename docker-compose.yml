@@ -22,8 +22,7 @@ services:
   web:
     build: ./web
     user: django
-    command: sh -c "pwd && ls && exec gunicorn backend.transcendence.wsgi:application --bind 0.0.0.0:8000"
-
+    command: ./entrypoint.sh db gunicorn backend.transcendence.wsgi:application --bind 0.0.0.0:8000 --log-level=debug
 
     volumes:
       - staticfiles:/usr/src/app/staticfiles
@@ -45,10 +44,8 @@ services:
 
 
   nginx:
-    image: nginx:latest
+    build: ./nginx
     volumes:
-      - ./nginx:/etc/nginx/conf.d
-      - ./nginx/ssl:/etc/nginx/ssl
       - staticfiles:/usr/share/nginx/html/static
       - mediafiles:/usr/share/nginx/html/media
       - ./web/frontend:/usr/share/nginx/html
