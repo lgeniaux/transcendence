@@ -22,7 +22,7 @@ services:
   web:
     build: ./web
     user: django
-    command: sh -c "pwd && ls && exec gunicorn backend.transcendence.wsgi:application --bind 0.0.0.0:8000"
+    command: ./entrypoint.sh db daphne -b 0.0.0.0 -p 8000 backend.transcendence.asgi:application
 
 
     volumes:

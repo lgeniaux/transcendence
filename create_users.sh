@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # API endpoint URL for user registration
-API_URL="http://localhost:8000/api/register-user/"
+API_URL="https://localhost:8443/api/register-user/"
 
 # Number of users to create
 NUM_USERS=$1
@@ -20,7 +20,7 @@ for i in $(seq 1 $NUM_USERS); do
     USERNAME="${BASE_USERNAME}${i}"
     EMAIL=$(echo $BASE_EMAIL | sed "s/@/${i}@/g")
     # Make a POST request to create a new user
-    RESPONSE=$(curl -s -o /dev/null -w "%{http_code}" -X POST "$API_URL" \
+    RESPONSE=$(curl -s -o /dev/null -w "%{http_code}" -X POST "$API_URL" --insecure \
         -H "Content-Type: application/json" \
         -d "{\"username\": \"${USERNAME}\", \"email\": \"${EMAIL}\", \"password\": \"${PASSWORD}\"}")
     

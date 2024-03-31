@@ -296,7 +296,7 @@ export async function init() {
     }
     else {
         const authToken = sessionStorage.getItem('authToken');
-        const ws = new WebSocket(`ws://${window.location.host}/ws/tournament/${authToken}/${tournamentId}/`);
+        const ws = new WebSocket(`wss://${window.location.host}/ws/tournament/${authToken}/${tournamentId}/`);
 
         ws.onopen = function (event) {
             console.log('WebSocket opened');

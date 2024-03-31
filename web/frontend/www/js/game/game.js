@@ -172,7 +172,7 @@ export async function init() {
                 displayGameView(game);
             } else if (game.game.status === 'waiting to start' || game.game.status === 'in progress') {
                 // Attempt to open the WebSocket only if the game is not finished
-                window.ws = new WebSocket(`ws://${window.location.host}/ws/game/${authToken}/${gameId}/`);
+                window.ws = new WebSocket(`wss://${window.location.host}/ws/game/${authToken}/${gameId}/`);
 
                 ws.onopen = function (event) {
                     console.log('WebSocket opened');

@@ -47,7 +47,7 @@ function attachChatboxEvents()
 function initWebsocket()
 {
     const auth_token = sessionStorage.getItem('authToken');
-    const wsUrl = `ws://${window.location.host}/ws/chat/${auth_token}/`;
+    const wsUrl = `wss://${window.location.host}/ws/chat/${auth_token}/`;
     const webSocket = new WebSocket(wsUrl);
 
     webSocket.onmessage = function(event) {

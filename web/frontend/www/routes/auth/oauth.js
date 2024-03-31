@@ -22,7 +22,7 @@ export async function init()
 function redirectTo42OAuth()
 {
     const clientId = 'u-s4t2ud-4c5c2185a70974ac0cfdefacbe289d7ec81936940b6980d71e752c16ec1c5d17'; // Louis: c'est normal que le user ai acces a cette information car il est public
-    const redirectUri = encodeURIComponent('http://localhost:8000/oauth_callback');
+    const redirectUri = encodeURIComponent('https://localhost:8443/oauth_callback');
     const scope = 'public';
     const state = generateRandomString();
     const responseType = 'code';
