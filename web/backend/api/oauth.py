@@ -58,7 +58,6 @@ class CodeForToken(APIView):
                                 },
                                 status=status.HTTP_400_BAD_REQUEST,
                             )
-
                     token, _ = Token.objects.get_or_create(user=user)
                     return Response(
                         {"detail": "Success", "auth_token": token.key},

@@ -160,10 +160,12 @@ class AddOrDeleteFriend(APIView):
 
 class GetUsersListSerializer(serializers.ModelSerializer):
     status = serializers.SerializerMethodField()
+    avatar = serializers.SerializerMethodField()
+
 
     class Meta:
         model = User
-        fields = ["username", "avatar", "online_status", "status"]
+        fields = ["id", "username", "avatar", "online_status", "status"]
 
     def get_status(self, obj):
         request_user = self.context["request"].user
@@ -174,6 +176,12 @@ class GetUsersListSerializer(serializers.ModelSerializer):
         else:
             return "None"
 
+    def get_avatar(self, obj):
+        if obj.avatar:
+            request = self.context.get('request')
+            avatar_url = obj.avatar.url
+            return avatar_url
+        return None
 
 class GetUsersList(APIView):
     """

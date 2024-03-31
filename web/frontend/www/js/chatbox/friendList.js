@@ -76,7 +76,7 @@ function displayUser(userHtml, usersList)
 function getUserHtml(user)
 {
     const dropdownId = `dropdown-${user.username}`;
-    const avatarSrc = user.avatar || 'static/img/person-fill.svg';
+    const avatarSrc = user.avatar ? user.avatar : '/media/zippy.jpg'
     const onlineStatusClass = user.online_status ? 'bg-success' : 'bg-danger';
     const onlineStatusText = user.online_status ? 'Online' : 'Offline';
 

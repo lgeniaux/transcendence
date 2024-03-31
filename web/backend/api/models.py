@@ -15,7 +15,7 @@ class User(AbstractUser):
     username = models.CharField(max_length=20, unique=True)
     email = models.EmailField(max_length=254, unique=True)
     avatar = models.ImageField(
-        upload_to="avatars/", default="avatars/zippy.jpg", blank=True
+        blank=True
     )
     online_status = models.BooleanField(default=False)
     friendlist = models.ManyToManyField(
