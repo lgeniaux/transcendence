@@ -7,6 +7,9 @@ from django.conf import settings
 import requests
 
 
+from django.db import IntegrityError
+from django.db.models import Q
+
 class CodeForToken(APIView):
     """
     Get a token for the user
@@ -17,51 +20,46 @@ class CodeForToken(APIView):
         redirect_uri = "https://localhost:8443/oauth_callback"
 
         if code is None:
-            return Response(
-                {"detail": "No code provided"}, status=status.HTTP_400_BAD_REQUEST
-            )
-        else:
-            token_response = requests.post(
-                "https://api.intra.42.fr/oauth/token",
-                data={
-                    "grant_type": "authorization_code",
-                    "client_id": "u-s4t2ud-4c5c2185a70974ac0cfdefacbe289d7ec81936940b6980d71e752c16ec1c5d17",  # a changer et mettre dans le .env
-                    "client_secret": "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",  # MEGA IMPORTANT DE NE PAS LE METTRE DANS LE CODE
-                    "code": code,
-                    "redirect_uri": redirect_uri,
-                },
-            )
+            return Response({"detail": "No code provided"}, status=status.HTTP_400_BAD_REQUEST)
+        
+        token_response = requests.post(
+            "https://api.intra.42.fr/oauth/token",
+            data={
+                "grant_type": "authorization_code",
+                "client_id": "u-s4t2ud-4c5c2185a70974ac0cfdefacbe289d7ec81936940b6980d71e752c16ec1c5d17",
+                "client_secret": "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",
+                "code": code,
+                "redirect_uri": redirect_uri,
+            },
+        )
 
-            if token_response.status_code == 200:
-                access_token = token_response.json().get("access_token")
+        if token_response.status_code == 200:
+            access_token = token_response.json().get("access_token")
 
-                user_info_response = requests.get(
-                    "https://api.intra.42.fr/v2/me",
-                    headers={"Authorization": f"Bearer {access_token}"},
-                )
-                if user_info_response.status_code == 200:
-                    user_info = user_info_response.json()
-                    # Authenticate or create user based on user_info
-                    User = get_user_model()
-                    user, created = User.objects.get_or_create(
+            user_info_response = requests.get(
+                "https://api.intra.42.fr/v2/me",
+                headers={"Authorization": f"Bearer {access_token}"},
+            )
+            if user_info_response.status_code == 200:
+                user_info = user_info_response.json()
+                User = get_user_model()
+                
+                existing_user = User.objects.filter(Q(email=user_info["email"]) | Q(username=user_info["login"])).first()
+                if existing_user:
+                    return Response({"detail": "A user with this email or username already exists."}, status=status.HTTP_409_CONFLICT)
+                
+                try:
+                    user = User.objects.create(
                         email=user_info["email"],
-                        defaults={"username": user_info["login"]},
+                        username=user_info["login"],
+                        is_oauth=True
                     )
-                    if created:
-                        user.is_oauth = True
-                        user.save()
-                    else:
-                        if not user.is_oauth:
-                            return Response(
-                                {
-                                    "detail": "User already exists with this email. Please login using your password."
-                                },
-                                status=status.HTTP_400_BAD_REQUEST,
-                            )
-                    token, _ = Token.objects.get_or_create(user=user)
-                    return Response(
-                        {"detail": "Success", "auth_token": token.key},
-                        status=status.HTTP_200_OK,
-                    )
+                except IntegrityError as e:
+                    return Response({"detail": "Failed to create user due to a conflict."}, status=status.HTTP_409_CONFLICT)
 
-            return Response(token_response.json(), status=token_response.status_code)
+
+                token, _ = Token.objects.get_or_create(user=user)
+                return Response({"detail": "Success", "auth_token": token.key}, status=status.HTTP_200_OK)
+
+        # Fallback response in case of failure
+        return Response(token_response.json(), status=token_response.status_code)

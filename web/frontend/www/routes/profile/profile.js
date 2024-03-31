@@ -1,4 +1,4 @@
-
+import { getRequestHeaders } from '../../js/utils.js';
 
 export async function init()
 {
