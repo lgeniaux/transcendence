@@ -2,7 +2,7 @@ import pytest
 from rest_framework import status
 import json
 
-base_url = "http://localhost:8000/api"
+base_url = "https://localhost:8433/api"
 
 # ========== FIXTURES ==========
 

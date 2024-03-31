@@ -31,8 +31,6 @@ services:
       - avatars:/usr/src/app/avatars
     networks:
       - transcendence
-    ports:
-      - "8000:8000"
     depends_on:
       - db
       - redis
