@@ -1,4 +1,4 @@
-import { launchGame, createGame } from "/static/game/js/main.js";
+import { launchGame, createGame } from "/frontend/www/game/js/main.js";
 
 async function getUserInfos(auth_token = null) {
     const headers = {

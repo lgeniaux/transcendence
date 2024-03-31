@@ -3,8 +3,8 @@ export async function loadNavbar()
     try
     {
         // Charger les composants spécifiques de la navbar
-        await loadContent('/static/html/navbar/sidepanel.html', '#sidePanel', 'barre de navigation');
-        await loadContent('/static/html/navbar/profilemodal.html', '#profileModal', 'bouton de profil');
+        await loadContent('/frontend/www/html/navbar/sidepanel.html', '#sidePanel', 'barre de navigation');
+        await loadContent('/frontend/www/html/navbar/profilemodal.html', '#profileModal', 'bouton de profil');
         await loadUsernameIntoModal();
         initLogoutButton();
     }

@@ -150,7 +150,7 @@ function displayInviteList(users) {
         return;
     }
     inviteList.innerHTML = '';
-    var avatarSrc = '/static/images/avatar.png';
+    var avatarSrc = '/frontend/www/images/avatar.png';
 
     users.forEach(user => {
         // if user is a friend, display the card

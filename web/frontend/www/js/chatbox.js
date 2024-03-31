@@ -7,7 +7,7 @@ export async function loadChatbox()
 {
     try
     {
-        await loadContent('/static/html/chatbox/chatbox.html', '#chatBox', 'chatbox');
+        await loadContent('/frontend/www/html/chatbox/chatbox.html', '#chatBox', 'chatbox');
         await loadFriendList();
         initWebsocket();
         attachChatboxEvents();
@@ -329,7 +329,7 @@ window.startGameWithUser = async (username)=>{
 
 window.sendMessage = async (username) =>
 {
-    const messagesUrl = '/static/html/chatbox/messagebox.html';
+    const messagesUrl = '/frontend/www/html/chatbox/messagebox.html';
     loadContent(messagesUrl, '#chatboxContainer', messages);
     fetchAndDisplayStoredMessages(username);
     document.getElementById('chatboxHeader').innerText = window.targetUsername;
