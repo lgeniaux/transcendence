@@ -1,0 +1,43 @@
+
+body
+{
+    overflow: auto;
+}
+
+@font-face
+{
+    font-family: 'Brandish';
+    src: url('/static/fonts/brandish.ttf') format('truetype');
+}
+
+.background-container
+{
+    min-width: 100%;
+    min-height: 100vh;
+    background: linear-gradient(to top, black, #383838);
+    overflow: hidden;
+}
+
+.footer
+{
+    display: flex;
+    width: 100%;
+    height: 3rem;
+    justify-content: center;
+    align-items: center;
+}
+
+.footer p
+{
+    color: white;
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 1.25rem;
+}
+
+.content
+{
+    width: 100%;
+    height: 100%;
+    overflow-y: auto;
+    overflow-x: hidden;
+}

@@ -24,10 +24,10 @@ export const routes = {
         requires_auth: true
     },
     '/duel': {
-        html: '/frontend/www/game/import.html',
+        html: '/frontend/www/html/game/game.html',
         js: '/frontend/www/js/duel.js',
         importmap: true,
-        css: '/frontend/www/css/game.css',
+        css: '/static/css/game.css',
         requires_auth: true
     },
     '/dashboard': {
@@ -46,7 +46,7 @@ export const routes = {
         html: '/frontend/www/html/game/game.html',
         js: '/frontend/www/js/game/game.js',
         importmap: true,
-        css: '/frontend/www/css/game.css',
+        css: '/static/css/game.css',
         requires_auth: true
     },
     '/stats': {
@@ -60,11 +60,11 @@ export const routes = {
     },
     '/gpdr': {
         html: '/frontend/www/html/gpdr',
-        css: '/frontend/www/css/gpdr'
+        css: '/static/css/gpdr'
     },
     '/404': {
         html: '/frontend/www/html/404.html',
-        css: '/frontend/www/css/404.css',
+        css: '/static/css/404.css',
         requires_auth: false
     }
 };

@@ -1,0 +1,27 @@
+.navbar
+{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: #FFB800;
+    height: 6.25rem;
+    width: 100vw;
+    text-align: center;
+}
+
+.navbar h1
+{
+    color: black;
+    font-family: 'Brandish', sans-serif;
+    font-size: 3.125rem;
+}
+
+.navbar .homeBtn
+{
+    display: flex;
+    justify-content: center;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    margin: 0 auto;
+}
