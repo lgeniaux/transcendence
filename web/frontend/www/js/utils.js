@@ -1,23 +1,22 @@
-async function loadContent(url, selector, description = '')
+export async function loadContent(url, selector)
 {
     try
     {
         const response = await fetch(url);
 
         if (!response.ok)
-            throw new Error(`Échec du chargement ${description}: ${response.statusText}`);
+            throw new Error(`loadContent failed: ${response.statusText}`);
 
         const html = await response.text();
         document.querySelector(selector).innerHTML = html;
     }
     catch (error)
     {
-        console.error('Erreur lors du chargement du contenu:', error);
+        console.error(error);
     }
 }
 
-
-function getCSRFToken()
+export function getCSRFToken()
 {
     let csrfToken = null;
 
@@ -40,13 +39,13 @@ function getCSRFToken()
     return csrfToken;
 }
 
-function revokeAuthToken()
+export function revokeAuthToken()
 {
     sessionStorage.removeItem('authToken');
     window.location.href = '/login';
 }
 
-function getRequestHeaders()
+export function getRequestHeaders()
 {
     const authToken = sessionStorage.getItem('authToken');
     const headers = {
@@ -59,7 +58,7 @@ function getRequestHeaders()
     return headers;
 }
 
-async function getFileContent(url)
+export async function getFileContent(url)
 {
     try
 	{
@@ -78,9 +77,7 @@ async function getFileContent(url)
     }
 }
 
-
-
-async function logoutUser()
+export async function logoutUser()
 {
     try
     {
@@ -105,23 +102,21 @@ async function logoutUser()
     }
 }
 
-
-
-function initLogoutButton()
+export function initLogoutButton()
 {
     const logoutButton = document.getElementById('logoutBtn');
     const sidePanelLogoutButton = document.getElementById('sidePanelLogoutButton');
 
     if (logoutButton)
     {
-        logoutButton.addEventListener('click', function() {
+        logoutButton.addEventListener('click', async function() {
             logoutUser();
         });
     }
 
     if (sidePanelLogoutButton)
     {
-        sidePanelLogoutButton.addEventListener('click', function() {
+        sidePanelLogoutButton.addEventListener('click', async function() {
             logoutUser();
         });
     }

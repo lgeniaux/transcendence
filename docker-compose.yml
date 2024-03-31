@@ -45,10 +45,8 @@ services:
 
 
   nginx:
-    image: nginx:latest
+    build: ./nginx
     volumes:
-      - ./nginx:/etc/nginx/conf.d
-      - ./nginx/ssl:/etc/nginx/ssl
       - staticfiles:/usr/share/nginx/html/static
       - mediafiles:/usr/share/nginx/html/media
       - ./web/frontend:/usr/share/nginx/html

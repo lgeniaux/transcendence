@@ -587,14 +587,10 @@ def test_game(client, users_with_games):
     assert response.json()["game"]["status"] == "in progress"
 
     # Player 1 check profile stats
-    # print(base_url + f"/profile/stats/?username={users[0]['username']}")
-    # response = client.get(
-    #     base_url + f"/profile/stats/?username={users[0]['username']}",
-    #     headers={"Authorization": f"Token {player1_token}", "Content-Type": "application/json"},
-    # )
-    # print(response.json())
-    # assert response.status_code == status.HTTP_200_OK
-    # assert response.json()["game_stats"]["games_played"] == 0
+    response = client.get(base_url + f"/stats/{users[0]['username']}/fetch/", HTTP_AUTHORIZATION="Token " + player1_token)
+    print(response.json())
+    assert response.status_code == status.HTTP_200_OK
+    assert response.json()["user_stats"]["games_played"] == 0
 
     # Player 1 ends the game with bad score
     response = client.post(
@@ -655,22 +651,22 @@ def test_game(client, users_with_games):
     assert response.status_code == status.HTTP_200_OK
     assert response.json()["game"]["status"] == "finished"
 
-    # # Player 1 check profile stats
-    # response = client.get(
-    #     base_url + f"/profile/stats/?username={users[0]['username']}",
-    #     HTTP_AUTHORIZATION="Token " + player1_token,
-    # )
-    # print(response.json())
-    # assert response.status_code == status.HTTP_200_OK
-    # assert response.json()["game_stats"]["games_played"] == 1
-    # assert response.json()["game_stats"]["wins"] == 1
+    # Player 1 check profile stats
+    response = client.get(
+        base_url + f"/stats/{users[0]['username']}/fetch/",
+        HTTP_AUTHORIZATION="Token " + player1_token,
+    )
+    print(response.json())
+    assert response.status_code == status.HTTP_200_OK
+    assert response.json()["user_stats"]["games_played"] == 1
+    assert response.json()["user_stats"]["games_won"] == 1
 
-    # # Player 1 check profile stats of player 2
-    # response = client.get(
-    #     base_url + f"/profile/stats/?username={users[1]['username']}",
-    #     HTTP_AUTHORIZATION="Token " + player1_token,
-    # )
-    # print(response.json())
-    # assert response.status_code == status.HTTP_200_OK
-    # assert response.json()["game_stats"]["games_played"] == 1
-    # assert response.json()["game_stats"]["losses"] == 1
+    # Player 1 check profile stats of player 2
+    response = client.get(
+        base_url + f"/stats/{users[1]['username']}/fetch/",
+        HTTP_AUTHORIZATION="Token " + player1_token,
+    )
+    print(response.json())
+    assert response.status_code == status.HTTP_200_OK
+    assert response.json()["user_stats"]["games_played"] == 1
+    assert response.json()["user_stats"]["games_won"] == 0

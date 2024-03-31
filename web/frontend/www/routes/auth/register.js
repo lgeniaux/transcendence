@@ -1,18 +1,16 @@
-// register.js
-
 export async function init()
 {
     var registerBtn = document.getElementById('registerBtn');
 
     if (registerBtn)
     {
-        registerBtn.addEventListener('click', function (event) {
+        registerBtn.addEventListener('click', async function (event) {
             event.preventDefault(); // Prevent default form submission
 
             if (!checkPassword())
                 return;
 
-            registerUser();
+            await registerUser();
         });
     }
 }
@@ -33,16 +31,20 @@ function checkPassword()
 
 
 
-async function registerUser() {
-    try {
+async function registerUser()
+{
+    try
+    {
         var formData = new FormData();
+        
         formData.append('username', document.querySelector('[name="username"]').value);
         formData.append('email', document.querySelector('[name="email"]').value);
         formData.append('password', document.querySelector('[name="password"]').value);
+        
         var avatar = document.querySelector('[name="avatar"]').files[0];
-        if (avatar) {
+        
+        if (avatar)
             formData.append('avatar', avatar, avatar.name);
-        }
 
         const response = await fetch('/api/register-user/', {
             method: 'POST',
@@ -52,25 +54,15 @@ async function registerUser() {
 
         const data = await response.json();
 
-        if (data.detail === "Success") {
+        if (data.detail === "Success") 
             window.location.href = '/login';
-        }
-        else {
+        else
             alert(data.message);
-        }
 
         // Rest of the code remains the same
-    } catch (error) {
+    }
+    catch (error)
+    {
         console.error('Error:', error);
     }
-}
-
-
-
-
-function showRegisterError(message)
-{
-    const alertHTML = `<div class="alert alert-danger" role="alert">${message}</div>`;
-
-    document.getElementById('registerAlert').innerHTML = alertHTML;
 }

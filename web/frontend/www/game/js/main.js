@@ -9,6 +9,7 @@ import { InvertShader } from './shaders/invertShader.js';
 import { createMeshes } from './createMeshes.js';
 import { createEventListeners } from './eventListeners.js';
 import { render, renderOnce } from './render.js';
+import { loadContent } from '../../js/utils.js';
 
 /**
  * @returns {Object}: An object with the properties of the game:
@@ -179,9 +180,9 @@ async function launchGame(player1 = "Left player", player2 = "Right player", pro
 
 }
 
-function displayTutorial()
+async function displayTutorial()
 {
-    loadContent('static/html/game/tutorial.html', '#endScreen', 'tutorial');
+    await loadContent('static/html/game/tutorial.html', '#endScreen');
 	document.querySelector('#endScreen').style.opacity = '1';
 }
 
