@@ -2,6 +2,3 @@
 __pycache__/
 .vscode/
 .cache/
-
-web/static/
-web/tests/
