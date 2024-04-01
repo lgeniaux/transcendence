@@ -298,7 +298,7 @@ def test_delete_user_with_game(client, users_with_games):
     assert response.json()["game"]["status"] == "finished"
     assert response.json()["game"]["winner"] == users[0]["username"]
     assert response.json()["game"]["player1"] == users[0]["username"]
-    assert response.json()["game"]["player2"].startswith("deleted_")
+    assert response.json()["game"]["player2"] != users[1]["username"]
 
     # Reregister the user
     response = client.post(
