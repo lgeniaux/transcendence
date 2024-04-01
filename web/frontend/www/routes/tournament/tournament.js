@@ -23,9 +23,9 @@ export async function inviteToTournament(username, tournamentId)
             return response.json();
         }).then(data => {
             if (data.message)
-                console.log('User invited successfully');
+                alert('User invited successfully');
             else
-                console.log('Failed to invite user:');
+                alert('Failed to invite user:', data.error || data.detail);
         });
     }
     catch (error)
