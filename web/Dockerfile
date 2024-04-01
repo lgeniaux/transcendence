@@ -9,7 +9,7 @@ WORKDIR /usr/src/app
 # Install dependencies
 COPY requirements.txt ./
 RUN pip install -U --no-cache-dir -r requirements.txt
-
+RUN pip install -U twisted[tls,http2]
 # Copy project files
 COPY . .
 

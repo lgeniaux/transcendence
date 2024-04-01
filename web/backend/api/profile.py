@@ -9,7 +9,7 @@ from rest_framework import permissions
 from .serializers import UserSerializer, ChangePasswordSerializer, UserChangeSerializer
 import requests
 import random
-
+from uuid import uuid4
 
 class UserProfile(APIView):
     permission_classes = [permissions.IsAuthenticated]
@@ -59,8 +59,9 @@ class UserDelete(APIView):
             )
         request.user.update_games_after_account_deletion()
         request.user.update_notifications_after_account_deletion()
-        request.user.username = "deleted_" + str(random.randint(0, 10000))
-        request.user.email = "deleted_" + str(random.randint(0, 10000))
+        # replace username with a random uuid4 (20 chars)
+        request.user.username = str(uuid4())[:20]
+        request.user.email = str(uuid4())[:20] + "@deleted.com"
         request.user.is_active = False
         request.user.set_password(None)
         request.user.auth_token.delete()

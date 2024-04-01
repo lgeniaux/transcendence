@@ -17,7 +17,7 @@ class LiveChatConsumer(AsyncWebsocketConsumer):
         if user:
             self.user = user
             self.room_group_name = f"user_{self.user.id}"
-            await self.update_user_online_status(user, True)
+            # await self.update_user_online_status(user, True)
             await self.channel_layer.group_add(self.room_group_name, self.channel_name)
             await self.accept()
         else:

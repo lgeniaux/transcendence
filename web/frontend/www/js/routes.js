@@ -58,9 +58,9 @@ export const routes = {
     '/old_stats': { // to remove
         html: '/frontend/www/routes/stats/old_stats.html'
     },
-    '/gpdr': {
-        html: '/frontend/www/html/gpdr',
-        css: '/static/css/gpdr'
+    '/gdpr': {
+        html: '/frontend/www/routes/gdpr/gdpr.html',
+        css: '/frontend/www/routes/gdpr/gdpr.css',
     },
     '/404': {
         html: '/frontend/www/html/404.html',
