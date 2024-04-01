@@ -74,6 +74,8 @@ class UserLoginSerializer(serializers.Serializer):
     password = serializers.CharField(style={"input_type": "password"}, write_only=True)
 
     def validate(self, data):
+        # if "email" in data:
+        #     email = data["email"]
         email = data.get("email")
         password = data.get("password")
 
