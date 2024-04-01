@@ -45,7 +45,6 @@
 }
 
 
-/* graphs */
 .stats .graph-container
 {
     height: 200px;
@@ -64,12 +63,11 @@
 }
 
 
-/*  */
 .stats .vr
 {
     border-left: 1px solid black;
-    height: 100px; /* Hauteur de la ligne verticale */
-    margin: 0 10px; /* Marge à gauche et à droite de la ligne verticale */
+    height: 100px;
+    margin: 0 10px;
 }
 
 @font-face {
