@@ -50,7 +50,7 @@ function handle42OAuthCallback()
         exchangeCodeForToken(code);
     } 
     else
-        console.error('State mismatch');
+        alert('State mismatch');
 }
 
 async function exchangeCodeForToken(code)
@@ -70,13 +70,15 @@ async function exchangeCodeForToken(code)
             sessionStorage.setItem('authToken', data.auth_token);
             window.location.href = '/';
         }
+        else if (data.detail)
+            alert(data.detail);
         else
-            console.error(data.detail);
+            alert('Invalid credentials');
  
     }
     catch (error)
     {
-        console.error('Error:', error);
+        alert('Error:', error);
     }
 }
 

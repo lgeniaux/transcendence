@@ -237,9 +237,12 @@ window.goToGame = async (gameId, type)=>
     window.location.href = '/game';
 }
 
-async function updateTournamentBracket(state) {
+async function updateTournamentBracket(state)
+{
     const tournamentBracket = document.getElementsByClassName('tournament-bracket')[0];
-    if (!tournamentBracket) {
+
+    if (!tournamentBracket)
+    {
         console.error('Tournament bracket not found');
         return;
     }
@@ -252,9 +255,12 @@ async function updateTournamentBracket(state) {
     {
         // Since round_name is used as a class, find all elements with this class
         const rounds = document.getElementsByClassName(round_name);
-        for (let round of rounds) {
+        for (let round of rounds)
+        {
             const matches = round.getElementsByClassName('match');
-            for (let i = 0; i < matches.length; i++) {
+
+            for (let i = 0; i < matches.length; i++)
+            {
                 const match = matches[i];
                 const player1 = match.querySelector('#player1');
                 const player2 = match.querySelector('#player2');
@@ -262,7 +268,9 @@ async function updateTournamentBracket(state) {
                 const score2 = match.querySelector('.score-p2 h4');
 
                 const game = state.state[round_name] && state.state[round_name][i];
-                if (game && game.status === "finished") {
+
+                if (game && game.status === "finished")
+                {
                     player1.innerText = game.player1;
                     player2.innerText = game.player2;
                     score1.innerText = game.score_player1;
@@ -272,7 +280,6 @@ async function updateTournamentBracket(state) {
         }
     }
 }
-
 
 async function displayTournamentView()
 {
@@ -285,23 +292,24 @@ async function displayTournamentView()
     if (tournamentName)
         tournamentName.innerText = state.name;
     const tournamentContainer = document.getElementById('tournament-container');
-    if (!tournamentContainer) {
+
+    if (!tournamentContainer)
+    {
         console.error('Tournament container not found');
         return;
     }
 
-
-    if (state.nb_players === 4) {
+    if (state.nb_players === 4)
         removeQuarterFinals();
+
+    if (state.state.status !== "waiting for all participants to join")
+    {
+        const inviteList = document.getElementsByClassName('invite-list');
+
+        if (inviteList.length > 0)
+            inviteList[0].remove();
     }
 
-    console.log('Tournament state:', state); 
-    if (state.state.status !== "waiting for all participants to join") {
-        const inviteList = document.getElementsByClassName('invite-list');
-        if (inviteList.length > 0) {
-            inviteList[0].remove();
-        }
-    }
     if (state.state.status === "in progress")
     {
         if (state.game_to_play)
@@ -310,19 +318,19 @@ async function displayTournamentView()
     }
     else if (state.state.status === "finished")
     {
-        // display the winner of the tournament
         const winner = state.state.winner;
         const winnerHTML = `
         <div class="alert alert-success" role="alert">
             <strong>The winner of the tournament is ${winner}</strong>
         </div>
         `;
-        tournamentContainer.innerHTML += winnerHTML;
+        tournamentContainer.insertAdjacentHTML('afterbegin', winnerHTML);
     }
     else if (state.state.status === "waiting for all participants to join")
     {
         fetchAllUsers();
     }
+
     updateTournamentBracket(state);   
 }
 
@@ -331,9 +339,7 @@ export async function init()
     const tournamentId = sessionStorage.getItem('currentTournamentId');
 
     if (!tournamentId)
-    {
         displayCreateTournamentForm();
-    }
     else
     {
         const authToken = sessionStorage.getItem('authToken');
