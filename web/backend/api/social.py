@@ -162,7 +162,6 @@ class GetUsersListSerializer(serializers.ModelSerializer):
     status = serializers.SerializerMethodField()
     avatar = serializers.SerializerMethodField()
 
-
     class Meta:
         model = User
         fields = ["id", "username", "avatar", "online_status", "status"]
@@ -178,10 +177,11 @@ class GetUsersListSerializer(serializers.ModelSerializer):
 
     def get_avatar(self, obj):
         if obj.avatar:
-            request = self.context.get('request')
+            request = self.context.get("request")
             avatar_url = obj.avatar.url
             return avatar_url
         return None
+
 
 class GetUsersList(APIView):
     """

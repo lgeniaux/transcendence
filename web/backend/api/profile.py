@@ -64,12 +64,17 @@ class UserDelete(APIView):
     def post(self, request, *args, **kwargs):
         if not request.user.is_active:
             return Response(
-                {"detail": "User is not an active account"}, status=status.HTTP_400_BAD_REQUEST
+                {"detail": "User is not an active account"},
+                status=status.HTTP_400_BAD_REQUEST,
             )
         try:
             request.user.update_games_after_account_deletion()
             request.user.update_notifications_after_account_deletion()
             request.user.delete_sent_messages()
+            # delete avatar from server and set the default one
+            if request.user.avatar:
+                request.user.avatar.delete()
+                request.user.avatar = "/media/zippy.jpg"
             request.user.username = str(uuid4())[:20]
             request.user.email = str(uuid4())[:20] + "@deleted.com"
             request.user.is_active = False
@@ -81,9 +86,10 @@ class UserDelete(APIView):
             )
         except Exception as e:
             return Response(
-                {"detail": "User could not be deleted"}, status=status.HTTP_400_BAD_REQUEST
+                {"detail": "User could not be deleted"},
+                status=status.HTTP_400_BAD_REQUEST,
             )
-        
+
 
 class DownloadData(APIView):
 
@@ -92,19 +98,28 @@ class DownloadData(APIView):
     def get(self, request, *args, **kwargs):
         if not request.user.is_active:
             return Response(
-                {"detail": "User is not an active account"}, status=status.HTTP_400_BAD_REQUEST
+                {"detail": "User is not an active account"},
+                status=status.HTTP_400_BAD_REQUEST,
             )
         try:
             data = {
                 "username": request.user.username,
                 "email": request.user.email,
-                "avatar_url": request.user.avatar if request.user.avatar else "",
-                "game_ids": [game.game_id for game in Game.objects.filter(models.Q(player1=request.user) | models.Q(player2=request.user))],
-                "tournament_ids": [tournament.id for tournament in request.user.tournaments.all()],
+                "game_ids": [
+                    game.game_id
+                    for game in Game.objects.filter(
+                        models.Q(player1=request.user) | models.Q(player2=request.user)
+                    )
+                ],
+                "tournament_ids": [
+                    tournament.id for tournament in request.user.tournaments.all()
+                ],
                 "messages_sent": [
                     {
                         "content": message.content,
-                        "recipient": message.recipient.username if message.recipient else ""
+                        "recipient": (
+                            message.recipient.username if message.recipient else ""
+                        ),
                     }
                     for message in PrivateMessage.objects.filter(sender=request.user)
                 ],
@@ -112,5 +127,6 @@ class DownloadData(APIView):
             return Response(data, status=status.HTTP_200_OK)
         except Exception as e:
             return Response(
-                {"detail": "Data could not be downloaded"}, status=status.HTTP_400_BAD_REQUEST
+                {"detail": "Data could not be downloaded"},
+                status=status.HTTP_400_BAD_REQUEST,
             )

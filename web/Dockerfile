@@ -22,6 +22,5 @@ USER django
 
 RUN DJANGO_SETTINGS_MODULE=transcendence.settings python backend/manage.py collectstatic --noinput
 
-
 # Add the frontend directory as an environment variable
 ENV FRONTEND_FOLDER=/usr/src/app/frontend

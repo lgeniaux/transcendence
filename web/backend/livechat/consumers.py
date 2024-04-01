@@ -37,17 +37,11 @@ class LiveChatConsumer(AsyncWebsocketConsumer):
         target_username = data.get("username")
 
         if message is None or message == "":
-            await self.send(
-                text_data=json.dumps(
-                    {"error": "message cannot be empty"}
-                )
-            )
+            await self.send(text_data=json.dumps({"error": "message cannot be empty"}))
             return
         if not target_username:
             await self.send(
-                text_data=json.dumps(
-                    {"error": "target_username cannot be empty"}
-                )
+                text_data=json.dumps({"error": "target_username cannot be empty"})
             )
             return
         if len(message) > 250:
@@ -97,4 +91,3 @@ class LiveChatConsumer(AsyncWebsocketConsumer):
             return User.objects.get(username=username)
         except User.DoesNotExist:
             return None
-

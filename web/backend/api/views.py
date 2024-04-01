@@ -11,14 +11,13 @@ from rest_framework.authtoken.models import Token
 from rest_framework.authentication import TokenAuthentication
 import random
 
+
 class GameList(APIView):
     """
     List all games
     """
 
-    permission_classes = [
-        IsAuthenticated
-    ]
+    permission_classes = [IsAuthenticated]
 
     def get(self, request, format=None):
         games = Game.objects.all()
@@ -62,9 +61,7 @@ class UserLogin(APIView):
 
             try:
                 user = User.objects.get(email=email)
-                if (
-                    not user.is_active
-                ):
+                if not user.is_active:
                     return Response(
                         {"detail": "This account has been deactivated"},
                         status=status.HTTP_401_UNAUTHORIZED,

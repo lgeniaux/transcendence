@@ -13,9 +13,7 @@ from livechat.models import PrivateMessage
 class User(AbstractUser):
     username = models.CharField(max_length=20, unique=True)
     email = models.EmailField(max_length=254, unique=True)
-    avatar = models.ImageField(
-        blank=True
-    )
+    avatar = models.ImageField(blank=True)
     online_status = models.BooleanField(default=False)
     friendlist = models.ManyToManyField(
         "self", symmetrical=False, blank=True, related_name="friends"
@@ -36,9 +34,7 @@ class User(AbstractUser):
     def update_games_after_account_deletion(self):
         games = Game.objects.filter(
             models.Q(player1=self) | models.Q(player2=self)
-        ).exclude(
-            status="finished"
-        )
+        ).exclude(status="finished")
         for game in games:
             if game.player1 == self:
                 game.winner = game.player2
@@ -50,11 +46,9 @@ class User(AbstractUser):
                 game.score_player2 = 0
             game.status = "finished"
             game.save()
-    
+
     def update_notifications_after_account_deletion(self):
-        notifications = Notification.objects.filter(
-            recipient=self
-        ).exclude(
+        notifications = Notification.objects.filter(recipient=self).exclude(
             notification_type="friend-request"
         )
         for notification in notifications:
@@ -62,12 +56,9 @@ class User(AbstractUser):
             notification.save()
 
     def delete_sent_messages(self):
-        messages = PrivateMessage.objects.filter(
-            sender=self
-        )
+        messages = PrivateMessage.objects.filter(sender=self)
         for message in messages:
             message.delete()
-        
 
 
 class Game(models.Model):
@@ -98,9 +89,7 @@ class Tournament(models.Model):
         User, on_delete=models.CASCADE, related_name="created_tournaments"
     )
     invitations = models.ManyToManyField(Notification, blank=True)
-    participants = models.ManyToManyField(
-        User, blank=True
-    )
+    participants = models.ManyToManyField(User, blank=True)
     start_time = models.DateTimeField(auto_now_add=True)
     state = models.JSONField(default=dict)
     nb_players = models.IntegerField()

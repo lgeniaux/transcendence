@@ -16,7 +16,7 @@ class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ["id", "username", "email", "avatar", "online_status", "is_oauth"]
-    
+
 
 class UserChangeSerializer(serializers.ModelSerializer):
     username = serializers.CharField(required=False, max_length=20)
@@ -51,20 +51,20 @@ class UserChangeSerializer(serializers.ModelSerializer):
             img = Image.open(value)
         except IOError:
             raise serializers.ValidationError("Invalid image file")
-        
+
         # Check if the image is too large
         if value.size > 2 * 1024 * 1024:  # 2MB
             raise serializers.ValidationError("Image file is too large ( > 2mb )")
-        
+
         # Check if the image is 128 x 128 pixels
         if img.width != 128 or img.height != 128:
             raise serializers.ValidationError("Image file must be 128 x 128 pixels")
-        
+
         # Check file extension
         ext = os.path.splitext(value.name)[1].lower()
-        if ext not in ['.jpg', '.jpeg', '.png']:
+        if ext not in [".jpg", ".jpeg", ".png"]:
             raise serializers.ValidationError("Image file must be a jpg or png file")
-        
+
         # Generate a new file name using UUID to ensure uniqueness
         # Retain the original extension, but sanitize the file name
         new_name = f"avatar_{self.initial_data['username']}{uuid4().hex}{ext}"
@@ -73,6 +73,7 @@ class UserChangeSerializer(serializers.ModelSerializer):
         value.name = new_name
 
         return value
+
 
 class GameSerializer(serializers.ModelSerializer):
     class Meta:
@@ -171,29 +172,29 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
                 "Password must contain at least one special character."
             )
         return value
-    
+
     def validate_avatar(self, value):
         try:
             img = Image.open(value)
         except IOError:
             raise serializers.ValidationError("Invalid image file")
-        
+
         if value.size > 2 * 1024 * 1024:  # 2MB
             raise serializers.ValidationError("Image file is too large ( > 2mb )")
-        
+
         if img.width != 128 or img.height != 128:
             raise serializers.ValidationError("Image file must be 128 x 128 pixels")
-        
+
         ext = os.path.splitext(value.name)[1].lower()
-        if ext not in ['.jpg', '.jpeg', '.png']:
+        if ext not in [".jpg", ".jpeg", ".png"]:
             raise serializers.ValidationError("Image file must be a jpg or png file")
-        
+
         new_name = f"avatar_{self.initial_data['username']}{uuid4().hex}{ext}"
 
         value.name = new_name
 
         return value
-            
+
 
 class ChangePasswordSerializer(serializers.Serializer):
     old_password = serializers.CharField(

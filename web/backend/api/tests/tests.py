@@ -127,9 +127,7 @@ def test_login_utils(client):
     assert response.status_code == status.HTTP_401_UNAUTHORIZED
 
     # Test case 5: Missing email
-    response = client.post(
-        base_url + "/login-user/", {"password": "17ValidPassword@"}
-    )
+    response = client.post(base_url + "/login-user/", {"password": "17ValidPassword@"})
     print(response.json())
     assert response.status_code == status.HTTP_400_BAD_REQUEST
     print("\n\n::endgroup::")
@@ -263,10 +261,9 @@ def test_delete_user_with_game(client, users_with_games):
     print(response.json())
     assert response.status_code == status.HTTP_200_OK
 
-
     response = client.post(
         base_url + "/me/delete/",
-        HTTP_AUTHORIZATION=f'Token badtoken',
+        HTTP_AUTHORIZATION=f"Token badtoken",
     )
     print(response.json())
     assert response.status_code == status.HTTP_401_UNAUTHORIZED
@@ -363,7 +360,7 @@ def test_change_password(client, created_users):
         ),
         headers={"Content-Type": "application/json", "Authorization": "Token " + token},
     )
-    if (response.status_code != status.HTTP_204_NO_CONTENT):
+    if response.status_code != status.HTTP_204_NO_CONTENT:
         print(response.json())
     assert response.status_code == status.HTTP_204_NO_CONTENT
     # Test case 3: Already changed password
@@ -640,7 +637,10 @@ def test_game(client, users_with_games):
     assert response.json()["game"]["status"] == "in progress"
 
     # Player 1 check profile stats
-    response = client.get(base_url + f"/stats/{users[0]['username']}/fetch/", HTTP_AUTHORIZATION="Token " + player1_token)
+    response = client.get(
+        base_url + f"/stats/{users[0]['username']}/fetch/",
+        HTTP_AUTHORIZATION="Token " + player1_token,
+    )
     print(response.json())
     assert response.status_code == status.HTTP_200_OK
     assert response.json()["user_stats"]["games_played"] == 0

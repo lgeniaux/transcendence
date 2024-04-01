@@ -7,6 +7,9 @@ export async function init()
     var profileFormButton = document.getElementById('profileChangeButton');
     var passwordFormButton = document.getElementById('passwordChangeButton');
     var deleteFormButton = document.getElementById('profileDeleteButton');
+    var downloadDataButton = document.getElementById('downloadDataButton');
+
+
 
     if (profileFormButton)
     {
@@ -29,6 +32,40 @@ export async function init()
             event.preventDefault();
             await deleteProfile(event);
         });
+    }
+    if (downloadDataButton)
+    {
+        downloadDataButton.addEventListener('click', async function (event) {
+            event.preventDefault();
+            await downloadData(event);
+        });
+    }
+}
+
+async function downloadData(event)
+{
+    // display the json text in a container under the button
+    try
+    {
+        const response = await fetch('/api/profile/download-data/', {
+            method: 'GET',
+            credentials: 'include',
+            headers: getRequestHeaders()
+        });
+
+        if (!response.ok)
+            throw new Error(`HTTP error! status: ${response.status}`);
+
+        const data = await response.json();
+
+        var jsonText = JSON.stringify(data, null, 4);
+        var container = document.getElementById('downloadDataContainer');
+        container.innerText = jsonText;
+        container.style.display = 'block';
+    }
+    catch (error)
+    {
+        console.error('Error:', error);
     }
 }
 
