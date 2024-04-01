@@ -5,7 +5,7 @@ from django.contrib.auth import get_user_model
 from rest_framework.authtoken.models import Token
 from django.conf import settings
 import requests
-
+from django.core.files.base import ContentFile
 
 from django.db import IntegrityError
 from django.db.models import Q
@@ -58,12 +58,22 @@ class CodeForToken(APIView):
                 elif existing_user:
                     return Response({"detail": "A user with this email or username already exists."}, status=status.HTTP_409_CONFLICT)
                 else:
+                    avatar_response = requests.get(user_info["image"]["link"])
+                    if avatar_response.status_code == 200:
+                        avatar_file = ContentFile(avatar_response.content, name=user_info["login"] + "_avatar.jpg")
+                    else:
+                        avatar_file = None  # or set a default avatar
+
                     try:
                         user = User.objects.create(
                             email=user_info["email"],
                             username=user_info["login"],
                             is_oauth=True
                         )
+
+                        if avatar_file:
+                            user.avatar.save(user.username + "_avatar.jpg", avatar_file, save=True)
+
                     except IntegrityError as e:
                         return Response({"detail": "Failed to create user due to a conflict."}, status=status.HTTP_409_CONFLICT)
 

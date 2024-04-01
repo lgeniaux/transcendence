@@ -1,7 +1,7 @@
 from django.urls import path
 from .views import GameList, UserRegistrationView, UserLogin, UserLogout
 from .oauth import CodeForToken
-from .profile import UserProfile, ChangePassword, UserDelete
+from .profile import UserProfile, ChangePassword, UserDelete, DownloadData
 from .social import (
     AddOrDeleteFriend,
     GetUsersList,
@@ -82,4 +82,6 @@ urlpatterns = [
     path("game/start/", StartGame.as_view(), name="start-game"),
     path("game/end/", EndGame.as_view(), name="end-game"),
     path("stats/<str:username>/fetch/", GetUserStats.as_view(), name="get-user-stats"),
+    path("profile/download-data/", DownloadData.as_view(), name="download-data"),
+
 ]
