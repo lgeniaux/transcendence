@@ -25,7 +25,7 @@ class LiveChatConsumer(AsyncWebsocketConsumer):
 
     async def disconnect(self, close_code):
         if self.user:
-            await self.update_user_online_status(self.user, False)
+            # await self.update_user_online_status(self.user, False)
             await self.channel_layer.group_discard(
                 self.room_group_name, self.channel_name
             )
@@ -79,7 +79,7 @@ class LiveChatConsumer(AsyncWebsocketConsumer):
         except User.DoesNotExist:
             return None
 
-    @database_sync_to_async
-    def update_user_online_status(self, user, status):
-        user.online_status = status
-        user.save()
+    # @database_sync_to_async
+    # def update_user_online_status(self, user, status):
+    #     user.online_status = status
+    #     user.save()
