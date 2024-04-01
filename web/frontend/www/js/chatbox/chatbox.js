@@ -45,8 +45,6 @@ function attachChatboxEvents()
 
 document.addEventListener('userStatusChange', async (event) => {
     const { username, newStatus } = event.detail;
-    // Vous pourriez avoir besoin de récupérer à nouveau les données de l'utilisateur ici
-    // Pour l'exemple, on va simplement rafraîchir toute la liste d'amis
     await loadFriendList();
 });
 

@@ -28,7 +28,11 @@ export async function handleUserAction(username, action)
     {
         await sendUserAction(username, action);
         console.log(`User ${action}ed successfully`);
-        updateDashboardInterface(username, statusAfterAction);
+        // if on /tournament page, update the tournament interface, if on /dashboard, update the dashboard interface
+        if (window.location.pathname === '/tournament')
+            updateTournamentInterface(username, statusAfterAction);
+        else
+            updateDashboardInterface(username, statusAfterAction);
         emitUserStatusChangeEvent(username, statusAfterAction);
     }
     catch (error)
