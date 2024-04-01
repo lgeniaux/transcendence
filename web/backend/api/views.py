@@ -89,8 +89,13 @@ class UserLogin(APIView):
                         status=status.HTTP_200_OK,
                     )
                 else:
+                    token.delete()
+                    token = Token.objects.create(user=user)
+                    user.online_status = True
+                    user.save()
                     return Response(
-                        {"detail": "You are already logged in on another device, please log out first"}, status=status.HTTP_401_UNAUTHORIZED
+                        {"detail": "Success", "auth_token": token.key},
+                        status=status.HTTP_200_OK,
                     )
             else:
                 return Response(

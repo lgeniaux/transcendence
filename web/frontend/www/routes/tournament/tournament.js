@@ -101,6 +101,7 @@ async function createTournament()
         const result = await response.json();
         console.log('Tournament created:', result);
         sessionStorage.setItem('currentTournamentId', result.tournament_id);
+        window.location.href = '/dashboard';
         
         removeCreateTournamentOverlay();
 
@@ -233,6 +234,7 @@ window.goToGame = async (gameId, type)=>
     } else {
         sessionStorage.setItem('endGameRedirect', '/');
     }
+    window.location.href = '/game';
 }
 
 async function updateTournamentBracket(state) {
@@ -328,7 +330,6 @@ export async function init()
     if (!tournamentId)
     {
         displayCreateTournamentForm();
-        initTournamentCreateButton();
     }
     else
     {

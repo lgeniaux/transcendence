@@ -1,7 +1,7 @@
 export const routes = {
     '/': {
         html: '/frontend/www/home.html',
-        css: '/frontend/www/home.css',
+        css: '/static/css/home.css',
     },
     '/login': {
         html: '/frontend/www/routes/auth/login.html',
