@@ -11,7 +11,7 @@ export function initWebsocket()
         const sender = message.sender;
 
         if (sender === window.targetUsername)
-            displayMessage(message.message, sender);
+            displayMessage(message.message, false);
     };
 
     webSocket.onerror = function(event) {
