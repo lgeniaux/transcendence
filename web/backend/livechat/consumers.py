@@ -30,7 +30,6 @@ class LiveChatConsumer(AsyncWebsocketConsumer):
 
     async def receive(self, text_data):
         data = json.loads(text_data)
-        print(data)
         if not data.get("message") or not data.get("username"):
             print("no message or target_username")
             return
