@@ -312,10 +312,6 @@ async function displayTournamentView()
         `;
         tournamentContainer.innerHTML += winnerHTML;
     }
-    else
-    {
-        const users = await fetchAllUsers();
-    }
     updateTournamentBracket(state);   
 }
 
