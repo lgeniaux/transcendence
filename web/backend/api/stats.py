@@ -81,8 +81,10 @@ class GetUserStats(APIView):
             user_stats = {
                 'tournaments_played': fetched_user.tournaments.filter(state__status='finished').count(),
                 'tournaments_won': fetched_user.tournaments.filter(state__winner=fetched_user.username, state__status='finished').count(),
+                'tournament_winrate': fetched_user.tournaments.filter(state__status='finished').count() / fetched_user.tournaments.count() * 100 if fetched_user.tournaments.count() > 0 else 0,
                 'games_played': finished_games.count(),
                 'games_won': finished_games.filter(winner=fetched_user).count(),
+                'game_winrate': finished_games.filter(winner=fetched_user).count() / finished_games.count() * 100 if finished_games.count() > 0 else 0,
             }
 
             # Calculate average scored value
@@ -103,13 +105,34 @@ class GetUserStats(APIView):
                 )
             ).aggregate(Avg('opponent_score'))['opponent_score__avg'] or 0
 
-            game_ids_history = list(finished_games.values_list('game_id', flat=True))
-            tournament_ids_history = list(fetched_user.tournaments.filter(state__status='finished').values_list('id', flat=True))
+            # Get game history (return, game_id, player1 username, player2 username, winner username, score_player1, score_player2, start_time for each finished game)
+            game_history = []
+            for game in finished_games:
+                game_history.append({
+                    'game_id': game.game_id,
+                    'player1': game.player1.username,
+                    'player2': game.player2.username,
+                    'winner': game.winner.username if game.winner else None,
+                    'score_player1': game.score_player1,
+                    'score_player2': game.score_player2,
+                    'start_time': game.start_time,
+                    'tournament_id': game.tournament.id if game.tournament else 'None',
+                })
+            
+            # Get tournament history (return, tournament_id, name, creator username, start_time, end_time, winner username, status for each finished tournament)
+            tournament_history = []
+            for tournament in fetched_user.tournaments.filter(state__status='finished'):
+                tournament_history.append({
+                    'tournament_id': tournament.id,
+                    'name': tournament.name,
+                    'start_time': tournament.start_time,
+                    'winner': tournament.state['winner'],
+                })
 
             return Response({
                 'user_stats': user_stats, 
-                'game_ids_history': game_ids_history, 
-                'tournament_ids_history': tournament_ids_history
+                'game_history': game_history, 
+                'tournament_history': tournament_history
             })
 
         except User.DoesNotExist:

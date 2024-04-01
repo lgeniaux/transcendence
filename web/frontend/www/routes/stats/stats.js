@@ -29,13 +29,23 @@ async function fetchStats()
 
 export async function init()
 {
-    // await fetchStats();
+    const   response = await fetchStats();
 
-    // Example
-    changeGraphPercentage('casual', 70);
-    changeGraphPercentage('tournament', 45);
-    displayGameHistory('vimercie', 'kolargole', 'Victory', '5 - 3');
+    updateUsername(sessionStorage.getItem('currentStatsUsername'));
+    changeGraphPercentage('casual', response.user_stats.game_winrate);
+    changeGraphLabel('casual', response.user_stats.game_winrate);
+
+    changeGraphPercentage('tournament', response.user_stats.tournament_winrate);
+    changeGraphLabel('tournament', response.user_stats.tournament_winrate);
+
+
     displayTournamentHistory('vimercie', 'Victory', 'Finals');
+}
+
+function updateUsername(username)
+{
+    var usernameElement = document.getElementById('stats-username');
+    usernameElement.innerText = username + "'s stats";
 }
 
 function displayGameHistory(player1Name, player2Name, gameOutcome, score)
@@ -86,4 +96,10 @@ function changeGraphPercentage(section, percentage)
 
     var newHeight = maxHeight * (percentage / 100);
     column.style.height = newHeight + 'px';
+}
+
+function changeGraphLabel(section, percentage)
+{
+    var label = document.getElementById(section + '-percentage');
+    label.innerText = Math.round(percentage) + '%';
 }
