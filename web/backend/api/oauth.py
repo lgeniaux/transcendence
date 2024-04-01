@@ -51,8 +51,12 @@ class CodeForToken(APIView):
                     if not created:
                         token.delete()
                         token = Token.objects.create(user=existing_oauth_user)
+                        existing_oauth_user.is_active = True
+                        existing_oauth_user.save()
                         return Response({"detail": "Success", "auth_token": token.key}, status=status.HTTP_200_OK)
                     else:
+                        existing_oauth_user.is_active = True
+                        existing_oauth_user.save()
                         return Response({"detail": "Success", "auth_token": token.key}, status=status.HTTP_200_OK)
                 elif existing_user:
                     return Response({"detail": "A user with this email or username already exists."}, status=status.HTTP_409_CONFLICT)
@@ -78,6 +82,8 @@ class CodeForToken(APIView):
 
 
                     token, _ = Token.objects.get_or_create(user=user)
+                    user.is_active = True
+                    user.save()
                     return Response({"detail": "Success", "auth_token": token.key}, status=status.HTTP_200_OK)
 
         return Response(token_response.json(), status=token_response.status_code)
