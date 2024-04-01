@@ -52,8 +52,8 @@ class CodeForToken(APIView):
                         return Response({"detail": "You are already logged in on another device."}, status=status.HTTP_409_CONFLICT)
                     else:
                         return Response({"detail": "Success", "auth_token": token.key}, status=status.HTTP_200_OK)
-                        
-                else if existing_user:
+
+                elif existing_user:
                     return Response({"detail": "A user with this email or username already exists."}, status=status.HTTP_409_CONFLICT)
                 else:
                     try:

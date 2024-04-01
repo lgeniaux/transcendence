@@ -64,8 +64,7 @@ function displayUsers(users)
 
     users.forEach(user => {
         var actionContainerId = `actions-${user.username}`;
-        var avatarSrc = 'https://toppng.com/uploads/preview/tumblr-aesthetic-icon-iconic-icons-circle-polaroid-ico-11562965806b70awpatjs.png';
-
+        var avatarSrc = user.avatar ? user.avatar : 'media/zippy.jpg';
         var userHTML = `
         <div class="card bg-dark text-white mb-3">
             <div class="card-body">
