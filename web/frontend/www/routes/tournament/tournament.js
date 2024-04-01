@@ -1,3 +1,9 @@
+export async function updateTournamentInterface()
+{
+    await fetchAllUsers();
+}
+
+
 export async function inviteToTournament(username, tournamentId)
 {
     const authToken = sessionStorage.getItem('authToken');
@@ -171,9 +177,9 @@ function displayInviteList(users)
         return;
     }
     inviteList.innerHTML = '';
-    var avatarSrc = '/frontend/www/images/avatar.png';
 
     users.forEach(user => {
+        const avatarSrc = user.avatar ? user.avatar : '/media/zippy.jpg';
         // if user is a friend, display the card
         if (user.status == 'friends')
         {
@@ -185,7 +191,6 @@ function displayInviteList(users)
                             <img src="${avatarSrc}" alt="User avatar" class="rounded-circle me-3" style="width: 60px; height: 60px;">
                             <div>
                                 <h3 class="h5 mb-0">${user.username}</h3>
-                                <p class="mb-0" id="status-${user.username}">Status: <span>${user.status}</span></p>
                             </div>
                         </div>
                         <button onclick="window.inviteToTournament('${user.username}', ${sessionStorage.getItem('currentTournamentId')})" class="btn btn-outline-success btn-sm" type="button">Invite</button>
@@ -218,7 +223,7 @@ async function fetchAllUsers() {
     }
 }
 
-export function goToGame(gameId, type)
+window.goToGame = async (gameId, type)=>
 {
     sessionStorage.setItem('currentGameId', gameId);
     if (type === 'game') {
@@ -229,8 +234,6 @@ export function goToGame(gameId, type)
         sessionStorage.setItem('endGameRedirect', '/');
     }
 }
-
-window.goToGame = goToGame;
 
 async function updateTournamentBracket(state) {
     const tournamentBracket = document.getElementsByClassName('tournament-bracket')[0];
@@ -282,7 +285,6 @@ async function displayTournamentView()
         return;
     }
 
-    //displayInviteContacts();
 
     if (state.nb_players === 4) {
         removeQuarterFinals();
@@ -311,6 +313,10 @@ async function displayTournamentView()
         </div>
         `;
         tournamentContainer.innerHTML += winnerHTML;
+    }
+    else if (state.state.status === "waiting for all participants to join")
+    {
+        fetchAllUsers();
     }
     updateTournamentBracket(state);   
 }

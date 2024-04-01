@@ -1,5 +1,6 @@
 import { getRequestHeaders } from '../utils.js';
 import { updateDashboardInterface } from '../../routes/dashboard/dashboard.js'
+import { updateTournamentInterface } from '../../routes/tournament/tournament.js'
 
 export async function handleUserAction(username, action)
 {
