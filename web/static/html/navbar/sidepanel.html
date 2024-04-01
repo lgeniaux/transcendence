@@ -1,0 +1,50 @@
+<html>
+
+	<nav class="sidePanel">
+
+		<button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasDarkNavbar" aria-controls="offcanvasDarkNavbar" aria-label="Toggle navigation">
+			<span class="navbar-toggler-icon"></span>
+		</button>
+
+		<div class="offcanvas offcanvas-start text-bg-dark" tabindex="-1" id="offcanvasDarkNavbar">
+
+			<div class="offcanvas-header">
+				<h5 class="offcanvas-title" id="offcanvasDarkNavbarLabel">Born2Pong</h5>
+				<button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+			</div>
+
+			<div class="offcanvas-body">
+				<ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
+					<li class="nav-item"><button class="btn" data-spa="/tournament" type="button" data-bs-dismiss="offcanvas">
+						<img src="static/img/trophy.svg" alt="Trophy" class="navIcon">
+						Tournament</button></li>
+
+					<li class="nav-item"><button class="btn" type="button" data-bs-dismiss="offcanvas" onclick="location.href='/duel'">
+						<img src="static/img/controller.svg" alt="Controller" class="navIcon">
+						1 vs 1</button></li>
+
+					<hr>
+
+					<li class="nav-item"><button class="btn" data-spa="/dashboard" type="button" data-bs-dismiss="offcanvas">
+						<img src="static/img/diagram-2.svg" alt="Dashboard" class="navIcon">
+						Dashboard</button></li>
+
+					<li class="nav-item"><button class="btn" data-spa="/profile" type="button" data-bs-dismiss="offcanvas">
+						<img src="static/img/person.svg" alt="Person" class="navIcon">
+						My profile</button></li>
+
+					<li class="nav-item"><button class="btn" data-spa="/stats" type="button" data-bs-dismiss="offcanvas">
+						<img src="static/img/bar-chart.svg" alt="Stats" class="navIcon">
+						My stats</button></li>
+
+					<li class="nav-item"><button class="btn" id="sidePanelLogoutButton" type="button" data-bs-dismiss="offcanvas">
+						<img src="static/img/disconnect.svg" alt="Disconnect" class="navIcon">
+						Disconnect</button></li>
+				</ul>
+			</div>
+
+		</div>
+
+	</nav>
+
+</html>
