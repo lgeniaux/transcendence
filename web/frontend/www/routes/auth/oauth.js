@@ -75,7 +75,7 @@ async function exchangeCodeForToken(code)
         }
         else
         {
-            alert('Error:', data.detail);
+            alert('Error: ' + data.detail);
             const state = sessionStorage.getItem('oauth_state');
             if (state)
                 sessionStorage.removeItem('oauth_state');
@@ -85,7 +85,7 @@ async function exchangeCodeForToken(code)
     }
     catch (error)
     {
-        alert('Error:', error);
+        alert('Error: ' + error);
     }
 }
 

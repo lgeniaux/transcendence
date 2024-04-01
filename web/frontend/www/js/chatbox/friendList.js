@@ -58,7 +58,7 @@ async function cb_displayUsers(users)
     users.sort((a, b) => b.online_status - a.online_status);
 
     if (users.length === 0) {
-        usersList.innerHTML = "<p>Aucun ami pour le moment</p>";
+        usersList.innerHTML = "<p>You have no friends (yet :P)</p>";
         return;
     }
 

@@ -12,13 +12,13 @@
     font-family: 'Fugaz One';
     color: white;
     text-decoration: underline;
-    margin: 50px;
+    margin: 20px;
     margin-left: 300px;
 }
 
 .stats #game-history, .stats #tournament-history
 {
-    max-height: 300px;
+    max-height: 240px;
     overflow-y: auto;
     overflow-x: hidden;
 }
@@ -47,7 +47,7 @@
 
 .stats .graph-container
 {
-    height: 200px;
+    height: 150px;
     width: 50px;
     border: 1px solid #000000;
     position: relative;

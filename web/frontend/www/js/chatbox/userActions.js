@@ -36,7 +36,7 @@ export async function handleUserAction(username, action)
     }
     catch (error)
     {
-        alert(`Error ${action}ing user ${username}:`, error);
+        alert(`Error ${action}ing user ${username}: ` + error);
     }
 }
 

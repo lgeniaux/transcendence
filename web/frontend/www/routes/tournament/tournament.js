@@ -13,8 +13,6 @@ export async function inviteToTournament(username, tournamentId)
         'Authorization': `Token ${authToken}`
     };
 
-    try
-    {
         fetch('/api/tournament/invite/', {
             method: 'POST',
             headers,
@@ -24,14 +22,19 @@ export async function inviteToTournament(username, tournamentId)
         }).then(data => {
             if (data.message)
                 alert('User invited successfully');
+            else if (Object.keys(data).length > 0){
+                var error = '';
+                for (var key in data)
+                {
+                    error += `${data[key]}\n`;
+                }
+                throw new Error(error);
+            }
             else
-                alert('Failed to invite user:', data.error || data.detail);
+                throw new Error('Could not invite user');
+        }).catch(error => {
+            alert(error.message);
         });
-    }
-    catch (error)
-    {
-        alert('Failed to invite user:', error);
-    }
 }
 
 window.inviteToTournament = inviteToTournament;

@@ -45,7 +45,7 @@ async function loginUser()
     } 
     catch (error)
     {
-        alert('Error:', error);
+        alert('Error: ' + error);
     }
 }
 
