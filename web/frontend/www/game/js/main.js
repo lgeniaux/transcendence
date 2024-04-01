@@ -172,13 +172,7 @@ async function launchGame(player1 = "Left player", player2 = "Right player", pro
 		properties.meshes.paddleL.name = player1;
 		properties.meshes.paddleR.name = player2;
 		properties.promise = resolve;
-		resolve({
-			player1: properties.meshes.paddleL.name,
-			player2: properties.meshes.paddleR.name,
-			score1: 5,
-			score2: 0
-		}
-		)
+		
 		requestAnimationFrame(() => render(properties));
 		document.querySelector('#endScreen').style.opacity = '0';
 	});
