@@ -30,10 +30,11 @@ class GetUserStats(APIView):
                 (Q(player1=fetched_user) | Q(player2=fetched_user)) & Q(status='finished')
             )
             
+            finished_tournaments = Tournament.objects.filter(participants=fetched_user, state__status='finished')
             user_stats = {
-                'tournaments_played': fetched_user.tournaments.filter(state__status='finished').count(),
-                'tournaments_won': fetched_user.tournaments.filter(state__winner=fetched_user.username, state__status='finished').count(),
-                'tournament_winrate': fetched_user.tournaments.filter(state__status='finished').count() / fetched_user.tournaments.count() * 100 if fetched_user.tournaments.count() > 0 else 0,
+                'tournaments_played': finished_tournaments.count(),
+                'tournaments_won': finished_tournaments.filter(state__winner=fetched_user.username).count(),
+                'tournament_winrate': finished_tournaments.filter(state__winner=fetched_user.username).count() / finished_tournaments.count() * 100 if finished_tournaments.count() > 0 else 0,
                 'games_played': finished_games.count(),
                 'games_won': finished_games.filter(winner=fetched_user).count(),
                 'game_winrate': finished_games.filter(winner=fetched_user).count() / finished_games.count() * 100 if finished_games.count() > 0 else 0,
@@ -69,7 +70,8 @@ class GetUserStats(APIView):
                 })
             
             tournament_history = []
-            for tournament in fetched_user.tournaments.filter(state__status='finished'):
+            # filter tournaments where the user is in "participants" array and the tournament is finished
+            for tournament in Tournament.objects.filter(participants=fetched_user, state__status='finished'):
                 tournament_history.append({
                     'tournament_id': tournament.id,
                     'name': tournament.name,
