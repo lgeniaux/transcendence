@@ -1,4 +1,4 @@
-import { createGame, launchGame } from "/frontend/www/game/js/main.js";
+import { createGame, launchGame } from "/frontend/www/js/game/main.js";
 
 async function displayGameView(game, fetch = false) {
     if (fetch) {

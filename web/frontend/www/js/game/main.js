@@ -9,7 +9,7 @@ import { InvertShader } from './shaders/invertShader.js';
 import { createMeshes } from './createMeshes.js';
 import { createEventListeners } from './eventListeners.js';
 import { render, renderOnce } from './render.js';
-import { loadContent } from '../../js/utils.js';
+import { loadContent } from '../utils.js';
 
 /**
  * @returns {Object}: An object with the properties of the game:
@@ -172,13 +172,7 @@ async function launchGame(player1 = "Left player", player2 = "Right player", pro
 		properties.meshes.paddleL.name = player1;
 		properties.meshes.paddleR.name = player2;
 		properties.promise = resolve;
-		resolve({
-			player1: properties.meshes.paddleL.name,
-			player2: properties.meshes.paddleR.name,
-			score1: 5,
-			score2: 0
-		}
-		)
+		
 		requestAnimationFrame(() => render(properties));
 		document.querySelector('#endScreen').style.opacity = '0';
 	});

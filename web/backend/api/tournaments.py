@@ -69,7 +69,7 @@ class TournamentSerializer(serializers.ModelSerializer):
     def validate(self, data):
         if data["nb_players"] not in [4, 8, 16]:
             raise serializers.ValidationError(
-                "Number of participants must be 4, 8 or 16."
+                "Number of participants must be 4 or 8."
             )
         return data
 

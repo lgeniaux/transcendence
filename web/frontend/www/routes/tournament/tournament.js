@@ -23,14 +23,14 @@ export async function inviteToTournament(username, tournamentId)
             return response.json();
         }).then(data => {
             if (data.message)
-                console.log('User invited successfully');
+                alert('User invited successfully');
             else
-                console.log('Failed to invite user:');
+                alert('Failed to invite user:', data.error || data.detail);
         });
     }
     catch (error)
     {
-        console.error('Failed to invite user:', error);
+        alert('Failed to invite user:', error);
     }
 }
 
@@ -41,7 +41,7 @@ function displayCreateTournamentForm()
     const overlayHTML = `
         <div id="createTournamentOverlay" class="d-flex justify-content-center align-items-center" tabindex="-1" style="position: fixed; inset: 0; background-color: rgba(0, 0, 0, 0.5); z-index: 1050;">
         <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content" style="background-color: #5a2b00; color: white;">
+        <div class="modal-content" style="background-color: rgb(24, 24, 24); color: white;">
             <div class="modal-header border-0">
             <h5 class="modal-title" id="createTournamentOverlayLabel"><strong>Create Tournament</strong></h5>
             </div>
@@ -95,9 +95,20 @@ async function createTournament()
             body: JSON.stringify(data)
         });
 
-        if (!response.ok) throw new Error('Failed to create tournament');
-        
         const result = await response.json();
+
+        if (!response.ok && Object.keys(result).length > 0)
+        {
+            var error = '';
+            for (var key in result)
+            {
+                error += `${key}: ${result[key]}\n`;
+            }
+            throw new Error(error);
+        }
+        else if (!response.ok)
+            throw new Error('Could not create tournament');
+
         sessionStorage.setItem('currentTournamentId', result.tournament_id);
         window.location.href = '/dashboard';
         
@@ -107,7 +118,7 @@ async function createTournament()
     }
     catch (error)
     {
-        console.error('Failed to create tournament:', error.message);
+        alert(error.message);
     }
 }
 
