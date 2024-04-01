@@ -23,6 +23,11 @@ class UserProfile(APIView):
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     def put(self, request, *args, **kwargs):
+        if request.user.is_oauth:
+            return Response(
+                {"detail": "You cannot edit your profile if you are an oauth user."},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
         serializer = UserChangeSerializer(request.user, data=request.data, partial=True)
         if serializer.is_valid():
             serializer.save()
