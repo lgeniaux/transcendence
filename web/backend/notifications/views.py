@@ -24,7 +24,7 @@ def send_notification_to_user(notification):
         group_name,
         {
             "type": "notify",
-            "data": {  #
+            "data": {
                 "id": notification.id,
                 "message": notification.message,
                 "notification_type": notification.notification_type,

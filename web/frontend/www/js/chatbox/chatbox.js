@@ -14,7 +14,7 @@ export async function loadChatbox()
     }
     catch (error)
     {
-        console.error('Erreur lors du chargement de la chatbox :', error);
+        console.error('Error loading chatbox:', error);
     }
 }
 
@@ -29,16 +29,11 @@ function attachChatboxEvents()
             try
             {
                 await loadFriendList();
-                console.log('Chatbox ouverte');
             }
             catch (error)
             {
-                console.error('Erreur lors du chargement de la liste d’amis:', error);
+                console.error('Error loading friend list:', error);
             }
-        });
-
-        chatboxCollapse.addEventListener('hide.bs.collapse', function () {
-            console.log('Chatbox fermée');
         });
     }
 }
@@ -63,13 +58,6 @@ window.startGameWithUser = async (username)=>{
         body: JSON.stringify(data)
     }).then(response => {
         return response.json();
-    }).then(data => {
-        console.log(data);
-    });
+    })
 
 }
-
-// make it testable in console browser by exposing it
-window.loadChatbox = loadChatbox;
-window.attachChatboxEvents = attachChatboxEvents;
-window.startGameWithUser = startGameWithUser;

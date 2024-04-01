@@ -1,5 +1,3 @@
-// oauth.js
-
 import { getRequestHeaders } from '../../js/utils.js';
 
 export async function init()
@@ -33,7 +31,6 @@ function redirectTo42OAuth()
 
     sessionStorage.setItem('oauth_state', state);
 
-    // Redirect to the 42 OAuth page
     window.location.href = authUrl;
 }
 

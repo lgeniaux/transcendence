@@ -92,7 +92,6 @@ class TournamentSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         name = validated_data.pop("name")
         nb_players = validated_data.pop("nb_players")
-        # Ensure 'participants_username' is removed from validated_data before creating the Tournament instance
         tournament = Tournament.objects.create(
             name=name, creator=self.context["request"].user, nb_players=nb_players
         )
@@ -157,7 +156,6 @@ class GetTournamentState(APIView):
         try:
             tournament = Tournament.objects.get(id=tournament_id)
             tournament.update_state()
-            # game_to_play is the game id that the user have to play
             game_to_play = None
             if tournament.state["status"] == "in progress":
                 game_to_play = tournament.get_game_to_play(request.user)
@@ -194,7 +192,6 @@ class InvitePlayerToTournamentSerializer(serializers.Serializer):
                 "You are not the creator of this tournament."
             )
 
-        # check if number of current participants + current pending inviation + the new invitation is less than max number of participants
         if (
             tournament.participants.count()
             + Notification.objects.filter(
@@ -209,13 +206,11 @@ class InvitePlayerToTournamentSerializer(serializers.Serializer):
                 "Maximum number of invitations + participants reached."
             )
 
-        # if the user is already a participant in the tournament
         if tournament.participants.filter(username=data["username"]).exists():
             raise serializers.ValidationError(
                 "User is already a participant in the tournament."
             )
 
-        # if there is not already a notification for this user on the same tournament
         if Notification.objects.filter(
             recipient__username=data["username"],
             data__tournament_id=tournament_id,
@@ -232,7 +227,6 @@ class InvitePlayerToTournamentSerializer(serializers.Serializer):
             raise serializers.ValidationError("You cannot invite yourself.")
         if not User.objects.filter(username=username).exists():
             raise serializers.ValidationError("User with this username does not exist.")
-        # if the request user is in the blocklist of the user
         if request_user in player.blocklist.all():
             raise serializers.ValidationError("User has blocked you.")
         if player in request_user.blocklist.all():

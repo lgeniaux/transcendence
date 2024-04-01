@@ -30,7 +30,7 @@ async function fetchAllUsers()
         const data = await response.json();
 
         allUsers = data;
-        displayUsers(allUsers); // Assurez-vous que cette fonction est prête à gérer les données des utilisateurs.
+        displayUsers(allUsers);
     }
     catch (error)
     {
@@ -125,7 +125,7 @@ export async function manageInvite(notificationId, action)
         const response = await fetch('/api/respond-to-invite/', {
             method: 'POST',
             credentials: 'include',
-            headers: getRequestHeaders(), // Utilisation de getRequestHeaders de utils.js
+            headers: getRequestHeaders(),
             body: JSON.stringify({ notification_id: notificationId, action: action })
         });
 
@@ -133,8 +133,6 @@ export async function manageInvite(notificationId, action)
             throw new Error(`HTTP error! status: ${response.status}`);
 
         const data = await response.json();
-        console.log('Response to invite:', data);
-        // delete notification from DOM
         const notificationElement = document.querySelector(`.notification[data-notification-id="${notificationId}"]`);
 
         if (notificationElement.classList.contains('tournament-invite'))
@@ -223,8 +221,6 @@ async function fetchAndDisplayStoredNotifications()
         const data = await response.json();
 
         data.forEach(notification => {
-            if (notification.data['status'] === 'pending')
-                console.log('Pending notification:', notification);
             displayNotification(notification);
         });
     }
@@ -245,16 +241,7 @@ async function initNotifications()
 
     webSocket.onmessage = function (event) {
         const notification = JSON.parse(event.data);
-        console.log('Live notification:', notification);
         displayNotification(notification);
-    }
-
-    webSocket.onopen = function (event) {
-        console.log('WebSocket opened');
-    }
-
-    webSocket.onclose = function (event) {
-        console.log('WebSocket closed');
     }
 
     webSocket.onerror = function (event) {
@@ -290,7 +277,6 @@ function displayTournaments(tournaments)
                     </div>
                 `;
 
-                // The click event listener is handled in your main.js, so no need to add it here
                 tournamentsList.appendChild(tournamentCard);
             }
         });
@@ -311,7 +297,6 @@ async function initTournamentsList()
             throw new Error(`HTTP error! status: ${response.status}`);
 
         const data = await response.json();
-        console.log('Tournaments:', data);
         displayTournaments(data);
     }
     catch (error)

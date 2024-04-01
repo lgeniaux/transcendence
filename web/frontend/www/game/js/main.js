@@ -50,7 +50,6 @@ async function createGame() {
 			camera.aspect = canvas.clientWidth / canvas.clientHeight;
 			camera.updateProjectionMatrix();
 			const lookat = model.getObjectByName('CameraLookat');
-			/** @type {THREE.Mesh} */
 			const screen = model.getObjectByName('Screen');
 			const screenSize = screen.geometry.boundingBox.getSize(new THREE.Vector3());
 			const aspect = screenSize.z / screenSize.y;
@@ -148,7 +147,7 @@ async function createGame() {
 			};
 			properties.clock.stop();
 		
-			createEventListeners(properties, meshes.ball, meshes.paddleL, meshes.paddleR, rules, visibleHeight);
+			createEventListeners(properties);
 			renderOnce(properties);
 			resolve(properties);
 			displayTutorial();
@@ -173,7 +172,13 @@ async function launchGame(player1 = "Left player", player2 = "Right player", pro
 		properties.meshes.paddleL.name = player1;
 		properties.meshes.paddleR.name = player2;
 		properties.promise = resolve;
-		
+		resolve({
+			player1: properties.meshes.paddleL.name,
+			player2: properties.meshes.paddleR.name,
+			score1: 5,
+			score2: 0
+		}
+		)
 		requestAnimationFrame(() => render(properties));
 		document.querySelector('#endScreen').style.opacity = '0';
 	});
@@ -187,5 +192,4 @@ async function displayTutorial()
 }
 
 
-//window.propreties = await createGame();
 export { launchGame, createGame, displayTutorial };

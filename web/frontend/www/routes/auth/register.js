@@ -5,7 +5,7 @@ export async function init()
     if (registerBtn)
     {
         registerBtn.addEventListener('click', async function (event) {
-            event.preventDefault(); // Prevent default form submission
+            event.preventDefault();
 
             if (!checkPassword())
                 return;

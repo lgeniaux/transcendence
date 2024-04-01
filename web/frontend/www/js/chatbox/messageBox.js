@@ -12,19 +12,15 @@ window.loadMessageBox = loadMessageBox;
 
 export function displayMessage(content, isSentByUser)
 {
-    // Crée un conteneur pour le message qui occupe toute la largeur
     const messageContainer = document.createElement('div');
     messageContainer.classList.add('message-container', isSentByUser ? 'sent' : 'received');
 
-    // Crée l'élément de message avec le contenu et le style approprié
     const messageElement = document.createElement('div');
     messageElement.classList.add('message', isSentByUser ? 'message-sent' : 'message-received');
     messageElement.innerText = `${content}`;
 
-    // Ajoute le messageElement comme enfant du messageContainer
     messageContainer.appendChild(messageElement);
 
-    // Ajoute le messageContainer au conteneur de messages global
     const messagesContainer = document.getElementById('messages');
     messagesContainer.appendChild(messageContainer);
     messagesContainer.scrollTop = messagesContainer.scrollHeight;

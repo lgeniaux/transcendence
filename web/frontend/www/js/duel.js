@@ -18,7 +18,6 @@ async function getUserInfos(auth_token = null) {
         headers: headers
     })
 	.then(response => response.json())
-	.catch(error => console.error('Error:', error));
 }
 
 async function startGame() {
@@ -28,7 +27,7 @@ async function startGame() {
             document.getElementsByClassName("score")[i].style.opacity = 1;
         }
     }, 3000);
-    const userInfos = await getUserInfos(sessionStorage.getItem('authToken')).catch(error => console.error('Error:', error));
+    const userInfos = await getUserInfos(sessionStorage.getItem('authToken'));
     if (userInfos && userInfos.username)
         await launchGame(userInfos.username, "Guest", properties)
     else

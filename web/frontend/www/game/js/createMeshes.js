@@ -11,7 +11,7 @@ import { Explosion } from './classes/Explosion.js';
  * @param {*} rules The rules of the game
  * @returns {Object} An object containing the meshes
  */
-function createMeshes(scene, visibleWidth, visibleHeight, rules, model) {
+function createMeshes(scene, visibleWidth, visibleHeight, rules) {
 
 	const meshes = {};
 
@@ -34,10 +34,10 @@ function createMeshes(scene, visibleWidth, visibleHeight, rules, model) {
 	meshes.ball = ball;
 	scene.add(ball.mesh);
 
-	const paddleL = new Paddle(model.getObjectByName('Circle'), { x: -(visibleWidth / 2) / 1.3, y: 0, z: 0 }, { 'up': 'KeyW', 'down': 'KeyS' }, rules.effect3D);
+	const paddleL = new Paddle({ x: -(visibleWidth / 2) / 1.3, y: 0, z: 0 }, { 'up': 'KeyW', 'down': 'KeyS' }, rules.effect3D);
 	meshes.paddleL = paddleL;
 	scene.add(paddleL.mesh);
-	const paddleR = new Paddle(model.getObjectByName('Circle.001'), { x: (visibleWidth / 2) / 1.3, y: 0, z: 0 }, { 'up': 'ArrowUp', 'down': 'ArrowDown' }, rules.effect3D);
+	const paddleR = new Paddle({ x: (visibleWidth / 2) / 1.3, y: 0, z: 0 }, { 'up': 'ArrowUp', 'down': 'ArrowDown' }, rules.effect3D);
 	meshes.paddleR = paddleR;
 	scene.add(paddleR.mesh);
 

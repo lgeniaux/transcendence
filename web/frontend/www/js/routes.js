@@ -55,9 +55,6 @@ export const routes = {
         js: '/frontend/www/routes/stats/stats.js',
         requires_auth: true
     },
-    '/old_stats': { // to remove
-        html: '/frontend/www/routes/stats/old_stats.html'
-    },
     '/gdpr': {
         html: '/frontend/www/routes/gdpr/gdpr.html',
         css: '/frontend/www/routes/gdpr/gdpr.css',

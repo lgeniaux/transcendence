@@ -66,5 +66,4 @@ class NotificationConsumer(AsyncWebsocketConsumer):
             pass
 
     async def notify(self, event):
-        # Forward the structured data to the client
         await self.send(text_data=json.dumps(event["data"]))

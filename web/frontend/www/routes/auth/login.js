@@ -1,6 +1,5 @@
 import { getRequestHeaders } from '../../js/utils.js';
 
-// Function to initialize the login form
 export function init()
 {
     var loginBtn = document.getElementById('loginBtn');

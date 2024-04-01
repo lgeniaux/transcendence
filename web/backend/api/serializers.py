@@ -25,16 +25,14 @@ class UserChangeSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ["username", "avatar"]
-        
-    def validate_username(self, value):
-        # validate username
-        username = value
+
+    def validate(self, data):
+        username = data.get("username")
         if username is not None:
             if User.objects.filter(username=username).exists():
                 raise serializers.ValidationError(
                     "A user with that username already exists."
                 )
-            # username must be at least 5 characters long, and contain only alphanumeric characters, and no spaces, and no special characters
             if len(username) < 5:
                 raise serializers.ValidationError(
                     "Username must be at least 5 characters long."
@@ -102,8 +100,6 @@ class UserLoginSerializer(serializers.Serializer):
     password = serializers.CharField(style={"input_type": "password"}, write_only=True)
 
     def validate(self, data):
-        # if "email" in data:
-        #     email = data["email"]
         email = data.get("email")
         password = data.get("password")
 
@@ -133,7 +129,6 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
     def validate_email(self, value):
         if User.objects.filter(email=value).exists():
             raise serializers.ValidationError("A user with that email already exists.")
-        # check the regex for email
         email_regex = r"(^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$)"
         if not re.match(email_regex, value):
             raise serializers.ValidationError("Enter a valid email address.")
@@ -144,7 +139,6 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError(
                 "A user with that username already exists."
             )
-        # username must be at least 5 characters long, and contain only alphanumeric characters, and no spaces, and no special characters
         if len(value) < 5:
             raise serializers.ValidationError(
                 "Username must be at least 5 characters long."
@@ -156,7 +150,6 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
         return value
 
     def validate_password(self, value):
-        # password must be at least 8 characters long, and contain at least one uppercase letter, one lowercase letter, one digit, and one special character
         if len(value) < 8:
             raise serializers.ValidationError(
                 "Password must be at least 8 characters long."
@@ -180,30 +173,23 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
         return value
     
     def validate_avatar(self, value):
-        # Check if the image is a valid image file and open it
         try:
             img = Image.open(value)
         except IOError:
             raise serializers.ValidationError("Invalid image file")
         
-        # Check if the image is too large
         if value.size > 2 * 1024 * 1024:  # 2MB
             raise serializers.ValidationError("Image file is too large ( > 2mb )")
         
-        # Check if the image is 128 x 128 pixels
         if img.width != 128 or img.height != 128:
             raise serializers.ValidationError("Image file must be 128 x 128 pixels")
         
-        # Check file extension
         ext = os.path.splitext(value.name)[1].lower()
         if ext not in ['.jpg', '.jpeg', '.png']:
             raise serializers.ValidationError("Image file must be a jpg or png file")
         
-        # Generate a new file name using UUID to ensure uniqueness
-        # Retain the original extension, but sanitize the file name
         new_name = f"avatar_{self.initial_data['username']}{uuid4().hex}{ext}"
 
-        # Assign the new name back to the file
         value.name = new_name
 
         return value
@@ -229,7 +215,6 @@ class ChangePasswordSerializer(serializers.Serializer):
         return data
 
     def validate_new_password(self, value):
-        # password must be at least 8 characters long, and contain at least one uppercase letter, one lowercase letter, one digit, and one special character
         if len(value) < 8:
             raise serializers.ValidationError(
                 "Password must be at least 8 characters long."

@@ -4,7 +4,6 @@ export async function loadNavbar()
 {
     try
     {
-        // Charger les composants spécifiques de la navbar
         await loadContent('/frontend/www/html/navbar/sidepanel.html', '#sidePanel', 'barre de navigation');
         await loadContent('/frontend/www/html/navbar/profilemodal.html', '#profileModal', 'bouton de profil');
         await loadUsernameIntoModal();
@@ -12,7 +11,7 @@ export async function loadNavbar()
     }
     catch (error)
     {
-        console.error('Erreur lors du chargement de la navbar :', error);
+        console.error('Error loading navbar:', error);
     }
 }
 
@@ -29,9 +28,8 @@ async function loadUsernameIntoModal()
         if (!response.ok)
             throw new Error('Failed to fetch user profile');
 
-        const data = await response.json(); // Parse la réponse JSON
+        const data = await response.json();
 
-        // Met à jour l'élément avec l'ID `modal-username` avec le username de l'utilisateur
         const modalUsernameElement = document.getElementById('modal-username');
 
         if (modalUsernameElement)

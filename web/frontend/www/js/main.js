@@ -1,5 +1,3 @@
-// main.js
-
 import { navigate, handleNavigationClick, isAuthenticated } from './navigation.js';
 import { loadNavbar } from './navbar.js';
 import { loadChatbox } from './chatbox/chatbox.js';
@@ -17,5 +15,4 @@ document.addEventListener('DOMContentLoaded', async () => {
     });
 });
 
-// Ensure handleNavigationClick is correctly imported and used.
 document.addEventListener('click', handleNavigationClick);

@@ -49,7 +49,6 @@ class CodeForToken(APIView):
                 if existing_oauth_user:
                     token, created = Token.objects.get_or_create(user=existing_oauth_user)
                     if not created:
-                        # revoke old token
                         token.delete()
                         token = Token.objects.create(user=existing_oauth_user)
                         return Response({"detail": "Success", "auth_token": token.key}, status=status.HTTP_200_OK)
@@ -62,7 +61,7 @@ class CodeForToken(APIView):
                     if avatar_response.status_code == 200:
                         avatar_file = ContentFile(avatar_response.content, name=user_info["login"] + "_avatar.jpg")
                     else:
-                        avatar_file = None  # or set a default avatar
+                        avatar_file = None
 
                     try:
                         user = User.objects.create(
@@ -81,5 +80,4 @@ class CodeForToken(APIView):
                     token, _ = Token.objects.get_or_create(user=user)
                     return Response({"detail": "Success", "auth_token": token.key}, status=status.HTTP_200_OK)
 
-        # Fallback response in case of failure
         return Response(token_response.json(), status=token_response.status_code)

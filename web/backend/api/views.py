@@ -11,9 +11,6 @@ from rest_framework.authtoken.models import Token
 from rest_framework.authentication import TokenAuthentication
 import random
 
-# LIST OF ALL API ENDPOINTS
-
-
 class GameList(APIView):
     """
     List all games
@@ -21,7 +18,7 @@ class GameList(APIView):
 
     permission_classes = [
         IsAuthenticated
-    ]  # this will make sure that the user is authenticated before accessing the endpoint
+    ]
 
     def get(self, request, format=None):
         games = Game.objects.all()
@@ -78,7 +75,6 @@ class UserLogin(APIView):
                     status=status.HTTP_401_UNAUTHORIZED,
                 )
 
-            # Check if the password is correct
             if user.check_password(password):
                 token, created = Token.objects.get_or_create(user=user)
                 if created:

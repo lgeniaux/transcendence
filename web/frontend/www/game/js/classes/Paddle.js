@@ -1,7 +1,7 @@
 import * as THREE from 'three';
 
 class Paddle {
-	constructor(joystick, position = {x: 0, y:0, z:0}, keys = {'up': 'ArrowUp', 'down': 'ArrowDown'}, is_3D = false, width = 0.25, height = 1, color = 0xFEFEFE) {
+	constructor(position = {x: 0, y:0, z:0}, keys = {'up': 'ArrowUp', 'down': 'ArrowDown'}, is_3D = false, width = 0.25, height = 1, color = 0xFEFEFE) {
 		this.x = position.x;
 		this.y = position.y;
 		this.z = position.z;
@@ -26,12 +26,10 @@ class Paddle {
 		});
 		window.addEventListener('keyup', (event) => {
 			if (event.code == keys.up) {
-				// joystick.position.x += 15;
 				event.preventDefault();
 				this.Up = false;
 			}
 			else if (event.code == keys.down) {
-				// joystick.position.x -= 15;
 				event.preventDefault();
 				this.Down = false;
 			}

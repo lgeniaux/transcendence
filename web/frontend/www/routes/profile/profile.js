@@ -139,10 +139,6 @@ async function changePassword(event)
 
 }
 
-// window.initPageFunctions = window.initPageFunctions || [];
-// window.initPageFunctions.push(initProfilePage);
-
-
 async function deleteProfile(event)
 {
     event.preventDefault();
