@@ -5,7 +5,8 @@ export function initWebsocket()
     const auth_token = sessionStorage.getItem('authToken');
     const wsUrl = `wss://${window.location.host}/ws/chat/${auth_token}/`;
     const webSocket = new WebSocket(wsUrl);
-
+    window.webSocket = webSocket;
+    
     webSocket.onmessage = function(event) {
         const message = JSON.parse(event.data);
         console.log('Target username:', window.targetUsername)
@@ -13,12 +14,12 @@ export function initWebsocket()
         //get sender of the message
         const sender = message.sender;
         console.log('message :', message.message);
-
+        
         if (sender === window.targetUsername)
-            displayMessage(message.message, sender);
-    };
+        displayMessage(message.message, sender);
+};
 
-    webSocket.onopen = function() {
+    webSocket.onopen = function()   {
         console.log('Chatbox WebSocket opened');
     };
 
@@ -36,13 +37,20 @@ export function initWebsocket()
 // Fonction pour envoyer un message via WebSocket
 function sendMessageViaWebSocket(webSocket, message, targetUsername)
 {
-    //handle the case where a malicious user tries to send a NULL message
-    if (!message)
-        return false;
-    //limit the message size at 250 characters
-    if (message.length > 250)
+    // if (!targetUsername)
+    //     return (false)
+    // //handle the case where a malicious user tries to send a NULL message
+    // if (!message)
+    //     return false;
+    // //limit the message size at 250 characters
+    // if (message.length > 250)
+    // {
+    //     alert('Message too long. Maximum 250 characters allowed');
+    //     return false;
+    // }
+    if (!webSocket)
     {
-        alert('Message too long. Maximum 250 characters allowed');
+        console.error('WebSocket is not initialized. Cannot send message');
         return false;
     }
 
@@ -61,6 +69,9 @@ function sendMessageViaWebSocket(webSocket, message, targetUsername)
         return false;
     }
 }
+
+
+
 
 function attachFormSubmitListener(webSocket)
 {
@@ -103,3 +114,7 @@ function observeForm(webSocket)
     const config = { childList: true, subtree: true };
     observer.observe(document.body, config); // Commencez à observer le document entier.
 }
+
+window.initWebsocket = initWebsocket;
+console.log(window.webSocket);
+window.sendMessageViaWebSocket = sendMessageViaWebSocket;

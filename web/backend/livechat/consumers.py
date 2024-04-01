@@ -31,13 +31,32 @@ class LiveChatConsumer(AsyncWebsocketConsumer):
             )
 
     async def receive(self, text_data):
+        #validate message
         data = json.loads(text_data)
+        print(data)
+        if not data.get("message") or not data.get("target_username"):
+            return
         message = data["message"]
-        target_username = data.get("username")
+        target_username =  await self.get_user_by_username(data["target_username"])
+
+        # add http response
+        print("target_username", target_username)
+        if message is None or message == "":
+            print("message is None or empty")
+            return
+        if not target_username:
+            print("target_user not found")
+            return
+        if not target_username == self.user.username:
+            print("cannot send message to self")
+            return
+        if len(message) > 250:
+            print("message too long")
+            return
 
         if target_username:
             target_user = await self.get_user_by_username(target_username)
-            if target_user:
+            if target_user and message:
                 await self.save_private_message(message, target_user)
                 await self.channel_layer.group_send(
                     f"user_{target_user.id}",
