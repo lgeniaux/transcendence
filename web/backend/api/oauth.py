@@ -6,7 +6,7 @@ from rest_framework.authtoken.models import Token
 from django.conf import settings
 import requests
 from django.core.files.base import ContentFile
-
+import os
 from django.db import IntegrityError
 from django.db.models import Q
 
@@ -26,8 +26,8 @@ class CodeForToken(APIView):
             "https://api.intra.42.fr/oauth/token",
             data={
                 "grant_type": "authorization_code",
-                "client_id": "u-s4t2ud-4c5c2185a70974ac0cfdefacbe289d7ec81936940b6980d71e752c16ec1c5d17",
-                "client_secret": "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",
+                "client_id": os.environ.get("OAUTH2_CLIENT_ID"),
+                "client_secret": os.environ.get("OAUTH2_CLIENT_SECRET"),
                 "code": code,
                 "redirect_uri": redirect_uri,
             },

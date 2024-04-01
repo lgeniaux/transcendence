@@ -47,7 +47,13 @@ function handle42OAuthCallback()
         exchangeCodeForToken(code);
     } 
     else
+    {
         alert('State mismatch');
+        const state = sessionStorage.getItem('oauth_state');
+        if (state)
+            sessionStorage.removeItem('oauth_state');
+        window.location.href = '/login';
+    }
 }
 
 async function exchangeCodeForToken(code)
@@ -67,10 +73,14 @@ async function exchangeCodeForToken(code)
             sessionStorage.setItem('authToken', data.auth_token);
             window.location.href = '/';
         }
-        else if (data.detail)
-            alert(data.detail);
         else
-            alert('Invalid credentials');
+        {
+            alert('Error:', data.detail);
+            const state = sessionStorage.getItem('oauth_state');
+            if (state)
+                sessionStorage.removeItem('oauth_state');
+            window.location.href = '/login';
+        }
  
     }
     catch (error)
