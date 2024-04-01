@@ -71,6 +71,10 @@ export function handleNavigationClick(event)
             sessionStorage.setItem('currentTournamentId', target.dataset.spaId);
         else if (originalPath === '/tournament' && !target.dataset.spaId)
             sessionStorage.removeItem('currentTournamentId');
+        else if (originalPath === '/stats' && target.dataset.spaId)
+            sessionStorage.setItem('currentStatsUsername', target.dataset.spaId);
+        else if (originalPath === '/stats' && !target.dataset.spaId)
+            sessionStorage.setItem('currentStatsUsername', 'me');
 
         navigate(finalPath);
     }

@@ -45,7 +45,10 @@ export async function init()
 function updateUsername(username)
 {
     var usernameElement = document.getElementById('stats-username');
-    usernameElement.innerText = username + "'s stats";
+    if (username === 'me')
+        usernameElement.innerText = 'My stats';
+    else
+        usernameElement.innerText = username + "'s stats";
 }
 
 function displayGameHistory(player1Name, player2Name, gameOutcome, score)
