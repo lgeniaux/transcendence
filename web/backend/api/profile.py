@@ -57,16 +57,22 @@ class UserDelete(APIView):
             return Response(
                 {"detail": "User is not an active account"}, status=status.HTTP_400_BAD_REQUEST
             )
-        request.user.update_games_after_account_deletion()
-        request.user.update_notifications_after_account_deletion()
-        # replace username with a random uuid4 (20 chars)
-        request.user.username = str(uuid4())[:20]
-        request.user.email = str(uuid4())[:20] + "@deleted.com"
-        request.user.is_active = False
-        request.user.set_password(None)
-        request.user.auth_token.delete()
-        request.user.save()
-        #update_games_after_account_deletion
-        return Response(
-            {"detail": "User successfully deleted"}, status=status.HTTP_200_OK
-        )
+        try:
+            request.user.update_games_after_account_deletion()
+            request.user.update_notifications_after_account_deletion()
+            request.user.delete_sent_messages()
+            # replace username with a random uuid4 (20 chars)
+            request.user.username = str(uuid4())[:20]
+            request.user.email = str(uuid4())[:20] + "@deleted.com"
+            request.user.is_active = False
+            request.user.set_password(None)
+            request.user.auth_token.delete()
+            request.user.save()
+            #update_games_after_account_deletion
+            return Response(
+                {"detail": "User successfully deleted"}, status=status.HTTP_200_OK
+            )
+        except Exception as e:
+            return Response(
+                {"detail": "User could not be deleted"}, status=status.HTTP_400_BAD_REQUEST
+            )

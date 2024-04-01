@@ -8,6 +8,7 @@ from notifications.models import Notification
 from notifications.views import send_notification
 from tournaments.views import broadcast_to_tournament_group
 import random
+from livechat.models import PrivateMessage
 
 
 # Louis: j'ai remove les attributs en doublons avec la classe de base de django
@@ -64,7 +65,14 @@ class User(AbstractUser):
             notification.data["status"] = "denied"
             notification.save()
 
+    def delete_sent_messages(self):
+        messages = PrivateMessage.objects.filter(
+            sender=self
+        )
+        for message in messages:
+            message.delete()
         
+
 
         
 

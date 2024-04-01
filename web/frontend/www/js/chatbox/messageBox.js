@@ -2,7 +2,7 @@ import { loadContent, getRequestHeaders } from '../utils.js';
 
 export async function loadMessageBox(username)
 {
-    await loadContent('/static/html/chatbox/messagebox.html', '#chatboxContainer');
+    await loadContent('/frontend/www/html/chatbox/messagebox.html', '#chatboxContainer');
     await fetchAndDisplayStoredMessages(username);
     document.getElementById('chatboxHeader').innerText = username;
 }
