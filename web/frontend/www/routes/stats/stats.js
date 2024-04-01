@@ -47,9 +47,9 @@ function displayGameHistory(player1Name, player2Name, gameOutcome, score)
             <div class="card-header text-center">${gameOutcome}</div>
             <div class="card-body">
                 <div class="row justify-content-between">
-                    <div class="col-1 text-center">${player1Name}</div>
-                    <div class="col-10 text-center">${score}</div>
-                    <div class="col-1 text-center">${player2Name}</div>
+                    <div class="col-3 text-center">${player1Name}</div>
+                    <div class="col-6 text-center">${score}</div>
+                    <div class="col-3 text-center">${player2Name}</div>
                 </div>
             </div>
         </div>
@@ -67,9 +67,9 @@ function displayTournamentHistory(playerName, outcome, round)
             <div class="card-header text-center">${outcome}</div>
             <div class="card-body">
                 <div class="row">
-                    <div class="activePlayer col-1 text-center">${playerName}</div>
-                    <div class="col-10 text-center">Round ${round}</div>
-                    <div class="col-1 text-center"></div>
+                    <div class="activePlayer col-3 text-center">${playerName}</div>
+                    <div class="col-6 text-center">Round ${round}</div>
+                    <div class="col-3 text-center"></div>
                 </div>
             </div>
         </div>
