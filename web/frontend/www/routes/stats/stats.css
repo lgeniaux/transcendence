@@ -13,7 +13,7 @@
     margin: 20px;
 }
 
-.stats #gameHistory, .stats #tournamentHistory
+.stats #game-history, .stats #tournament-history
 {
     max-height: 300px;
     overflow-y: auto;

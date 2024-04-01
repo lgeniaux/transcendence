@@ -37,9 +37,6 @@ export async function init()
 
     changeGraphPercentage('tournament', response.user_stats.tournament_winrate);
     changeGraphLabel('tournament', response.user_stats.tournament_winrate);
-
-
-    displayTournamentHistory('vimercie', 'Victory', 'Finals');
 }
 
 function updateUsername(username)
@@ -68,7 +65,7 @@ function displayGameHistory(player1Name, player2Name, gameOutcome, score)
         </div>
     `;
 
-    gameHistory.innerHTML = template;
+    gameHistory.innerHTML += template;
 }
 
 function displayTournamentHistory(playerName, outcome, round)
@@ -88,7 +85,7 @@ function displayTournamentHistory(playerName, outcome, round)
         </div>
     `;
 
-    tournamentHistory.innerHTML = template;
+    tournamentHistory.innerHTML += template;
 }
 
 function changeGraphPercentage(section, percentage)
