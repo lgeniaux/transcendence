@@ -63,7 +63,7 @@
 
 .authForm .primaryBtn:hover
 {
-	background-color: #FFD966; /* Change la couleur de fond au survol */
+	background-color: #FFD966;
 }
 
 .authForm .secondaryBtn
@@ -118,17 +118,17 @@
 
 .authForm .oauthBtn:hover
 {
-	background-color: #FFD966; /* Change la couleur de fond au survol */
+	background-color: #FFD966;
 }
   
 .authForm .oauthBtn:hover .oauthLogo
 {
-	background-color: #bfbfbf; /* Change la couleur de fond de l'image au survol */
+	background-color: #bfbfbf;
 }
   
 .authForm .oauthBtn:hover .oauthText
 {
-	color: #333; /* Change la couleur du texte au survol */
+	color: #333;
 }
 
 .authForm hr

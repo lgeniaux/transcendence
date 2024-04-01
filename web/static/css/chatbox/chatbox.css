@@ -39,7 +39,7 @@
 	border: none;
 	outline: none;
 	box-shadow: none;
-	position: relative; /* Nécessaire pour le positionnement des enfants absolus */
+	position: relative;
 	overflow: hidden;
 	transition: background-color 0.3s;
 }

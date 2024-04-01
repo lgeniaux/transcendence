@@ -37,7 +37,7 @@ async function cb_fetchAllUsers()
                     revokeAuthToken();
             }
 
-            throw new Error('Erreur lors de la récupération des utilisateurs');
+            throw new Error('Error fetching users');
         }
 
         const data = await response.json();

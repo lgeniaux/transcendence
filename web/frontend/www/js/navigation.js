@@ -85,7 +85,7 @@ async function loadHTML(url)
         const response = await fetch(url);
 
         if (!response.ok)
-            throw new Error(`Erreur HTTP: ${response.status}`);
+            throw new Error(`HTTP error: ${response.status}`);
 
         const html = await response.text();
         document.querySelector('#app').innerHTML = html;

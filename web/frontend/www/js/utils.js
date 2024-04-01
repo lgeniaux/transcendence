@@ -65,7 +65,7 @@ export async function getFileContent(url)
         const response = await fetch(url);
 
         if (!response.ok)
-            throw new Error('La requête a échoué.');
+            throw new Error('Failed to load the file.');
 
         const html = await response.text();
 

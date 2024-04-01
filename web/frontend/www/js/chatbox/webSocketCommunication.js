@@ -11,7 +11,7 @@ export function initWebsocket()
         const sender = message.sender;
 
         if (sender === window.targetUsername)
-            displayMessage(message.message, sender);
+            displayMessage(message.message, false);
     };
 
     webSocket.onerror = function(event) {
@@ -23,9 +23,21 @@ export function initWebsocket()
 
 function sendMessageViaWebSocket(webSocket, message, targetUsername)
 {
+    if (!targetUsername)
+        return (false)
+    //handle the case where a malicious user tries to send a NULL message
+    if (!message)
+        return false;
+    //limit the message size at 250 characters
+    if (message.length > 250)
+    {
+        alert('Message too long. Maximum 250 characters allowed');
+        return false;
+    }
+
     if (!webSocket)
     {
-        console.error('WebSocket is not initialized. Cannot send message');
+        console.error('WebSocket is not initialized, please refresh the page');
         return false;
     }
 

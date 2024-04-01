@@ -2,13 +2,13 @@
 {
     display: flex;
     flex-direction: column;
-    justify-content: space-between; /* Répartit l'espace entre les éléments */
+    justify-content: space-between;
     height: 100%;
     background-color: rgb(32, 32, 32);
     color: white;
     padding: 10px;
     box-sizing: border-box;
-    position: relative; /* Assure que le positionnement absolu du bouton retour fonctionne correctement */
+    position: relative;
 	border-radius: 8px;
 }
 
@@ -26,7 +26,7 @@
     border: none;
     cursor: pointer;
     outline: none;
-    margin-left: auto; /* Déplace le bouton vers la droite */
+    margin-left: auto;
 	background: none;
     z-index: 1;
 }
@@ -64,5 +64,5 @@
 {
     display: flex;
     width: 100%;
-    align-items: center; /* Pour aligner les éléments verticalement */
+    align-items: center;
 }
