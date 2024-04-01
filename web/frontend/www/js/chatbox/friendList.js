@@ -92,6 +92,14 @@ function getUserHtml(user)
     `;
 }
 
+window.viewProfile = function(username)
+{
+    if (username)
+    {
+        sessionStorage.setItem('currentStatsUsername', username);
+        window.location.href = '/stats';
+    }
+}
 
 function getChatboxActionButtonsHtml(user, actionContainerId)
 {
