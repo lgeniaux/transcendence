@@ -30,7 +30,7 @@ def invite_participants_to_tournament(
             }
             notification = send_notification(
                 recipient=participant,
-                message="You have been invited to participate in a tournament.",
+                message=f"You have been invited by {sender_username} to participate in {tournament.name}.",
                 notification_type="tournament-invite",
                 data=data,
             )
@@ -50,7 +50,7 @@ def invite_participant_to_tournament(tournament, participant_username, sender_us
         }
         notification = send_notification(
             recipient=participant,
-            message="You have been invited to participate in a tournament.",
+            message=f"You have been invited by {sender_username} to participate in {tournament.name}.",
             notification_type="tournament-invite",
             data=data,
         )
