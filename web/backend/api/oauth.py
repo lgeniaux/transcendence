@@ -58,7 +58,7 @@ class CodeForToken(APIView):
                 elif existing_user:
                     return Response({"detail": "A user with this email or username already exists."}, status=status.HTTP_409_CONFLICT)
                 else:
-                    avatar_response = requests.get(user_info["image"]["link"])
+                    avatar_response = requests.get(user_info["image"]["versions"]["small"], stream=True)
                     if avatar_response.status_code == 200:
                         avatar_file = ContentFile(avatar_response.content, name=user_info["login"] + "_avatar.jpg")
                     else:
