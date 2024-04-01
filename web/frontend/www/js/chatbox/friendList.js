@@ -109,7 +109,7 @@ function getChatboxActionButtonsHtml(user, actionContainerId)
     {
         // Les utilisateurs qui sont déjà amis
         buttonsHtml += `<a class="dropdown-item" onclick="window.loadMessageBox('${user.username}')">Send message</a>`;
-        buttonsHtml += `<a class="dropdown-item" onclick="window.viewProfile('${user.username}')">See profile page</a>`;
+        buttonsHtml += `<a class="dropdown-item" onclick="window.viewProfile('${user.username}')">See stats page</a>`;
         buttonsHtml += `<a class="dropdown-item" onclick="startGameWithUser('${user.username}')">Invite to 1v1</a>`;
         // Si l'url actuelle est /tournament et que on possede un sessionStorage.currentTournamentId
         buttonsHtml += `<hr>`

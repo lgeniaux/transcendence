@@ -72,7 +72,11 @@ class GetUserStats(APIView):
 
     def get(self, request, *args, **kwargs):
         try:
-            fetched_user = User.objects.get(username=kwargs['username'])
+            if kwargs['username'] == 'me':
+                fetched_user = request.user
+            else:
+                fetched_user = User.objects.get(username=kwargs['username'])
+                
             # Filter games by status "finished"
             finished_games = Game.objects.filter(
                 (Q(player1=fetched_user) | Q(player2=fetched_user)) & Q(status='finished')
