@@ -41,7 +41,7 @@ function displayCreateTournamentForm()
     const overlayHTML = `
         <div id="createTournamentOverlay" class="d-flex justify-content-center align-items-center" tabindex="-1" style="position: fixed; inset: 0; background-color: rgba(0, 0, 0, 0.5); z-index: 1050;">
         <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content" style="background-color: #5a2b00; color: white;">
+        <div class="modal-content" style="background-color: rgb(24, 24, 24); color: white;">
             <div class="modal-header border-0">
             <h5 class="modal-title" id="createTournamentOverlayLabel"><strong>Create Tournament</strong></h5>
             </div>
