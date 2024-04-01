@@ -41,3 +41,16 @@ body
     overflow-y: auto;
     overflow-x: hidden;
 }
+
+.hyperlink-style
+{
+    color: #007bff;
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+.hyperlink-style:hover
+{
+    color: #0056b3;
+    text-decoration: none;
+}
