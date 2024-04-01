@@ -168,7 +168,7 @@ function getActionButtonsNotification(notification)
     else if (notification.notification_type === 'game-start')
     {
         buttonsHtml = `
-            <button class="btn btn-success" onclick="window.goToGame(${notification.data.game_id})">PLAY</button>
+            <button class="btn btn-success" onclick="window.goToGame(${notification.data.game_id}, 'game')">PLAY</button>
         `;
     }
     else if (notification.notification_type === 'game-invite')

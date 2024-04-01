@@ -67,7 +67,7 @@ class UserLogin(APIView):
                 user = User.objects.get(email=email)
                 if (
                     not user.is_active
-                ):  # Note de Louis: j'ai viré la fonction authenticate() car elle demande un username au lieu d'un email
+                ):
                     return Response(
                         {"detail": "This account has been deactivated"},
                         status=status.HTTP_401_UNAUTHORIZED,
@@ -81,10 +81,17 @@ class UserLogin(APIView):
             # Check if the password is correct
             if user.check_password(password):
                 token, created = Token.objects.get_or_create(user=user)
-                return Response(
-                    {"detail": "Success", "auth_token": token.key},
-                    status=status.HTTP_200_OK,
-                )
+                if created:
+                    user.online_status = True
+                    user.save()
+                    return Response(
+                        {"detail": "Success", "auth_token": token.key},
+                        status=status.HTTP_200_OK,
+                    )
+                else:
+                    return Response(
+                        {"detail": "You are already logged in on another device, please log out first"}, status=status.HTTP_401_UNAUTHORIZED
+                    )
             else:
                 return Response(
                     {"detail": "Invalid credentials"},
@@ -100,6 +107,8 @@ class UserLogout(APIView):
     def post(self, request, *args, **kwargs):
         if request.user.is_authenticated:
             request.user.auth_token.delete()
+            request.user.online_status = False
+            request.user.save()
             return Response(
                 {"detail": "You have successfuly been logged out"},
                 status=status.HTTP_200_OK,

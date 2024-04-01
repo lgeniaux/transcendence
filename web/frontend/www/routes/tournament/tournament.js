@@ -218,11 +218,16 @@ async function fetchAllUsers() {
     }
 }
 
-export function goToGame(gameId)
+export function goToGame(gameId, type)
 {
     sessionStorage.setItem('currentGameId', gameId);
-    sessionStorage.setItem('endGameRedirect', '/tournament');
-    window.location.href = '/game';
+    if (type === 'game') {
+        sessionStorage.setItem('endGameRedirect', '/game');
+    } else if (type === 'tournament') {
+        sessionStorage.setItem('endGameRedirect', '/tournament');
+    } else {
+        sessionStorage.setItem('endGameRedirect', '/');
+    }
 }
 
 window.goToGame = goToGame;
@@ -293,7 +298,7 @@ async function displayTournamentView()
     if (state.state.status === "in progress")
     {
         if (state.game_to_play)
-            goToGame(state.game_to_play);
+            goToGame(state.game_to_play, 'tournament');
         
     }
     else if (state.state.status === "finished")
