@@ -22,10 +22,9 @@ function checkPassword()
 
     if (password !== password2)
     {
-        console.log('Passwords do not match');
+        alert('Passwords do not match');
         return false;
     }
-    console.log('Passwords match');
     return true;
 }
 
@@ -54,15 +53,24 @@ async function registerUser()
 
         const data = await response.json();
 
-        if (data.detail === "Success") 
+        if (data.detail === "Success")
             window.location.href = '/login';
+        else if (Object.keys(data).length > 0){
+            var error = '';
+            for (var key in data)
+            {
+                error += key + ': ' + data[key] + '\n';
+            }
+            alert(error);
+        }
         else
-            alert(data.message);
-
-        // Rest of the code remains the same
+            throw new Error('Could not register user');
     }
     catch (error)
     {
-        console.error('Error:', error);
+        alert(error);
     }
 }
+
+const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
+const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))

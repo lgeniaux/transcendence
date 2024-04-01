@@ -5,7 +5,7 @@ from django.contrib.auth import get_user_model
 from rest_framework.authtoken.models import Token
 from django.conf import settings
 import requests
-
+from django.core.files.base import ContentFile
 
 from django.db import IntegrityError
 from django.db.models import Q
@@ -49,19 +49,31 @@ class CodeForToken(APIView):
                 if existing_oauth_user:
                     token, created = Token.objects.get_or_create(user=existing_oauth_user)
                     if not created:
-                        return Response({"detail": "You are already logged in on another device."}, status=status.HTTP_409_CONFLICT)
+                        # revoke old token
+                        token.delete()
+                        token = Token.objects.create(user=existing_oauth_user)
+                        return Response({"detail": "Success", "auth_token": token.key}, status=status.HTTP_200_OK)
                     else:
                         return Response({"detail": "Success", "auth_token": token.key}, status=status.HTTP_200_OK)
-
                 elif existing_user:
                     return Response({"detail": "A user with this email or username already exists."}, status=status.HTTP_409_CONFLICT)
                 else:
+                    avatar_response = requests.get(user_info["image"]["versions"]["small"], stream=True)
+                    if avatar_response.status_code == 200:
+                        avatar_file = ContentFile(avatar_response.content, name=user_info["login"] + "_avatar.jpg")
+                    else:
+                        avatar_file = None  # or set a default avatar
+
                     try:
                         user = User.objects.create(
                             email=user_info["email"],
                             username=user_info["login"],
                             is_oauth=True
                         )
+
+                        if avatar_file:
+                            user.avatar.save(user.username + "_avatar.jpg", avatar_file, save=True)
+
                     except IntegrityError as e:
                         return Response({"detail": "Failed to create user due to a conflict."}, status=status.HTTP_409_CONFLICT)
 

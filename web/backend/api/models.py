@@ -74,11 +74,6 @@ class User(AbstractUser):
         
 
 
-        
-
-        
-
-
 class Game(models.Model):
     def __str__(self):
         return f"{self.player1} vs {self.player2}"
@@ -282,8 +277,6 @@ class Tournament(models.Model):
                 game_data["score_player1"] = game.score_player1
                 game_data["score_player2"] = game.score_player2
                 game_data["player1"] = game.player1.username
-                print(game.player1.username)
-                print(game.player2.username)
                 game_data["player2"] = game.player2.username
                 game_data["winner"] = game.winner.username if game.winner else None
         self.save()

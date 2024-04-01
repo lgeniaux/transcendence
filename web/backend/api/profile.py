@@ -95,11 +95,16 @@ class DownloadData(APIView):
             data = {
                 "username": request.user.username,
                 "email": request.user.email,
-                "avatar_url": request.user.avatar.url,
-                "date_of_account_creation": request.user.date_joined,
+                "avatar_url": request.user.avatar if request.user.avatar else "",
                 "game_ids": [game.game_id for game in Game.objects.filter(models.Q(player1=request.user) | models.Q(player2=request.user))],
-                "tournament_ids": [tournament.tournament_id for tournament in request.user.tournaments.all()],
-                "messages_sent": [message.id for message in PrivateMessage.objects.filter(sender=request.user)],
+                "tournament_ids": [tournament.id for tournament in request.user.tournaments.all()],
+                "messages_sent": [
+                    {
+                        "content": message.content,
+                        "recipient": message.recipient.username if message.recipient else ""
+                    }
+                    for message in PrivateMessage.objects.filter(sender=request.user)
+                ],
             }
             return Response(data, status=status.HTTP_200_OK)
         except Exception as e:

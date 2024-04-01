@@ -38,13 +38,15 @@ async function loginUser()
             sessionStorage.setItem('authToken', auth_token);
             window.location.href = '/dashboard';
         }
+        else if (data.detail)
+            alert(data.detail);
         else
-            alert(data.message);
+            alert('Invalid credentials');
 
     } 
     catch (error)
     {
-        console.error('Error:', error);
+        alert('Error:', error);
     }
 }
 
