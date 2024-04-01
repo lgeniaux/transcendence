@@ -78,7 +78,10 @@ class TournamentSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError(
                 "Name must be at least 3 characters long."
             )
-        # Ensure uniqueness is correctly enforced
+
+        if not name.isalnum():
+            raise serializers.ValidationError("Name must be alphanumeric.")
+
         existing_tournament = Tournament.objects.filter(name=name).first()
         if existing_tournament and self.instance != existing_tournament:
             raise serializers.ValidationError(
