@@ -28,7 +28,7 @@ async function fetchStats() {
 
         }
     }catch (error) {
-        alert('Error:', error);
+        alert('Error: ' + error);
     }
 }
 
