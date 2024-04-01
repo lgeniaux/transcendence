@@ -49,10 +49,12 @@ class CodeForToken(APIView):
                 if existing_oauth_user:
                     token, created = Token.objects.get_or_create(user=existing_oauth_user)
                     if not created:
-                        return Response({"detail": "You are already logged in on another device."}, status=status.HTTP_409_CONFLICT)
+                        # revoke old token
+                        token.delete()
+                        token = Token.objects.create(user=existing_oauth_user)
+                        return Response({"detail": "Success", "auth_token": token.key}, status=status.HTTP_200_OK)
                     else:
                         return Response({"detail": "Success", "auth_token": token.key}, status=status.HTTP_200_OK)
-
                 elif existing_user:
                     return Response({"detail": "A user with this email or username already exists."}, status=status.HTTP_409_CONFLICT)
                 else:
