@@ -1,0 +1,68 @@
+.messageBox
+{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 100%;
+    background-color: rgb(32, 32, 32);
+    color: white;
+    padding: 10px;
+    box-sizing: border-box;
+    position: relative;
+	border-radius: 8px;
+}
+
+#messages
+{
+    flex-grow: 1;
+    overflow-y: auto;
+    padding: 10px;
+    margin: 10px 0;
+    border-radius: 8px;
+}
+
+.messageBox .backBtn
+{
+    border: none;
+    cursor: pointer;
+    outline: none;
+    margin-left: auto;
+	background: none;
+    z-index: 1;
+}
+
+.messageBox .backBtn img
+{
+	height: 30px;
+}
+
+.messageBox .form-control
+{
+    flex-grow: 1;
+    background-color: rgb(225, 225, 225);
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-shadow: none;
+    overflow-y: auto;
+}
+
+.messageBox .sendBtn
+{
+    padding: 6px 12px;
+    color: black;
+    font-family: 'Fugaz One';
+    font-weight: bold;
+    background-color: #FFB800;
+    border: none;
+    border-radius: 4px;
+    box-shadow: none;
+    cursor: pointer;
+    margin-left: 10px;
+}
+
+.messageBox .message-form
+{
+    display: flex;
+    width: 100%;
+    align-items: center;
+}

@@ -160,10 +160,11 @@ class AddOrDeleteFriend(APIView):
 
 class GetUsersListSerializer(serializers.ModelSerializer):
     status = serializers.SerializerMethodField()
+    avatar = serializers.SerializerMethodField()
 
     class Meta:
         model = User
-        fields = ["username", "avatar", "online_status", "status"]
+        fields = ["id", "username", "avatar", "online_status", "status"]
 
     def get_status(self, obj):
         request_user = self.context["request"].user
@@ -173,6 +174,13 @@ class GetUsersListSerializer(serializers.ModelSerializer):
             return "blocked"
         else:
             return "None"
+
+    def get_avatar(self, obj):
+        if obj.avatar:
+            request = self.context.get("request")
+            avatar_url = obj.avatar.url
+            return avatar_url
+        return None
 
 
 class GetUsersList(APIView):
@@ -208,7 +216,6 @@ class GetUserNotifications(APIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request, *args, **kwargs):
-        # get all notifications with status 'pending' for the user (the invite_status is in the data field)
         notifications = Notification.objects.filter(
             recipient=request.user, data__status="pending"
         )
@@ -358,7 +365,6 @@ class InvitePlayerToGameSerializer(serializers.Serializer):
             raise serializers.ValidationError(
                 {"detail": "You cannot invite a user who has blocked you"}
             )
-            # Check if there is already an invitation (game pending) between them
         existing_invitation = Notification.objects.filter(
             Q(
                 recipient=request_user,
@@ -377,7 +383,6 @@ class InvitePlayerToGameSerializer(serializers.Serializer):
                 {"detail": "An invitation is already pending"}
             )
 
-        # Check if there's an ongoing game between them ( status != 'finished')
         ongoing_game = Game.objects.filter(
             Q(player1=request_user, player2=player)
             | Q(player1=player, player2=request_user),

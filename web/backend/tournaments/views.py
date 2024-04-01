@@ -1,4 +1,3 @@
-# Create your views here.
 from asgiref.sync import async_to_sync
 from channels.layers import get_channel_layer
 
@@ -9,7 +8,7 @@ def broadcast_to_tournament_group(tournament_id, message):
     async_to_sync(channel_layer.group_send)(
         group_name,
         {
-            "type": "tournament.update",  # Matches the method name in the consumer
+            "type": "tournament.update",
             "message": message,
         },
     )

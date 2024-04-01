@@ -20,11 +20,11 @@ clean:
 	printf "$(INFO_TEXT)   Stoping $(NAME)...$(RESET)\r🛑\n"
 	docker compose down
 
-fclean: clean
-	printf "$(INFO_TEXT)   Removing images...$(RESET)\r🗑️\n"
-	-docker rmi -f $(NAME)-web
-	printf "$(INFO_TEXT)   Removing volumes...$(RESET)\r🗑️\n"
-	-docker volume rm `docker volume ls -q | grep $(NAME)`
+fclean:
+	printf "$(INFO_TEXT)   Force Stoping $(NAME)...$(RESET)\r🛑\n"
+	-docker kill `docker compose ps -q`
+	printf "$(INFO_TEXT)   Removing images, volumes and network...$(RESET)\r🗑️\n"
+	docker compose down --rmi local -v -t 0
 
 re: fclean build all
 

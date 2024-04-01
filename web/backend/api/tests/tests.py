@@ -1,8 +1,9 @@
 import pytest
 from rest_framework import status
 import json
+import inspect
 
-base_url = "http://localhost:8000/api"
+base_url = "https://localhost:8433/api"
 
 # ========== FIXTURES ==========
 
@@ -71,16 +72,20 @@ def users_with_games(client, created_users):
 
 @pytest.mark.django_db
 def test_login_invalid(client):
+    print(f"::group::{inspect.currentframe().f_code.co_name}")
     # Test case 1: Invalid credentials
     response = client.post(
         base_url + "/login-user/",
         {"username": "test", "password": "test", "email": "test"},
     )
+    print(response.json())
     assert response.status_code == status.HTTP_401_UNAUTHORIZED
+    print("\n\n::endgroup::")
 
 
 @pytest.mark.django_db
 def test_login_valid(client):
+    print(f"::group::{inspect.currentframe().f_code.co_name}")
     # Test case 2: Valid credentials
     response = client.post(
         base_url + "/register-user/",
@@ -96,30 +101,41 @@ def test_login_valid(client):
         base_url + "/login-user/",
         {"email": "validemail@gmail.com", "password": "17ValidPassword@"},
     )
+    print(response.json())
     assert response.status_code == status.HTTP_200_OK
-    # Test Token
     assert response.data["detail"] == "Success"
+    print("\n\n::endgroup::")
 
 
 @pytest.mark.django_db
 def test_login_utils(client):
+    print(f"::group::{inspect.currentframe().f_code.co_name}")
     # Test case 3: Valid email and invalid password
     response = client.post(
         base_url + "/login-user/",
         {"email": "validemail@gmail.com", "password": "invalidpassword"},
     )
+    print(response.json())
     assert response.status_code == status.HTTP_401_UNAUTHORIZED
 
-    # Test case 4: Invalid email and valid password (note: ça n'a aucune chance d'arriver mais pour l'instant on le teste quand même)
+    # Test case 4: Invalid email and valid password
     response = client.post(
         base_url + "/login-user/",
         {"email": "invalidusername", "password": "17ValidPassword@"},
     )
+    print(response.json())
     assert response.status_code == status.HTTP_401_UNAUTHORIZED
+
+    # Test case 5: Missing email
+    response = client.post(base_url + "/login-user/", {"password": "17ValidPassword@"})
+    print(response.json())
+    assert response.status_code == status.HTTP_400_BAD_REQUEST
+    print("\n\n::endgroup::")
 
 
 @pytest.mark.django_db
 def test_already_logged_in(client):
+    print(f"::group::{inspect.currentframe().f_code.co_name}")
     # Test case 5: Already logged in
     response = client.post(
         base_url + "/register-user/",
@@ -133,6 +149,7 @@ def test_already_logged_in(client):
         base_url + "/login-user/",
         {"email": "validemail2@gmail.com", "password": "17ValidPassword@"},
     )
+    print(response.json())
     assert response.status_code == status.HTTP_200_OK
     token = response.data["auth_token"]
     response = client.post(
@@ -140,8 +157,10 @@ def test_already_logged_in(client):
         {"email": "validemail2@gmail.com", "password": "17ValidPassword@"},
         HTTP_AUTHORIZATION="Token " + token,
     )
+    print(response.json())
     assert response.status_code == status.HTTP_200_OK
     assert response.data["detail"] == "You are already authenticated"
+    print("\n\n::endgroup::")
 
 
 # ========== REGISTER TESTS ==========
@@ -149,16 +168,19 @@ def test_already_logged_in(client):
 
 @pytest.mark.django_db
 def test_bad_email(client):
+    print(f"::group::{inspect.currentframe().f_code.co_name}")
     # Test case 1: Bad email
     response = client.post(
         base_url + "/register-user/",
         {"email": "bademail", "username": "Vusername", "password": "17ValidPassword@"},
     )
+    print(response.json())
     assert response.status_code == status.HTTP_400_BAD_REQUEST
     response = client.post(
         base_url + "/register-user/",
         {"email": "bademail@", "username": "Vusername", "password": "17ValidPassword@"},
     )
+    print(response.json())
     assert response.status_code == status.HTTP_400_BAD_REQUEST
     response = client.post(
         base_url + "/register-user/",
@@ -168,6 +190,7 @@ def test_bad_email(client):
             "password": "17ValidPassword@",
         },
     )
+    print(response.json())
     assert response.status_code == status.HTTP_400_BAD_REQUEST
     response = client.post(
         base_url + "/register-user/",
@@ -177,6 +200,7 @@ def test_bad_email(client):
             "password": "17ValidPassword@",
         },
     )
+    print(response.json())
     assert response.status_code == status.HTTP_400_BAD_REQUEST
     response = client.post(
         base_url + "/register-user/",
@@ -186,7 +210,9 @@ def test_bad_email(client):
             "password": "17ValidPassword@",
         },
     )
+    print(response.json())
     assert response.status_code == status.HTTP_400_BAD_REQUEST
+    print("\n\n::endgroup::")
 
 
 # ========== LOGOUT TESTS ==========
@@ -194,10 +220,12 @@ def test_bad_email(client):
 
 @pytest.mark.django_db
 def test_logout(client, created_users):
+    print(f"::group::{inspect.currentframe().f_code.co_name}")
     # Test case 1: bad token
     response = client.post(
         base_url + "/logout-user/", HTTP_AUTHORIZATION="Token " + "badtoken"
     )
+    print(response.json())
     assert response.status_code == status.HTTP_401_UNAUTHORIZED
 
     # Test case 2: good token
@@ -205,6 +233,7 @@ def test_logout(client, created_users):
         base_url + "/logout-user/",
         HTTP_AUTHORIZATION="Token " + created_users[0]["token"],
     )
+    print(response.json())
     assert response.status_code == status.HTTP_200_OK
 
     # Test case 3: already logged out
@@ -212,14 +241,17 @@ def test_logout(client, created_users):
         base_url + "/logout-user/",
         HTTP_AUTHORIZATION="Token " + created_users[0]["token"],
     )
+    print(response.json())
     assert response.status_code == status.HTTP_401_UNAUTHORIZED
+    print("\n\n::endgroup::")
 
 
 # ========== DELETE USER TESTS ==========
 
 
 @pytest.mark.django_db
-def test_delete_user(client, users_with_games):
+def test_delete_user_with_game(client, users_with_games):
+    print(f"::group::{inspect.currentframe().f_code.co_name}")
     game_id, users = users_with_games
 
     response = client.get(
@@ -229,11 +261,11 @@ def test_delete_user(client, users_with_games):
     print(response.json())
     assert response.status_code == status.HTTP_200_OK
 
-
     response = client.post(
         base_url + "/me/delete/",
-        HTTP_AUTHORIZATION=f'Token badtoken',
+        HTTP_AUTHORIZATION=f"Token badtoken",
     )
+    print(response.json())
     assert response.status_code == status.HTTP_401_UNAUTHORIZED
 
     # Test case 2: good token
@@ -241,13 +273,23 @@ def test_delete_user(client, users_with_games):
         base_url + "/me/delete/",
         HTTP_AUTHORIZATION=f'Token {users[1]["token"]}',
     )
+    print(response.json())
     assert response.status_code == status.HTTP_200_OK
 
-    # Test case 3: already deleted
+    # Test case 3: login again
+    response = client.post(
+        base_url + "/login-user/",
+        {"email": users[1]["email"], "password": users[1]["password"]},
+    )
+    print(response.json())
+    assert response.status_code == status.HTTP_401_UNAUTHORIZED
+
+    # Test case 4: already deleted
     response = client.post(
         base_url + "/me/delete/",
         HTTP_AUTHORIZATION=f'Token {users[1]["token"]}',
     )
+    print(response.json())
     assert response.status_code == status.HTTP_401_UNAUTHORIZED
 
     # Check if the game is deleted
@@ -259,6 +301,8 @@ def test_delete_user(client, users_with_games):
     assert response.status_code == status.HTTP_200_OK
     assert response.json()["game"]["status"] == "finished"
     assert response.json()["game"]["winner"] == users[0]["username"]
+    assert response.json()["game"]["player1"] == users[0]["username"]
+    assert response.json()["game"]["player2"] != users[1]["username"]
 
     # Reregister the user
     response = client.post(
@@ -269,6 +313,7 @@ def test_delete_user(client, users_with_games):
             "password": users[1]["password"],
         },
     )
+    print(response.json())
     assert response.status_code == status.HTTP_201_CREATED
 
     # Using the token of the deleted user
@@ -278,7 +323,7 @@ def test_delete_user(client, users_with_games):
     )
     print(response.json())
     assert response.status_code == status.HTTP_401_UNAUTHORIZED
-    
+    print("\n\n::endgroup::")
 
 
 # ========== CHANGE PASSWORD TESTS ==========
@@ -286,6 +331,7 @@ def test_delete_user(client, users_with_games):
 
 @pytest.mark.django_db
 def test_change_password(client, created_users):
+    print(f"::group::{inspect.currentframe().f_code.co_name}")
     user1 = created_users[0]
     token = user1["token"]
     # Test case 1: Invalid current password
@@ -314,7 +360,7 @@ def test_change_password(client, created_users):
         ),
         headers={"Content-Type": "application/json", "Authorization": "Token " + token},
     )
-    if response.status_code > 400:
+    if response.status_code != status.HTTP_204_NO_CONTENT:
         print(response.json())
     assert response.status_code == status.HTTP_204_NO_CONTENT
     # Test case 3: Already changed password
@@ -373,6 +419,7 @@ def test_change_password(client, created_users):
     )
     print(response.json())
     assert response.status_code == status.HTTP_401_UNAUTHORIZED
+    print("\n\n::endgroup::")
 
 
 # ========== Game Tests ==========
@@ -380,6 +427,7 @@ def test_change_password(client, created_users):
 
 @pytest.mark.django_db
 def test_create_game(client, created_users):
+    print(f"::group::{inspect.currentframe().f_code.co_name}")
     user1, user2, user3 = created_users[0], created_users[1], created_users[2]
     player1_token, player2_token, player3_token = (
         user1["token"],
@@ -507,10 +555,12 @@ def test_create_game(client, created_users):
     )
     print(response.json())
     assert response.status_code == status.HTTP_400_BAD_REQUEST
+    print("\n\n::endgroup::")
 
 
 @pytest.mark.django_db
 def test_game(client, users_with_games):
+    print(f"::group::{inspect.currentframe().f_code.co_name}")
     game_id, users = users_with_games
     player1_token = users[0]["token"]
     player2_token = users[1]["token"]
@@ -587,14 +637,13 @@ def test_game(client, users_with_games):
     assert response.json()["game"]["status"] == "in progress"
 
     # Player 1 check profile stats
-    # print(base_url + f"/profile/stats/?username={users[0]['username']}")
-    # response = client.get(
-    #     base_url + f"/profile/stats/?username={users[0]['username']}",
-    #     headers={"Authorization": f"Token {player1_token}", "Content-Type": "application/json"},
-    # )
-    # print(response.json())
-    # assert response.status_code == status.HTTP_200_OK
-    # assert response.json()["game_stats"]["games_played"] == 0
+    response = client.get(
+        base_url + f"/stats/{users[0]['username']}/fetch/",
+        HTTP_AUTHORIZATION="Token " + player1_token,
+    )
+    print(response.json())
+    assert response.status_code == status.HTTP_200_OK
+    assert response.json()["user_stats"]["games_played"] == 0
 
     # Player 1 ends the game with bad score
     response = client.post(
@@ -655,22 +704,23 @@ def test_game(client, users_with_games):
     assert response.status_code == status.HTTP_200_OK
     assert response.json()["game"]["status"] == "finished"
 
-    # # Player 1 check profile stats
-    # response = client.get(
-    #     base_url + f"/profile/stats/?username={users[0]['username']}",
-    #     HTTP_AUTHORIZATION="Token " + player1_token,
-    # )
-    # print(response.json())
-    # assert response.status_code == status.HTTP_200_OK
-    # assert response.json()["game_stats"]["games_played"] == 1
-    # assert response.json()["game_stats"]["wins"] == 1
+    # Player 1 check profile stats
+    response = client.get(
+        base_url + f"/stats/{users[0]['username']}/fetch/",
+        HTTP_AUTHORIZATION="Token " + player1_token,
+    )
+    print(response.json())
+    assert response.status_code == status.HTTP_200_OK
+    assert response.json()["user_stats"]["games_played"] == 1
+    assert response.json()["user_stats"]["games_won"] == 1
 
-    # # Player 1 check profile stats of player 2
-    # response = client.get(
-    #     base_url + f"/profile/stats/?username={users[1]['username']}",
-    #     HTTP_AUTHORIZATION="Token " + player1_token,
-    # )
-    # print(response.json())
-    # assert response.status_code == status.HTTP_200_OK
-    # assert response.json()["game_stats"]["games_played"] == 1
-    # assert response.json()["game_stats"]["losses"] == 1
+    # Player 1 check profile stats of player 2
+    response = client.get(
+        base_url + f"/stats/{users[1]['username']}/fetch/",
+        HTTP_AUTHORIZATION="Token " + player1_token,
+    )
+    print(response.json())
+    assert response.status_code == status.HTTP_200_OK
+    assert response.json()["user_stats"]["games_played"] == 1
+    assert response.json()["user_stats"]["games_won"] == 0
+    print("\n\n::endgroup::")

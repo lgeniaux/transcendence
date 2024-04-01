@@ -1,0 +1,132 @@
+.chatbox
+{
+	position: fixed;
+	bottom: 0;
+	right: 0;
+	width: 400px;
+	margin-right: 40px;
+	z-index: 1000;
+}
+
+@media (max-width: 768px)
+{
+	.chatbox
+	{
+		width: 100%;
+		margin-right: 0;
+	}
+}
+
+#chatboxHeader
+{
+	margin-left: 10px;
+}
+
+.chatbox .btn-group-vertical
+{
+	width: 100%;
+}
+
+.chatbox .collapseBtn
+{
+	font-family: 'Fugaz One';
+	font-size: 25px;
+	text-align: left;
+	background-color: black;
+	border-radius: 8px;
+	padding: 10px;
+	padding-bottom: 0;
+	border: none;
+	outline: none;
+	box-shadow: none;
+	position: relative;
+	overflow: hidden;
+	transition: background-color 0.3s;
+}
+
+.chatbox .collapseBtn::before
+{
+	content: '';
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background: linear-gradient(#333, black);
+	border-radius: 8px;
+	transition: opacity 0.3s;
+	opacity: 0;
+	z-index: 1;
+}
+
+.chatbox .collapseBtn:hover::before
+{
+	opacity: 1;
+}
+
+.chatbox .collapseBtn .container-fluid
+{
+	display: flex;
+	flex-direction: row;
+	background-color: #FFB800;
+	color: white;
+	border-radius: 8px 8px 0px 0px;
+	padding: 5px;
+	border: none;
+	position: relative;
+	z-index: 2;
+	transition: none;
+}
+
+.chatbox .collapse
+{
+	width: 100%;
+	background-color: black;
+	padding: 10px;
+	padding-top: 0px;
+	transition: none;
+}
+
+.chatbox #chatboxCollapse.show
+{
+	transition: none;
+}
+
+.chatbox .chatIcon
+{
+	height: 25px;
+	margin: 5px;
+}
+
+.chatbox .badge
+{
+	margin-left: auto;
+}
+
+.message-container
+{
+    width: 100%;
+    display: flex;
+	margin: 10px 0;
+}
+
+.message-sent, .message-received
+{
+    background-color: #53bdff;
+    color: white;
+    padding: 5px 10px;
+    border-radius: 10px;
+    max-width: 80%;
+    word-wrap: break-word;
+}
+
+.message-received
+{
+    background-color: #fff;
+    color: black;
+}
+
+.message-container.sent
+{
+    justify-content: flex-end;
+}

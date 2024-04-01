@@ -113,3 +113,14 @@ Data Management, and Account Deletion"
 - Handle active games when user delete account 
 - Use logout doesnt fetch the api (delete token from the db)
 - check tournament live update (little problem)
+
+
+
+
+
+- alert error everywhere
+- Data portability
+- stats
+- server side sanitization
+- prevent 2 logins on the same account at the same time
+- 

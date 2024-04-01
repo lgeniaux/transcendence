@@ -9,6 +9,10 @@ from rest_framework import permissions
 from .serializers import UserSerializer, ChangePasswordSerializer, UserChangeSerializer
 import requests
 import random
+from uuid import uuid4
+from django.db import models
+from .models import Game
+from livechat.models import PrivateMessage
 
 
 class UserProfile(APIView):
@@ -19,6 +23,11 @@ class UserProfile(APIView):
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     def put(self, request, *args, **kwargs):
+        if request.user.is_oauth:
+            return Response(
+                {"detail": "You cannot edit your profile if you are an oauth user."},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
         serializer = UserChangeSerializer(request.user, data=request.data, partial=True)
         if serializer.is_valid():
             serializer.save()
@@ -55,17 +64,69 @@ class UserDelete(APIView):
     def post(self, request, *args, **kwargs):
         if not request.user.is_active:
             return Response(
-                {"detail": "User is not an active account"}, status=status.HTTP_400_BAD_REQUEST
+                {"detail": "User is not an active account"},
+                status=status.HTTP_400_BAD_REQUEST,
             )
-        request.user.update_games_after_account_deletion()
-        request.user.update_notifications_after_account_deletion()
-        request.user.username = "deleted_" + str(random.randint(0, 10000))
-        request.user.email = "deleted_" + str(random.randint(0, 10000))
-        request.user.is_active = False
-        request.user.set_password(None)
-        request.user.auth_token.delete()
-        request.user.save()
-        #update_games_after_account_deletion
-        return Response(
-            {"detail": "User successfully deleted"}, status=status.HTTP_200_OK
-        )
+        try:
+            request.user.update_games_after_account_deletion()
+            request.user.update_notifications_after_account_deletion()
+            request.user.delete_sent_messages()
+            # delete avatar from server and set the default one
+            if request.user.avatar:
+                request.user.avatar.delete()
+                request.user.avatar = "/media/zippy.jpg"
+            request.user.username = str(uuid4())[:20]
+            request.user.email = str(uuid4())[:20] + "@deleted.com"
+            request.user.is_active = False
+            request.user.set_password(None)
+            request.user.auth_token.delete()
+            request.user.save()
+            return Response(
+                {"detail": "User successfully deleted"}, status=status.HTTP_200_OK
+            )
+        except Exception as e:
+            return Response(
+                {"detail": "User could not be deleted"},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+
+class DownloadData(APIView):
+
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get(self, request, *args, **kwargs):
+        if not request.user.is_active:
+            return Response(
+                {"detail": "User is not an active account"},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+        try:
+            data = {
+                "username": request.user.username,
+                "email": request.user.email,
+                "game_ids": [
+                    game.game_id
+                    for game in Game.objects.filter(
+                        models.Q(player1=request.user) | models.Q(player2=request.user)
+                    )
+                ],
+                "tournament_ids": [
+                    tournament.id for tournament in request.user.tournaments.all()
+                ],
+                "messages_sent": [
+                    {
+                        "content": message.content,
+                        "recipient": (
+                            message.recipient.username if message.recipient else ""
+                        ),
+                    }
+                    for message in PrivateMessage.objects.filter(sender=request.user)
+                ],
+            }
+            return Response(data, status=status.HTTP_200_OK)
+        except Exception as e:
+            return Response(
+                {"detail": "Data could not be downloaded"},
+                status=status.HTTP_400_BAD_REQUEST,
+            )

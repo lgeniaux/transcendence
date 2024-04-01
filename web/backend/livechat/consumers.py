@@ -17,7 +17,6 @@ class LiveChatConsumer(AsyncWebsocketConsumer):
         if user:
             self.user = user
             self.room_group_name = f"user_{self.user.id}"
-            await self.update_user_online_status(user, True)
             await self.channel_layer.group_add(self.room_group_name, self.channel_name)
             await self.accept()
         else:
@@ -25,19 +24,33 @@ class LiveChatConsumer(AsyncWebsocketConsumer):
 
     async def disconnect(self, close_code):
         if self.user:
-            await self.update_user_online_status(self.user, False)
             await self.channel_layer.group_discard(
                 self.room_group_name, self.channel_name
             )
 
     async def receive(self, text_data):
         data = json.loads(text_data)
+        if not data.get("message") or not data.get("username"):
+            print("no message or target_username")
+            return
         message = data["message"]
         target_username = data.get("username")
 
+        if message is None or message == "":
+            await self.send(text_data=json.dumps({"error": "message cannot be empty"}))
+            return
+        if not target_username:
+            await self.send(
+                text_data=json.dumps({"error": "target_username cannot be empty"})
+            )
+            return
+        if len(message) > 250:
+            print("message too long")
+            return
+
         if target_username:
             target_user = await self.get_user_by_username(target_username)
-            if target_user:
+            if target_user and message:
                 await self.save_private_message(message, target_user)
                 await self.channel_layer.group_send(
                     f"user_{target_user.id}",
@@ -78,8 +91,3 @@ class LiveChatConsumer(AsyncWebsocketConsumer):
             return User.objects.get(username=username)
         except User.DoesNotExist:
             return None
-
-    @database_sync_to_async
-    def update_user_online_status(self, user, status):
-        user.online_status = status
-        user.save()

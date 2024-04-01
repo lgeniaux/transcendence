@@ -1,0 +1,82 @@
+.stats
+{
+    color: white;
+    margin: 0 auto;
+    height: 700px;
+    padding: 100px;
+    padding-top: 0px;
+}
+
+.stats #stats-username
+{
+    font-family: 'Fugaz One';
+    color: white;
+    text-decoration: underline;
+    margin: 20px;
+    margin-left: 300px;
+}
+
+.stats #game-history, .stats #tournament-history
+{
+    max-height: 240px;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+.stats .card
+{
+    color: white;
+    background-color: rgb(24, 24, 24);
+    margin: 20px;
+}
+
+.stats .game-card, .stats .tournament-card
+{
+    background-color: beige;
+    color: black;
+}
+
+.stats .col
+{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+
+.stats .graph-container
+{
+    height: 150px;
+    width: 50px;
+    border: 1px solid #000000;
+    position: relative;
+    background-color: beige;
+}
+
+.stats .column
+{
+    background-color: #FFB800;
+    width: 100%;
+    position: absolute;
+    bottom: 0;
+}
+
+
+.stats .vr
+{
+    border-left: 1px solid black;
+    height: 100px;
+    margin: 0 10px;
+}
+
+@font-face {
+    font-family: 'Silkscreen Bold';
+    src: url('/static/fonts/Silkscreen-Bold.ttf') format('truetype');
+}
+
+
+@font-face {
+    font-family: 'Fugaz One';
+    src: url('/static/fonts/FugazOne-Regular.ttf') format('truetype');
+}

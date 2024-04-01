@@ -26,7 +26,6 @@ class GameConsumer(AsyncWebsocketConsumer):
         if self.user:
             group_name = f"game_{self.game_id}"
             await self.channel_layer.group_discard(group_name, self.channel_name)
-            # Reset the game if the disconnecting user is player1 and the game isn't finished
             if await self.is_player1(
                 self.user, self.game_id
             ) and not await self.is_finished(self.game_id):
