@@ -45,21 +45,29 @@ class CodeForToken(APIView):
                 User = get_user_model()
                 
                 existing_user = User.objects.filter(Q(email=user_info["email"]) | Q(username=user_info["login"])).first()
-                if existing_user:
+                existing_oauth_user = User.objects.filter(Q(email=user_info["email"]) & Q(username=user_info["login"]) & Q(is_oauth=True)).first()
+                if existing_oauth_user:
+                    token, created = Token.objects.get_or_create(user=existing_oauth_user)
+                    if not created:
+                        return Response({"detail": "You are already logged in on another device."}, status=status.HTTP_409_CONFLICT)
+                    else:
+                        return Response({"detail": "Success", "auth_token": token.key}, status=status.HTTP_200_OK)
+                        
+                else if existing_user:
                     return Response({"detail": "A user with this email or username already exists."}, status=status.HTTP_409_CONFLICT)
-                
-                try:
-                    user = User.objects.create(
-                        email=user_info["email"],
-                        username=user_info["login"],
-                        is_oauth=True
-                    )
-                except IntegrityError as e:
-                    return Response({"detail": "Failed to create user due to a conflict."}, status=status.HTTP_409_CONFLICT)
+                else:
+                    try:
+                        user = User.objects.create(
+                            email=user_info["email"],
+                            username=user_info["login"],
+                            is_oauth=True
+                        )
+                    except IntegrityError as e:
+                        return Response({"detail": "Failed to create user due to a conflict."}, status=status.HTTP_409_CONFLICT)
 
 
-                token, _ = Token.objects.get_or_create(user=user)
-                return Response({"detail": "Success", "auth_token": token.key}, status=status.HTTP_200_OK)
+                    token, _ = Token.objects.get_or_create(user=user)
+                    return Response({"detail": "Success", "auth_token": token.key}, status=status.HTTP_200_OK)
 
         # Fallback response in case of failure
         return Response(token_response.json(), status=token_response.status_code)
