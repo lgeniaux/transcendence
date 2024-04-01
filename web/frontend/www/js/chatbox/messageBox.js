@@ -5,6 +5,7 @@ export async function loadMessageBox(username)
     await loadContent('/frontend/www/html/chatbox/messagebox.html', '#chatboxContainer');
     await fetchAndDisplayStoredMessages(username);
     document.getElementById('chatboxHeader').innerText = username;
+    document.getElementById('message').focus();
 }
 
 window.loadMessageBox = loadMessageBox;
