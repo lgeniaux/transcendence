@@ -41,7 +41,7 @@ async function displayGameView(game, fetch = false) {
                             <p class="display-6 ${game.winner === game.player1 ? 'text-warning font-weight-bold' : 'text-white'}">
                                 ${game.score_player1}
                             </p>
-                            ${game.winner === game.player1 ? '<img src="/path/to/trophy-icon.png" class="trophy-icon" alt="Trophy">' : ''}
+                            ${game.winner === game.player1 ? '<img src="static/img/trophy.svg" class="trophy-icon" alt="Trophy">' : ''}
                         </div>
                         <div class="col-md-6 d-flex flex-column align-items-center justify-content-center py-3">
                             <h5 class="${game.winner === game.player2 ? 'text-warning font-weight-bold' : 'text-white'}">

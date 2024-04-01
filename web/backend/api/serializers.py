@@ -25,10 +25,10 @@ class UserChangeSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ["username", "avatar"]
-
-    def validate(self, data):
+        
+    def validate_username(self, value):
         # validate username
-        username = data.get("username")
+        username = value
         if username is not None:
             if User.objects.filter(username=username).exists():
                 raise serializers.ValidationError(
@@ -45,8 +45,36 @@ class UserChangeSerializer(serializers.ModelSerializer):
                 )
         else:
             raise serializers.ValidationError("Username is required.")
-        return data
+        return value
 
+    def validate_avatar(self, value):
+        # Check if the image is a valid image file and open it
+        try:
+            img = Image.open(value)
+        except IOError:
+            raise serializers.ValidationError("Invalid image file")
+        
+        # Check if the image is too large
+        if value.size > 2 * 1024 * 1024:  # 2MB
+            raise serializers.ValidationError("Image file is too large ( > 2mb )")
+        
+        # Check if the image is 128 x 128 pixels
+        if img.width != 128 or img.height != 128:
+            raise serializers.ValidationError("Image file must be 128 x 128 pixels")
+        
+        # Check file extension
+        ext = os.path.splitext(value.name)[1].lower()
+        if ext not in ['.jpg', '.jpeg', '.png']:
+            raise serializers.ValidationError("Image file must be a jpg or png file")
+        
+        # Generate a new file name using UUID to ensure uniqueness
+        # Retain the original extension, but sanitize the file name
+        new_name = f"avatar_{self.initial_data['username']}{uuid4().hex}{ext}"
+
+        # Assign the new name back to the file
+        value.name = new_name
+
+        return value
 
 class GameSerializer(serializers.ModelSerializer):
     class Meta:

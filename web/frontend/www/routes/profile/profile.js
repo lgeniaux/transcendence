@@ -51,7 +51,10 @@ async function fetchUserProfile()
         document.getElementById('email').innerText = data.email;
 
         if (data.is_oauth)
+        {
             document.querySelector('.profile-password').style.display = 'none';
+            document.querySelector('.profile-edit ').style.display = 'none';
+        }
         else
             document.querySelector('.profile-password').style.display = 'block';
 
@@ -65,34 +68,32 @@ async function fetchUserProfile()
 
 async function updateProfile(event)
 {
-    event.preventDefault();
+    try {
+        event.preventDefault();
+        var formData = new FormData();
 
-    const username = document.querySelector('[name="username"]').value;
-    const avatar = document.querySelector('[name="avatar"]').value;
-    const body_data = {};
+        formData.append('username', document.querySelector('[name="username"]').value);
+        formData.append('avatar', document.querySelector('[name="avatar"]').files[0]);
 
-    if (username) body_data.username = username;
-    if (avatar) body_data.avatar = avatar;
-
-    try
-	{
         const response = await fetch('/api/me/', {
             method: 'PUT',
             credentials: 'include',
-            headers: getRequestHeaders(), // Utilisation de getRequestHeaders() ici
-            body: JSON.stringify(body_data)
+            headers: { 'Authorization': `Token ${sessionStorage.getItem('authToken')}` },
+            body: formData
         });
 
         const data = await response.json();
 
-        if (data.non_field_errors || data.error)
-            alert(data.non_field_errors || data.error);
+        if (!response.ok)
+            throw new Error(`HTTP error! status: ${response.status}`);
         else
+        {
+            alert('Profile updated successfully');
             await fetchUserProfile();
-
+        }
     }
-	catch (error)
-	{
+    catch (error)
+    {
         console.error('Error:', error);
     }
 }
