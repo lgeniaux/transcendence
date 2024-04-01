@@ -192,7 +192,7 @@ function displayNotification(notification)
         notificationElement.innerHTML = `
         <div class="card bg-dark text-white">
             <div class="card-body d-flex justify-content-between align-items-center">
-                <img src="/static/img/trophy.svg" alt="Notification icon" class="rounded-circle me-3" style="width: 40px; height: 40px;">
+                <img src="/static/img/trophy.svg" alt="Notification icon" class="me-3" style="width: 40px; height: 40px;">
                 <h5>${notification.message}</h5>
                 <div class="card-footer bg-transparent border-top-0">
                     ${getActionButtonsNotification(notification)}
