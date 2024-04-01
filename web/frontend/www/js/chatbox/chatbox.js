@@ -68,8 +68,3 @@ window.startGameWithUser = async (username)=>{
     });
 
 }
-
-// make it testable in console browser by exposing it
-window.loadChatbox = loadChatbox;
-window.attachChatboxEvents = attachChatboxEvents;
-window.startGameWithUser = startGameWithUser;

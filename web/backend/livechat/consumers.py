@@ -34,21 +34,26 @@ class LiveChatConsumer(AsyncWebsocketConsumer):
         #validate message
         data = json.loads(text_data)
         print(data)
-        if not data.get("message") or not data.get("target_username"):
+        if not data.get("message") or not data.get("username"):
+            print("no message or target_username")
             return
         message = data["message"]
-        target_username =  await self.get_user_by_username(data["target_username"])
+        target_username = data.get("username")
 
         # add http response
-        print("target_username", target_username)
         if message is None or message == "":
-            print("message is None or empty")
+            await self.send(
+                text_data=json.dumps(
+                    {"error": "message cannot be empty"}
+                )
+            )
             return
         if not target_username:
-            print("target_user not found")
-            return
-        if not target_username == self.user.username:
-            print("cannot send message to self")
+            await self.send(
+                text_data=json.dumps(
+                    {"error": "target_username cannot be empty"}
+                )
+            )
             return
         if len(message) > 250:
             print("message too long")

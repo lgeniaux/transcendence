@@ -5,7 +5,6 @@ export function initWebsocket()
     const auth_token = sessionStorage.getItem('authToken');
     const wsUrl = `wss://${window.location.host}/ws/chat/${auth_token}/`;
     const webSocket = new WebSocket(wsUrl);
-    window.webSocket = webSocket;
     
     webSocket.onmessage = function(event) {
         const message = JSON.parse(event.data);
@@ -37,20 +36,21 @@ export function initWebsocket()
 // Fonction pour envoyer un message via WebSocket
 function sendMessageViaWebSocket(webSocket, message, targetUsername)
 {
-    // if (!targetUsername)
-    //     return (false)
-    // //handle the case where a malicious user tries to send a NULL message
-    // if (!message)
-    //     return false;
-    // //limit the message size at 250 characters
-    // if (message.length > 250)
-    // {
-    //     alert('Message too long. Maximum 250 characters allowed');
-    //     return false;
-    // }
+    if (!targetUsername)
+        return (false)
+    //handle the case where a malicious user tries to send a NULL message
+    if (!message)
+        return false;
+    //limit the message size at 250 characters
+    if (message.length > 250)
+    {
+        alert('Message too long. Maximum 250 characters allowed');
+        return false;
+    }
+
     if (!webSocket)
     {
-        console.error('WebSocket is not initialized. Cannot send message');
+        console.error('WebSocket is not initialized, please refresh the page');
         return false;
     }
 
@@ -114,7 +114,3 @@ function observeForm(webSocket)
     const config = { childList: true, subtree: true };
     observer.observe(document.body, config); // Commencez à observer le document entier.
 }
-
-window.initWebsocket = initWebsocket;
-console.log(window.webSocket);
-window.sendMessageViaWebSocket = sendMessageViaWebSocket;
