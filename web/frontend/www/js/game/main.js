@@ -9,7 +9,7 @@ import { InvertShader } from './shaders/invertShader.js';
 import { createMeshes } from './createMeshes.js';
 import { createEventListeners } from './eventListeners.js';
 import { render, renderOnce } from './render.js';
-import { loadContent } from '../../js/utils.js';
+import { loadContent } from '../utils.js';
 
 /**
  * @returns {Object}: An object with the properties of the game:
