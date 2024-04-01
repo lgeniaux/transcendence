@@ -30,7 +30,7 @@ export async function inviteToTournament(username, tournamentId)
     }
     catch (error)
     {
-        console.error('Failed to invite user:', error);
+        alert('Failed to invite user:', error);
     }
 }
 
@@ -95,9 +95,20 @@ async function createTournament()
             body: JSON.stringify(data)
         });
 
-        if (!response.ok) throw new Error('Failed to create tournament');
-        
         const result = await response.json();
+
+        if (!response.ok && Object.keys(result).length > 0)
+        {
+            var error = '';
+            for (var key in result)
+            {
+                error += `${key}: ${result[key]}\n`;
+            }
+            throw new Error(error);
+        }
+        else if (!response.ok)
+            throw new Error('Could not create tournament');
+
         sessionStorage.setItem('currentTournamentId', result.tournament_id);
         window.location.href = '/dashboard';
         
@@ -107,7 +118,7 @@ async function createTournament()
     }
     catch (error)
     {
-        console.error('Failed to create tournament:', error.message);
+        alert(error.message);
     }
 }
 

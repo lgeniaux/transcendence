@@ -145,7 +145,7 @@ export async function manageInvite(notificationId, action)
     }
     catch (error)
     {
-        console.error('Error responding to invite:', error);
+        alert('Error responding to invite:', error);
     }
 }
 
