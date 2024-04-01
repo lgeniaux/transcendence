@@ -12,7 +12,6 @@ from .models import PrivateMessage
 
 class GetConversationMessagesSerializer(serializers.Serializer):
     username = serializers.CharField()
-    # message max count is optional
     message_max_count = serializers.IntegerField(required=False)
 
     def validate_username(self, value):

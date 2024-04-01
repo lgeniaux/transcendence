@@ -28,8 +28,6 @@ export async function handleUserAction(username, action)
     try
     {
         await sendUserAction(username, action);
-        console.log(`User ${action}ed successfully`);
-        // if on /tournament page, update the tournament interface, if on /dashboard, update the dashboard interface
         if (window.location.pathname === '/tournament')
             updateTournamentInterface(username, statusAfterAction);
         else
@@ -38,7 +36,7 @@ export async function handleUserAction(username, action)
     }
     catch (error)
     {
-        console.error(`Error ${action}ing user ${username}:`, error);
+        alert(`Error ${action}ing user ${username}:`, error);
     }
 }
 
@@ -56,25 +54,17 @@ async function sendUserAction(username, action)
         "delete": 'api/delete-friend/',
     };
 
-    try
-    {
-        const response = await fetch(endpointMap[action], {
-            method: 'POST',
-            credentials: 'include',
-            headers,
-            body: JSON.stringify(data)
-        });
+    const response = await fetch(endpointMap[action], {
+        method: 'POST',
+        credentials: 'include',
+        headers,
+        body: JSON.stringify(data)
+    });
 
-        if (!response.ok)
-            throw new Error(`Failed to ${action} user. Status: ${response.status}`);
-        
-        return await response.json(); // Assuming the API returns JSON.
-    }
-    catch (error)
-    {
-        console.error(`Error performing ${action} on user: ${username}`, error);
-        throw error; // Re-throw to handle it outside or log it.
-    }
+    if (!response.ok)
+        throw new Error(`Failed to ${action} user. Status: ${response.status}`);
+    
+    return await response.json();
 }
 
 async function emitUserStatusChangeEvent(username, newStatus)

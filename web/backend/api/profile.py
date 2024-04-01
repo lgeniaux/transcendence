@@ -23,6 +23,11 @@ class UserProfile(APIView):
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     def put(self, request, *args, **kwargs):
+        if request.user.is_oauth:
+            return Response(
+                {"detail": "You cannot edit your profile if you are an oauth user."},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
         serializer = UserChangeSerializer(request.user, data=request.data, partial=True)
         if serializer.is_valid():
             serializer.save()
@@ -65,14 +70,12 @@ class UserDelete(APIView):
             request.user.update_games_after_account_deletion()
             request.user.update_notifications_after_account_deletion()
             request.user.delete_sent_messages()
-            # replace username with a random uuid4 (20 chars)
             request.user.username = str(uuid4())[:20]
             request.user.email = str(uuid4())[:20] + "@deleted.com"
             request.user.is_active = False
             request.user.set_password(None)
             request.user.auth_token.delete()
             request.user.save()
-            #update_games_after_account_deletion
             return Response(
                 {"detail": "User successfully deleted"}, status=status.HTTP_200_OK
             )

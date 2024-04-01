@@ -125,6 +125,13 @@ def test_login_utils(client):
     )
     print(response.json())
     assert response.status_code == status.HTTP_401_UNAUTHORIZED
+
+    # Test case 5: Missing email
+    response = client.post(
+        base_url + "/login-user/", {"password": "17ValidPassword@"}
+    )
+    print(response.json())
+    assert response.status_code == status.HTTP_400_BAD_REQUEST
     print("\n\n::endgroup::")
 
 

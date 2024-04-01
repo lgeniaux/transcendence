@@ -2,15 +2,16 @@ import { createGame, launchGame } from "/frontend/www/game/js/main.js";
 
 async function displayGameView(game, fetch = false) {
     if (fetch) {
-        game = await getGameStatus();
+        game = await (getGameStatus().catch(error => {
+            console.error('Error getting game status:', error);
+            return null;
+        }));
     }
 
     var player = game.player;
     game = game.game;
-    console.log('Displaying game:', game);
     if (game.status === 'waiting to start' && player === 'player2') {
         document.getElementById("game").removeEventListener("click", startGame);
-        // display a view saying "Game is ready, you are playing as the guest so you must go play on the computer {username player1}"
         document.getElementById("game").innerHTML = `
         <div class="alert alert-info" role="alert">
         Game is ready, you are playing as the guest so you must go play on <strong>${game.player1}</strong>'s computer.
@@ -19,7 +20,6 @@ async function displayGameView(game, fetch = false) {
     }
     else if (game.status === 'waiting to start' && player === 'player1') {
         window.properties = await createGame();
-        // displayTutorial();
         document.getElementById("game").addEventListener("click", startGame);
     }
     else if (game.status === 'finished') {
@@ -41,7 +41,7 @@ async function displayGameView(game, fetch = false) {
                             <p class="display-6 ${game.winner === game.player1 ? 'text-warning font-weight-bold' : 'text-white'}">
                                 ${game.score_player1}
                             </p>
-                            ${game.winner === game.player1 ? '<img src="/path/to/trophy-icon.png" class="trophy-icon" alt="Trophy">' : ''}
+                            ${game.winner === game.player1 ? '<img src="static/img/trophy.svg" class="trophy-icon" alt="Trophy">' : ''}
                         </div>
                         <div class="col-md-6 d-flex flex-column align-items-center justify-content-center py-3">
                             <h5 class="${game.winner === game.player2 ? 'text-warning font-weight-bold' : 'text-white'}">
@@ -150,13 +150,8 @@ function getGameStatus() {
             return response.json();
         })
         .then(data => {
-            console.log('Game status:', data);
             return data;
         })
-        .catch(error => {
-            console.error('Error getting game status:', error);
-            throw error;
-        });
 }
 
 
@@ -171,16 +166,10 @@ export async function init() {
             if (game.game.status === 'finished') {
                 displayGameView(game);
             } else if (game.game.status === 'waiting to start' || game.game.status === 'in progress') {
-                // Attempt to open the WebSocket only if the game is not finished
                 window.ws = new WebSocket(`wss://${window.location.host}/ws/game/${authToken}/${gameId}/`);
 
                 ws.onopen = function (event) {
-                    console.log('WebSocket opened');
                     displayGameView(game);
-                };
-
-                ws.onclose = function (event) {
-                    console.log('WebSocket closed');
                 };
 
                 ws.onerror = function (event) {
@@ -189,7 +178,6 @@ export async function init() {
 
                 ws.onmessage = function (event) {
                     const message = JSON.parse(event.data);
-                    console.log('Live game:', message);
                     if (message.message === 'Game has been reset' || message.message === 'Game has ended') {
                         alert(message.message);
                         displayGameView(game, true);
@@ -199,7 +187,6 @@ export async function init() {
                 window.addEventListener('beforeunload', function () {
                     if (ws) {
                         ws.close();
-                        console.log('WebSocket closed');
                     }
                 });
             }

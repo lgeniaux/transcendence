@@ -11,7 +11,7 @@ export async function loadFriendList()
     }
     catch (error)
     {
-        console.error("Une erreur s'est produite lors du chargement des amis :", error);
+        console.error("Error loading friend list:", error);
     }
 }
 
@@ -46,14 +46,14 @@ async function cb_fetchAllUsers()
     }
     catch (error)
     {
-        throw error; // L'erreur est renvoyée pour être gérée par l'appelant
+        throw error;
     }
 }
 
 async function cb_displayUsers(users)
 {
     let usersList = document.getElementById('chatboxContainer');
-    usersList.innerHTML = ''; // Réinitialiser le contenu de la liste
+    usersList.innerHTML = '';
 
     users.sort((a, b) => b.online_status - a.online_status);
 
@@ -92,6 +92,14 @@ function getUserHtml(user)
     `;
 }
 
+window.viewProfile = function(username)
+{
+    if (username)
+    {
+        sessionStorage.setItem('currentStatsUsername', username);
+        window.location.href = '/stats';
+    }
+}
 
 function getChatboxActionButtonsHtml(user, actionContainerId)
 {
@@ -99,22 +107,16 @@ function getChatboxActionButtonsHtml(user, actionContainerId)
 
     if (user.status === 'friends')
     {
-        // Les utilisateurs qui sont déjà amis
         buttonsHtml += `<a class="dropdown-item" onclick="window.loadMessageBox('${user.username}')">Send message</a>`;
-        buttonsHtml += `<a class="dropdown-item" onclick="window.viewProfile('${user.username}')">See profile page</a>`;
+        buttonsHtml += `<a class="dropdown-item" onclick="window.viewProfile('${user.username}')">See stats page</a>`;
         buttonsHtml += `<a class="dropdown-item" onclick="startGameWithUser('${user.username}')">Invite to 1v1</a>`;
-        // Si l'url actuelle est /tournament et que on possede un sessionStorage.currentTournamentId
         buttonsHtml += `<hr>`
         buttonsHtml += `<a class="dropdown-item dangerBtn" onclick="window.handleUserAction('${user.username}', 'delete')">Delete</a>`;
     }
     else if (user.status === 'blocked')
-    {
-        // Les utilisateurs qui sont bloqués
         buttonsHtml += `<a class="dropdown-item dangerBtn" onclick="window.handleUserAction('${user.username}', 'unblock')">Unblock</a>`;
-    }
     else
     { 
-        // Tous les autres cas, y compris ceux où l'utilisateur peut être ajouté en ami
         buttonsHtml += `<a class="dropdown-item" onclick="window.handleUserAction('${user.username}', 'add')">Add contact</a>`;
         buttonsHtml += `<a class="dropdown-item dangerBtn" onclick="window.handleUserAction('${user.username}', 'block')">Block</a>`;
     }
@@ -126,16 +128,12 @@ function getChatboxActionButtonsHtml(user, actionContainerId)
 
 function attachClickEventToFriends()
 {
-    // Attache un gestionnaire d'événements à tous les éléments avec la classe 'user'
     document.querySelectorAll('.user').forEach(userElement => {
         userElement.addEventListener('click', function(event) {
-            // Vérifie si l'élément cliqué ou l'un de ses parents est le menu déroulant
             if (!event.target.closest('.dropdown-menu'))
             {
                 const username = this.getAttribute('data-username');
-                console.log("Ami cliqué :", username);
                 window.targetUsername = username;
-                // Ici, tu peux ajouter la logique pour afficher la chatbox ou effectuer d'autres actions
             }
         });
     });

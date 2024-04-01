@@ -17,7 +17,6 @@ class LiveChatConsumer(AsyncWebsocketConsumer):
         if user:
             self.user = user
             self.room_group_name = f"user_{self.user.id}"
-            # await self.update_user_online_status(user, True)
             await self.channel_layer.group_add(self.room_group_name, self.channel_name)
             await self.accept()
         else:
@@ -25,13 +24,11 @@ class LiveChatConsumer(AsyncWebsocketConsumer):
 
     async def disconnect(self, close_code):
         if self.user:
-            # await self.update_user_online_status(self.user, False)
             await self.channel_layer.group_discard(
                 self.room_group_name, self.channel_name
             )
 
     async def receive(self, text_data):
-        #validate message
         data = json.loads(text_data)
         print(data)
         if not data.get("message") or not data.get("username"):
@@ -40,7 +37,6 @@ class LiveChatConsumer(AsyncWebsocketConsumer):
         message = data["message"]
         target_username = data.get("username")
 
-        # add http response
         if message is None or message == "":
             await self.send(
                 text_data=json.dumps(
@@ -103,7 +99,3 @@ class LiveChatConsumer(AsyncWebsocketConsumer):
         except User.DoesNotExist:
             return None
 
-    # @database_sync_to_async
-    # def update_user_online_status(self, user, status):
-    #     user.online_status = status
-    #     user.save()

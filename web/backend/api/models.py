@@ -1,6 +1,5 @@
 from django.db import models
 
-# Create your models here.
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.contrib.postgres.fields import ArrayField
@@ -11,7 +10,6 @@ import random
 from livechat.models import PrivateMessage
 
 
-# Louis: j'ai remove les attributs en doublons avec la classe de base de django
 class User(AbstractUser):
     username = models.CharField(max_length=20, unique=True)
     email = models.EmailField(max_length=254, unique=True)
@@ -36,7 +34,6 @@ class User(AbstractUser):
         )
 
     def update_games_after_account_deletion(self):
-        # every game != finished where the user is involved automatilcally set the other player as winner
         games = Game.objects.filter(
             models.Q(player1=self) | models.Q(player2=self)
         ).exclude(
@@ -55,7 +52,6 @@ class User(AbstractUser):
             game.save()
     
     def update_notifications_after_account_deletion(self):
-        # every notification where the server is waiting for a response is set as denied
         notifications = Notification.objects.filter(
             recipient=self
         ).exclude(
@@ -101,11 +97,10 @@ class Tournament(models.Model):
     creator = models.ForeignKey(
         User, on_delete=models.CASCADE, related_name="created_tournaments"
     )
-    # participants are a list of inviation notificaitons the creator has sent
     invitations = models.ManyToManyField(Notification, blank=True)
     participants = models.ManyToManyField(
         User, blank=True
-    )  # users that have accepted the invitation
+    )
     start_time = models.DateTimeField(auto_now_add=True)
     state = models.JSONField(default=dict)
     nb_players = models.IntegerField()
@@ -133,7 +128,6 @@ class Tournament(models.Model):
 
         random.shuffle(participants)
 
-        # Split participants into pairs
         games = [participants[i : i + 2] for i in range(0, len(participants), 2)]
 
         for index, game in enumerate(games):
@@ -159,7 +153,6 @@ class Tournament(models.Model):
                     },
                 )
 
-            # Update the tournament state
             game_data = {
                 "game_id": new_game.game_id,
                 "player1": player1.username,
@@ -182,7 +175,6 @@ class Tournament(models.Model):
         if self.state["status"] != "in progress":
             return None
 
-        # Assuming the round names stored in `state` are directly applicable to the `round_name` field of the Game model
         for round_name in ["quarter-finals", "semi-finals", "finals"]:
             game = Game.objects.filter(
                 models.Q(player1=user) | models.Q(player2=user),
@@ -207,7 +199,6 @@ class Tournament(models.Model):
             Game.objects.filter(game_id=game["game_id"], status="finished").exists()
             for game in current_round_games
         ):
-            # Proceed to next round or finish tournament
             if current_round == "quarter-finals":
                 self.prepare_next_round("semi-finals")
             elif current_round == "semi-finals":
@@ -269,7 +260,6 @@ class Tournament(models.Model):
         broadcast_to_tournament_group(self.id, f"{next_round} has started.")
 
     def update_state(self):
-        # resync tournament state with the actual games
         for round_name in ["quarter-finals", "semi-finals", "finals"]:
             for game_data in self.state[round_name]:
                 game = Game.objects.get(game_id=game_data["game_id"])

@@ -36,7 +36,6 @@ class GetGameStatus(APIView):
                 "round_name": game.round_name if game.round_name else None,
             }
 
-            # do not return the response if the request user is not player1 or player2
             if request.user != game.player1 and request.user != game.player2:
                 return Response(
                     {"detail": "You are not a player of this game."},
@@ -69,7 +68,6 @@ class StartGameSerializer(serializers.Serializer):
             raise serializers.ValidationError(
                 "Game already started or waiting for player2"
             )
-        # if the game is linked to a tournament brodcast the update to the tournament channel
         return data
 
 
@@ -127,7 +125,6 @@ class EndGameSerializer(serializers.Serializer):
             raise serializers.ValidationError("Invalid score format")
         if not score[0].isdigit() or not score[1].isdigit():
             raise serializers.ValidationError("Invalid score format")
-        # one of the two players MUST have a score of 5 to end the game
         if score[0] != "5" and score[1] != "5":
             raise serializers.ValidationError("Invalid score format")
         if int(score[0]) > 5 or int(score[1]) > 5:
@@ -151,7 +148,6 @@ class EndGame(APIView):
             game.score_player1 = score[0]
             game.score_player2 = score[1]
             game.save()
-            # send the game end message to the game channel
             channel_layer = get_channel_layer()
             broadcast_message = {"type": "game.update", "message": "Game has ended"}
             async_to_sync(channel_layer.group_send)(
@@ -170,7 +166,6 @@ class EndGame(APIView):
                 }
                 broadcast_to_tournament_group(tournament.id, broadcast_message)
                 tournament.check_round_completion()
-            # change related notifications to finished
             notifications = Notification.objects.filter(data__game_id=game_id)
             for notification in notifications:
                 notification.data["status"] = "finished"

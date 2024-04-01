@@ -28,7 +28,6 @@ export async function navigate(path)
     if (route.js) {
         try {
             if (Array.isArray(route.js)) {
-                // Handle multiple scripts
                 const imports = route.js.map(script => import(script));
                 const modules = await Promise.all(imports);
 
@@ -36,7 +35,6 @@ export async function navigate(path)
                     if (module.init) module.init();
                 });
             } else {
-                // Handle a single script
                 const module = await import(route.js);
                 if (module.init) module.init();
             }
@@ -71,6 +69,10 @@ export function handleNavigationClick(event)
             sessionStorage.setItem('currentTournamentId', target.dataset.spaId);
         else if (originalPath === '/tournament' && !target.dataset.spaId)
             sessionStorage.removeItem('currentTournamentId');
+        else if (originalPath === '/stats' && target.dataset.spaId)
+            sessionStorage.setItem('currentStatsUsername', target.dataset.spaId);
+        else if (originalPath === '/stats' && !target.dataset.spaId)
+            sessionStorage.setItem('currentStatsUsername', 'me');
 
         navigate(finalPath);
     }
@@ -97,26 +99,23 @@ async function loadHTML(url)
 
 async function loadCSS(url)
 {
-    const head = document.getElementsByTagName('head')[0];
-    const link = document.createElement('link');
+    try {
+        const head = document.getElementsByTagName('head')[0];
+        const link = document.createElement('link');
 
-    link.rel = 'stylesheet';
-    link.type = 'text/css';
-    link.href = url;
-    head.appendChild(link);
+        link.rel = 'stylesheet';
+        link.type = 'text/css';
+        link.href = url;
+
+        head.appendChild(link);
+    } catch (error) {
+        console.error('Error loading CSS:', error);
+    }
 }
 
 
-async function loadModule(url)
-{
-    const module = document.createElement('script');
-    module.src = url;
-    module.type = 'module';
-    document.body.appendChild(module);
-}
 
 async function loadImportmap() {
-    // Check if an importmap is already loaded to avoid duplication
     if (!document.querySelector('script[type="importmap"]')) {
         return new Promise((resolve, reject) => {
             const importmap = document.createElement('script');
@@ -132,7 +131,6 @@ async function loadImportmap() {
             document.head.appendChild(importmap);
         });
     }
-    // If an importmap is already present, resolve immediately
     return Promise.resolve();
 }
 

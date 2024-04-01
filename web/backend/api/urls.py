@@ -11,7 +11,6 @@ from .social import (
     InvitePlayerToGame,
 )
 
-# import notifications.consumers
 from notifications import consumers
 from .tournaments import (
     CreateTournament,

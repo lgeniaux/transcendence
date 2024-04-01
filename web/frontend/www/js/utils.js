@@ -67,13 +67,13 @@ export async function getFileContent(url)
         if (!response.ok)
             throw new Error('La requête a échoué.');
 
-        const html = await response.text(); // Extraire le texte de la réponse
+        const html = await response.text();
 
-        return html; // Retourner le contenu du fichier
+        return html;
     }
 	catch (error)
 	{
-        throw new Error(`Erreur lors du chargement du fichier depuis l'URL ${url}: ${error.message}`);
+        throw new Error(`Error loading the file from URL ${url}: ${error.message}`);
     }
 }
 
@@ -93,7 +93,7 @@ export async function logoutUser()
             window.location.href = '/login';
         }
         else
-            console.error('Failed to logout.');
+            alert('Failed to logout.');
 
     }
     catch (error)

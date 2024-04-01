@@ -22,7 +22,7 @@ export async function inviteToTournament(username, tournamentId)
         }).then(response => {
             return response.json();
         }).then(data => {
-            if (data.success)
+            if (data.message)
                 console.log('User invited successfully');
             else
                 console.log('Failed to invite user:');
@@ -38,7 +38,6 @@ window.inviteToTournament = inviteToTournament;
 
 function displayCreateTournamentForm()
 {
-    // append the create-tournament.html to the html of the tournament page
     const overlayHTML = `
         <div id="createTournamentOverlay" class="d-flex justify-content-center align-items-center" tabindex="-1" style="position: fixed; inset: 0; background-color: rgba(0, 0, 0, 0.5); z-index: 1050;">
         <div class="modal-dialog modal-dialog-centered">
@@ -99,7 +98,6 @@ async function createTournament()
         if (!response.ok) throw new Error('Failed to create tournament');
         
         const result = await response.json();
-        console.log('Tournament created:', result);
         sessionStorage.setItem('currentTournamentId', result.tournament_id);
         window.location.href = '/dashboard';
         
@@ -118,7 +116,7 @@ function removeCreateTournamentOverlay()
     const overlay = document.getElementById('createTournamentOverlay');
 
     if (overlay)
-        overlay.remove(); // This completely removes the element from the DOM
+        overlay.remove();
 }
 
 
@@ -181,7 +179,6 @@ function displayInviteList(users)
 
     users.forEach(user => {
         const avatarSrc = user.avatar ? user.avatar : '/media/zippy.jpg';
-        // if user is a friend, display the card
         if (user.status == 'friends')
         {
             var userHTML = `
@@ -247,13 +244,10 @@ async function updateTournamentBracket(state)
         return;
     }
 
-    // Define all round names that you expect in the tournament
     const roundNames = ['quarter-finals', 'semi-finals', 'finals'];
 
-    // Iterate over each round name
     for (let round_name of roundNames)
     {
-        // Since round_name is used as a class, find all elements with this class
         const rounds = document.getElementsByClassName(round_name);
         for (let round of rounds)
         {
@@ -346,12 +340,7 @@ export async function init()
         const ws = new WebSocket(`wss://${window.location.host}/ws/tournament/${authToken}/${tournamentId}/`);
 
         ws.onopen = function (event) {
-            console.log('WebSocket opened');
             displayTournamentView();
-        }
-
-        ws.onclose = function (event) {
-            console.log('WebSocket closed');
         }
 
         ws.onerror = function (event) {
@@ -360,7 +349,6 @@ export async function init()
 
         ws.onmessage = function (event) {
             const message = JSON.parse(event.data);
-            console.log('Live message:', message);
             if (message) {
                 const game = undefined;
                 displayTournamentView(game, true);

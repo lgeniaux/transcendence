@@ -34,20 +34,16 @@ class TournamentConsumer(AsyncWebsocketConsumer):
 
     async def send_update_to_group(self, message):
         group_name = f"tournament_{self.tournament_id}"
-        # Send message to WebSocket group
         await self.channel_layer.group_send(
             group_name, {"type": "tournament.update", "message": message}
         )
 
-    # Handler for sending a message to this group
     async def tournament_update(self, event):
         message = event["message"]
-        # Send message to WebSocket
         await self.send(text_data=json.dumps(message))
 
     @database_sync_to_async
     def is_participant(self, user_id, tournament_id):
-        # Check if the user is in the tournament's participants list
         tournament = Tournament.objects.filter(
             id=tournament_id, participants__id=user_id
         ).first()
