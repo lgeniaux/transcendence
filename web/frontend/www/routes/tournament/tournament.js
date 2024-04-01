@@ -281,6 +281,9 @@ async function displayTournamentView()
     if (!state)
         return;
 
+    const tournamentName = document.getElementById('tournament-name');
+    if (tournamentName)
+        tournamentName.innerText = state.name;
     const tournamentContainer = document.getElementById('tournament-container');
     if (!tournamentContainer) {
         console.error('Tournament container not found');

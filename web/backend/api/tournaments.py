@@ -160,6 +160,7 @@ class GetTournamentState(APIView):
                 game_to_play = tournament.get_game_to_play(request.user)
             return Response(
                 {
+                    "name": tournament.name,
                     "state": tournament.state,
                     "nb_players": tournament.nb_players,
                     "is_creator": tournament.creator == request.user,
