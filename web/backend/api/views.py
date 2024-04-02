@@ -32,9 +32,7 @@ class UserRegistrationView(APIView):
 
     def post(self, request, *args, **kwargs):
         serializer = UserRegistrationSerializer(data=request.data)
-        if (
-            serializer.is_valid()
-        ):  # Note de Louis: is_valid will check all functions that starts with validate_*
+        if (serializer.is_valid()):  # Note de Louis: is_valid will check all functions that starts with validate_*
             user = serializer.save()
             return Response(
                 {"detail": "Success", "message": "User successfully registered"},

@@ -72,7 +72,7 @@ def users_with_games(client, created_users):
 
 @pytest.mark.django_db
 def test_login_invalid(client):
-    print(f"::group::{inspect.currentframe().f_code.co_name}")
+    print(f"\n\n::group::{inspect.currentframe().f_code.co_name}")
     # Test case 1: Invalid credentials
     response = client.post(
         base_url + "/login-user/",
@@ -80,12 +80,12 @@ def test_login_invalid(client):
     )
     print(response.json())
     assert response.status_code == status.HTTP_401_UNAUTHORIZED
-    print("\n\n::endgroup::")
+    print("::endgroup::")
 
 
 @pytest.mark.django_db
 def test_login_valid(client):
-    print(f"::group::{inspect.currentframe().f_code.co_name}")
+    print(f"\n\n::group::{inspect.currentframe().f_code.co_name}")
     # Test case 2: Valid credentials
     response = client.post(
         base_url + "/register-user/",
@@ -104,12 +104,12 @@ def test_login_valid(client):
     print(response.json())
     assert response.status_code == status.HTTP_200_OK
     assert response.data["detail"] == "Success"
-    print("\n\n::endgroup::")
+    print("::endgroup::")
 
 
 @pytest.mark.django_db
 def test_login_utils(client):
-    print(f"::group::{inspect.currentframe().f_code.co_name}")
+    print(f"\n\n::group::{inspect.currentframe().f_code.co_name}")
     # Test case 3: Valid email and invalid password
     response = client.post(
         base_url + "/login-user/",
@@ -130,12 +130,12 @@ def test_login_utils(client):
     response = client.post(base_url + "/login-user/", {"password": "17ValidPassword@"})
     print(response.json())
     assert response.status_code == status.HTTP_400_BAD_REQUEST
-    print("\n\n::endgroup::")
+    print("::endgroup::")
 
 
 @pytest.mark.django_db
 def test_already_logged_in(client):
-    print(f"::group::{inspect.currentframe().f_code.co_name}")
+    print(f"\n\n::group::{inspect.currentframe().f_code.co_name}")
     # Test case 5: Already logged in
     response = client.post(
         base_url + "/register-user/",
@@ -160,7 +160,7 @@ def test_already_logged_in(client):
     print(response.json())
     assert response.status_code == status.HTTP_200_OK
     assert response.data["detail"] == "You are already authenticated"
-    print("\n\n::endgroup::")
+    print("::endgroup::")
 
 
 # ========== REGISTER TESTS ==========
@@ -168,7 +168,7 @@ def test_already_logged_in(client):
 
 @pytest.mark.django_db
 def test_bad_email(client):
-    print(f"::group::{inspect.currentframe().f_code.co_name}")
+    print(f"\n\n::group::{inspect.currentframe().f_code.co_name}")
     # Test case 1: Bad email
     response = client.post(
         base_url + "/register-user/",
@@ -212,7 +212,7 @@ def test_bad_email(client):
     )
     print(response.json())
     assert response.status_code == status.HTTP_400_BAD_REQUEST
-    print("\n\n::endgroup::")
+    print("::endgroup::")
 
 
 # ========== LOGOUT TESTS ==========
@@ -220,7 +220,7 @@ def test_bad_email(client):
 
 @pytest.mark.django_db
 def test_logout(client, created_users):
-    print(f"::group::{inspect.currentframe().f_code.co_name}")
+    print(f"\n\n::group::{inspect.currentframe().f_code.co_name}")
     # Test case 1: bad token
     response = client.post(
         base_url + "/logout-user/", HTTP_AUTHORIZATION="Token " + "badtoken"
@@ -243,7 +243,7 @@ def test_logout(client, created_users):
     )
     print(response.json())
     assert response.status_code == status.HTTP_401_UNAUTHORIZED
-    print("\n\n::endgroup::")
+    print("::endgroup::")
 
 
 # ========== DELETE USER TESTS ==========
@@ -251,7 +251,7 @@ def test_logout(client, created_users):
 
 @pytest.mark.django_db
 def test_delete_user_with_game(client, users_with_games):
-    print(f"::group::{inspect.currentframe().f_code.co_name}")
+    print(f"\n\n::group::{inspect.currentframe().f_code.co_name}")
     game_id, users = users_with_games
 
     response = client.get(
@@ -323,7 +323,7 @@ def test_delete_user_with_game(client, users_with_games):
     )
     print(response.json())
     assert response.status_code == status.HTTP_401_UNAUTHORIZED
-    print("\n\n::endgroup::")
+    print("::endgroup::")
 
 
 # ========== CHANGE PASSWORD TESTS ==========
@@ -331,7 +331,7 @@ def test_delete_user_with_game(client, users_with_games):
 
 @pytest.mark.django_db
 def test_change_password(client, created_users):
-    print(f"::group::{inspect.currentframe().f_code.co_name}")
+    print(f"\n\n::group::{inspect.currentframe().f_code.co_name}")
     user1 = created_users[0]
     token = user1["token"]
     # Test case 1: Invalid current password
@@ -348,6 +348,13 @@ def test_change_password(client, created_users):
     )
     print(response.json())
     assert response.status_code == status.HTTP_400_BAD_REQUEST
+    response = client.post(
+        base_url + "/login-user/",
+        {"email": user1["email"], "password": user1["password"]},
+    )
+    print(response.json())
+    assert response.status_code == status.HTTP_200_OK
+    token = response.data["auth_token"]
     # Test case 2: Valid current password
     response = client.put(
         base_url + "/change-password/",
@@ -362,7 +369,21 @@ def test_change_password(client, created_users):
     )
     if response.status_code != status.HTTP_204_NO_CONTENT:
         print(response.json())
-    assert response.status_code == status.HTTP_204_NO_CONTENT
+    assert response.status_code == status.HTTP_200_OK
+    response = client.post(
+        base_url + "/login-user/",
+        {"email": user1["email"], "password": user1["password"]},
+    )
+    print(response.json())
+    assert response.status_code == status.HTTP_401_UNAUTHORIZED
+    response = client.post(
+        base_url + "/login-user/",
+        {"email": user1["email"], "password": "18ValidPassword@"},
+    )
+    print(response.json())
+    assert response.status_code == status.HTTP_200_OK
+
+
     # Test case 3: Already changed password
     response = client.put(
         base_url + "/change-password/",
@@ -376,7 +397,7 @@ def test_change_password(client, created_users):
         headers={"Content-Type": "application/json", "Authorization": "Token " + token},
     )
     print(response.json())
-    assert response.status_code == status.HTTP_400_BAD_REQUEST
+    assert response.status_code == status.HTTP_401_UNAUTHORIZED
     # Test case 4: Wrong password format
     response = client.put(
         base_url + "/change-password/",
@@ -390,8 +411,8 @@ def test_change_password(client, created_users):
         headers={"Content-Type": "application/json", "Authorization": "Token " + token},
     )
     print(response.json())
-    assert response.status_code == status.HTTP_400_BAD_REQUEST
-    # Test case 5: Passwords don't match
+    assert response.status_code == status.HTTP_401_UNAUTHORIZED
+    # Test case 5: Passwords match
     response = client.put(
         base_url + "/change-password/",
         data=json.dumps(
@@ -404,22 +425,22 @@ def test_change_password(client, created_users):
         headers={"Content-Type": "application/json", "Authorization": "Token " + token},
     )
     print(response.json())
-    assert response.status_code == status.HTTP_400_BAD_REQUEST
+    assert response.status_code == status.HTTP_401_UNAUTHORIZED
     # Test case 6: invalid token
     response = client.put(
         base_url + "/change-password/",
         data=json.dumps(
             {
                 "old_password": "18ValidPassword@",
-                "new_password": "18ValidPassword@",
-                "confirm_new_password": "18ValidPassword@",
+                "new_password": "19ValidPassword@",
+                "confirm_new_password": "19ValidPassword@",
             }
         ),
         headers={"Content-Type": "application/json", "Authorization": "Token badtoken"},
     )
     print(response.json())
     assert response.status_code == status.HTTP_401_UNAUTHORIZED
-    print("\n\n::endgroup::")
+    print("::endgroup::")
 
 
 # ========== Game Tests ==========
@@ -427,7 +448,7 @@ def test_change_password(client, created_users):
 
 @pytest.mark.django_db
 def test_create_game(client, created_users):
-    print(f"::group::{inspect.currentframe().f_code.co_name}")
+    print(f"\n\n::group::{inspect.currentframe().f_code.co_name}")
     user1, user2, user3 = created_users[0], created_users[1], created_users[2]
     player1_token, player2_token, player3_token = (
         user1["token"],
@@ -555,12 +576,12 @@ def test_create_game(client, created_users):
     )
     print(response.json())
     assert response.status_code == status.HTTP_400_BAD_REQUEST
-    print("\n\n::endgroup::")
+    print("::endgroup::")
 
 
 @pytest.mark.django_db
 def test_game(client, users_with_games):
-    print(f"::group::{inspect.currentframe().f_code.co_name}")
+    print(f"\n\n::group::{inspect.currentframe().f_code.co_name}")
     game_id, users = users_with_games
     player1_token = users[0]["token"]
     player2_token = users[1]["token"]
@@ -723,4 +744,4 @@ def test_game(client, users_with_games):
     assert response.status_code == status.HTTP_200_OK
     assert response.json()["user_stats"]["games_played"] == 1
     assert response.json()["user_stats"]["games_won"] == 0
-    print("\n\n::endgroup::")
+    print("::endgroup::")

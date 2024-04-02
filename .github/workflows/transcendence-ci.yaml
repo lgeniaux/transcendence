@@ -15,7 +15,7 @@ jobs:
       run: make && docker compose cp tests/pytest.ini web:/usr/src/app
 
     - name: PyTest
-      run: docker compose exec -T web pytest backend
+      run: docker compose exec -T web pytest backend -s
 
     - name: Show logs
       if: failure()
