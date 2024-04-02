@@ -2,7 +2,7 @@ import { getRequestHeaders } from '../../js/utils.js';
 
 export async function init()
 {
-    await fetchUserProfile();
+    await displayUserProfile();
 
     var profileFormButton = document.getElementById('profileChangeButton');
     var passwordFormButton = document.getElementById('passwordChangeButton');
@@ -71,30 +71,38 @@ async function downloadData(event)
 
 async function fetchUserProfile()
 {
+    const response = await fetch('/api/me/', {
+        method: 'GET',
+        credentials: 'include',
+        headers: getRequestHeaders()
+    });
+
+    if (!response.ok){
+        console.error(`HTTP error! status: ${response.status}`);
+        return {};
+    }
+    else
+        return await response.json();
+}
+
+async function displayUserProfile()
+{
     try
 	{
-        const response = await fetch('/api/me/', {
-            method: 'GET',
-            credentials: 'include',
-            headers: getRequestHeaders()
-        });
-
-        if (!response.ok)
-            throw new Error(`HTTP error! status: ${response.status}`);
-
-        const data = await response.json();
+        const data = await fetchUserProfile();
 
         document.getElementById('username').innerText = data.username;
         document.getElementById('email').innerText = data.email;
 
-        if (data.is_oauth)
-        {
-            document.querySelector('.profile-password').style.display = 'none';
-            document.querySelector('.profile-edit ').style.display = 'none';
+        if (data.is_oauth !== undefined){
+            if (data.is_oauth)
+            {
+                document.querySelector('.profile-password').style.display = 'none';
+                document.querySelector('.profile-edit ').style.display = 'none';
+            }
+            else
+                document.querySelector('.profile-password').style.display = 'block';
         }
-        else
-            document.querySelector('.profile-password').style.display = 'block';
-
     }
 	catch (error)
 	{
@@ -109,8 +117,10 @@ async function updateProfile(event)
         event.preventDefault();
         var formData = new FormData();
 
-        formData.append('username', document.querySelector('[name="username"]').value);
-        formData.append('avatar', document.querySelector('[name="avatar"]').files[0]);
+        let username = document.querySelector('[name="username"]').value;
+        formData.append('username', username || (await fetchUserProfile()).username);
+        let avatar = document.querySelector('[name="avatar"]').files[0];
+        formData.append('avatar', avatar);
 
         const response = await fetch('/api/me/', {
             method: 'PUT',
@@ -122,16 +132,16 @@ async function updateProfile(event)
         const data = await response.json();
 
         if (!response.ok)
-            throw new Error(`HTTP error! status: ${response.status}`);
+            throw new Error(Object.values(data).join(' '));
         else
         {
             alert('Profile updated successfully');
-            await fetchUserProfile();
+            await displayUserProfile();
         }
     }
     catch (error)
     {
-        console.error('Error:', error);
+        alert(error);
     }
 }
 
@@ -164,10 +174,11 @@ async function changePassword(event)
 
         const data = await response.json();
 
-        if (data.non_field_errors || data.error)
-            alert(data.non_field_errors || data.error);
-        else
-            alert('Password changed successfully');
+        if (!response.ok){
+            alert(Object.values(data).join(' '))
+        } else {
+            alert(data.detail);
+        }
 	}
 	catch (error)
 	{

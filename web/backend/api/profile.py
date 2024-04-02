@@ -30,6 +30,9 @@ class UserProfile(APIView):
             )
         serializer = UserChangeSerializer(request.user, data=request.data, partial=True)
         if serializer.is_valid():
+            if "avatar" in request.data:
+                if request.user.avatar:
+                    request.user.avatar.delete()
             serializer.save()
             return Response(serializer.data, status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
@@ -52,9 +55,12 @@ class ChangePassword(APIView):
                     {"old_password": ["Wrong password."]},
                     status=status.HTTP_400_BAD_REQUEST,
                 )
-            request.user.set_password(serializer.data.get("new_password"))
+            request.user.set_password(serializer.validated_data.get("new_password"))
             request.user.save()
-            return Response(status=status.HTTP_204_NO_CONTENT)
+            return Response(
+                {"detail": "Password successfully changed"},
+                status=status.HTTP_200_OK
+            )
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 

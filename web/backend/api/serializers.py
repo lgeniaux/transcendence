@@ -29,7 +29,7 @@ class UserChangeSerializer(serializers.ModelSerializer):
     def validate(self, data):
         username = data.get("username")
         if username is not None:
-            if User.objects.filter(username=username).exists():
+            if User.objects.filter(username=username).exists() and username != self.instance.username:
                 raise serializers.ValidationError(
                     "A user with that username already exists."
                 )
@@ -43,33 +43,28 @@ class UserChangeSerializer(serializers.ModelSerializer):
                 )
         else:
             raise serializers.ValidationError("Username is required.")
-        return value
+        return data
 
     def validate_avatar(self, value):
-        # Check if the image is a valid image file and open it
         try:
             img = Image.open(value)
         except IOError:
             raise serializers.ValidationError("Invalid image file")
 
-        # Check if the image is too large
         if value.size > 2 * 1024 * 1024:  # 2MB
             raise serializers.ValidationError("Image file is too large ( > 2mb )")
 
-        # Check if the image is 128 x 128 pixels
         if img.width != 128 or img.height != 128:
             raise serializers.ValidationError("Image file must be 128 x 128 pixels")
 
-        # Check file extension
         ext = os.path.splitext(value.name)[1].lower()
         if ext not in [".jpg", ".jpeg", ".png"]:
             raise serializers.ValidationError("Image file must be a jpg or png file")
 
-        # Generate a new file name using UUID to ensure uniqueness
-        # Retain the original extension, but sanitize the file name
+        if self.initial_data.get("username") is None:
+            raise serializers.ValidationError("Username is required.")
         new_name = f"avatar_{self.initial_data['username']}{uuid4().hex}{ext}"
 
-        # Assign the new name back to the file
         value.name = new_name
 
         return value
@@ -213,6 +208,10 @@ class ChangePasswordSerializer(serializers.Serializer):
 
         if new_password != confirm_new_password:
             raise serializers.ValidationError("The new passwords do not match.")
+        if new_password == data.get("old_password"):
+            raise serializers.ValidationError(
+                "The new password cannot be the same as the old password."
+            )
         return data
 
     def validate_new_password(self, value):
