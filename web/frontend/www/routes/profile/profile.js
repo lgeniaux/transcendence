@@ -71,18 +71,23 @@ async function downloadData(event)
 
 async function fetchUserProfile()
 {
-    const response = await fetch('/api/me/', {
-        method: 'GET',
-        credentials: 'include',
-        headers: getRequestHeaders()
-    });
+    try {
+        const response = await fetch('/api/me/', {
+            method: 'GET',
+            credentials: 'include',
+            headers: getRequestHeaders()
+        });
 
-    if (!response.ok){
-        console.error(`HTTP error! status: ${response.status}`);
+        if (!response.ok){
+            console.error(`HTTP error! status: ${response.status}`);
+            return {};
+        }
+        else
+            return await response.json();
+    } catch (error) {
+        console.error('Error:', error);
         return {};
     }
-    else
-        return await response.json();
 }
 
 async function displayUserProfile()

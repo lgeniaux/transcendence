@@ -20,9 +20,7 @@ export async function inviteToTournament(username, tournamentId)
         }).then(response => {
             return response.json();
         }).then(data => {
-            if (data.message)
-                alert('User invited successfully');
-            else if (Object.keys(data).length > 0){
+            if (!data.message && Object.keys(data).length > 0){
                 var error = '';
                 for (var key in data)
                 {
@@ -114,25 +112,12 @@ async function createTournament()
 
         sessionStorage.setItem('currentTournamentId', result.tournament_id);
         window.location.href = '/dashboard';
-        
-        removeCreateTournamentOverlay();
-
-        displayTournamentView();
     }
     catch (error)
     {
         alert(error.message);
     }
 }
-
-function removeCreateTournamentOverlay()
-{
-    const overlay = document.getElementById('createTournamentOverlay');
-
-    if (overlay)
-        overlay.remove();
-}
-
 
 
 function initTournamentCreateButton()
