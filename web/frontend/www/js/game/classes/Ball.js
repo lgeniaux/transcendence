@@ -162,13 +162,15 @@ class Ball extends Cube {
 		if (step.x >= p.rules.maxWidth - this.size / 2) {
 			step.x = p.rules.maxWidth - this.size / 2;
 			this.reset(step, p);
-			p.scoreL = ++document.getElementById('scoreL').innerHTML;
+			if (document.getElementById('scoreL'))
+				p.scoreL = ++document.getElementById('scoreL').innerHTML;
 			p.meshes.explosion.explode(p.rules.pointTimeout, this);
 		}
 		else if (step.x <= -p.rules.maxWidth + this.size / 2) {
 			step.x = -p.rules.maxWidth + this.size / 2;
 			this.reset(step, p);
-			p.scoreR = ++document.getElementById('scoreR').innerHTML;
+			if (document.getElementById('scoreR'))
+				p.scoreR = ++document.getElementById('scoreR').innerHTML;
 			p.meshes.explosion.explode(p.rules.pointTimeout, this);
 		}
 	}

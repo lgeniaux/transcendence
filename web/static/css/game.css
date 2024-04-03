@@ -57,6 +57,9 @@ body {
 
 #filter, #endScreen {
 	transition: opacity .6s ease-in-out;
+}
+
+#filter {
 	opacity: 0;
 }
 

@@ -21,6 +21,7 @@ async function getUserInfos(auth_token = null) {
 }
 
 async function startGame() {
+    document.getElementById("game").removeEventListener("click", startGame);
     properties = window.properties;
     setTimeout(() => {
         for (let i = 0; i < document.getElementsByClassName("score").length; i++) {

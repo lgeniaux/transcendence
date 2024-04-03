@@ -121,3 +121,6 @@ export function initLogoutButton()
         });
     }
 }
+window.addEventListener('popstate', async function(event) {
+    window.location.reload();
+});

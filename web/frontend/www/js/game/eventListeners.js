@@ -1,5 +1,6 @@
 import { Ball } from "./classes/Ball.js";
 import { Paddle } from "./classes/Paddle.js";
+import { renderOnce } from "./render.js";
 
 /**
  * Creates the event listeners for the game (resize, visibility change)
@@ -12,6 +13,7 @@ function createEventListeners(p) {
 		p.composer.setSize(p.canvas.clientWidth, p.canvas.clientHeight);
 		p.camera.aspect = p.canvas.clientWidth / p.canvas.clientHeight;
 		p.camera.updateProjectionMatrix();
+		renderOnce(p);
 	});
 
 	document.addEventListener('visibilitychange', () => {
