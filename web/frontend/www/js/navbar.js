@@ -34,6 +34,11 @@ async function loadUsernameIntoModal()
 
         if (modalUsernameElement)
             modalUsernameElement.innerText = data.username;
+
+        const modalAvatarElement = document.getElementById('modal-avatar');
+
+        if (modalAvatarElement && data.avatar)
+            modalAvatarElement.src = data.avatar;
     }
 	catch (error)
 	{
