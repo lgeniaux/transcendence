@@ -1,39 +1,39 @@
-<div id="registerForm" class="authForm">
+<form id="registerForm" class="authForm" action="/register" method="POST">
 
     <div id="registerAlert" class="mb-3"></div>
 
-	<div class="row">
-		<h1>Register</h1>
-	</div>
-
     <div class="row">
-		<div class="col-auto">
-			<label for="username">Username</label>
-            <input type="text" name="username" placeholder="username" class="form-control" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="- must be between 5 and 20 characters</br>- must be alphanumeric" data-bs-html="true">
-		</div>
+        <h1>Register</h1>
     </div>
 
     <div class="row">
-		<div class="col-auto">
-			<label for="email">E-mail</label>
-        	<input type="email" name="email" placeholder="email@example.com" class="form-control" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="- must be a valid email address">
-		</div>
+        <div class="col-auto">
+            <label for="username">Username</label>
+            <input id="username" type="text" name="username" placeholder="username" class="form-control" autocomplete= "username" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="- must be between 5 and 20 characters</br>- must be alphanumeric" data-bs-html="true">
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-auto">
+            <label for="email">E-mail</label>
+            <input id="email" type="email" name="email" placeholder="email@example.com" class="form-control" autocomplete="email" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="- must be a valid email address">
+        </div>
     </div>
 
     <div class="row">
         <div class="col-auto">
             <label for="avatar">Avatar</label>
-            <input type="file" name="avatar" accept="image/*" class="form-control" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="- must be a .jpg, .jpeg, .png</br>- max size: 2mb</br>- max dimensions: 128x128px" data-bs-html="true">
+            <input id="avatar" type="file" name="avatar" accept="image/*" class="form-control" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="- must be a .jpg, .jpeg, .png</br>- max size: 2mb</br>- max dimensions: 128x128px" data-bs-html="true">
         </div>
     </div>
 
     <div class="row">
         <div class="col-auto mb-2">
-			<label for="password">Password</label>
-            <input type="password" name="password" placeholder="password" class="form-control" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="- must be at least 8 characters</br>- must contain at least one uppercase letter</br>- must contain at least one lowercase letter</br>- must contain at least one number</br>- must contain at least one special character" data-bs-html="true">
+            <label for="password">Password</label>
+            <input id="password" type="password" name="password" placeholder="password" class="form-control" autocomplete="new-password" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="- must be at least 8 characters</br>- must contain at least one uppercase letter</br>- must contain at least one lowercase letter</br>- must contain at least one number</br>- must contain at least one special character" data-bs-html="true">
         </div>
         <div class="col-auto">
-            <input type="password" name="confirmPassword" placeholder="confirm password" class="form-control" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="- must be at least 8 characters</br>- must contain at least one uppercase letter</br>- must contain at least one lowercase letter</br>- must contain at least one number</br>- must contain at least one special character" data-bs-html="true">
+            <input type="password" name="confirmPassword" placeholder="confirm password" class="form-control" autocomplete="new-password" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="- must be at least 8 characters</br>- must contain at least one uppercase letter</br>- must contain at least one lowercase letter</br>- must contain at least one number</br>- must contain at least one special character" data-bs-html="true">
         </div>
     </div>
 
@@ -42,11 +42,11 @@
             <label for="terms">By registering you agree to our <a class="hyperlink-style" data-spa="/gdpr">privacy policy</a></label>
         </div>
     </div>
-	<div class="row"></div>
+    <div class="row"></div>
 
     <div class="row justify-content-around">
-		<button class="secondaryBtn btn btn-secondary" data-spa="/login" type="button">Already registered ?</button>
+        <button class="secondaryBtn btn btn-secondary" data-spa="/login" type="button">Already registered ?</button>
         <button class="primaryBtn btn btn-primary" id="registerBtn" type="submit">Register</button>
     </div>
 
-</div>
+</form>
