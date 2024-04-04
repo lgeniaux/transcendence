@@ -59,9 +59,15 @@ async function downloadData(event)
         const data = await response.json();
 
         var jsonText = JSON.stringify(data, null, 4);
-        var container = document.getElementById('downloadDataContainer');
-        container.innerText = jsonText;
-        container.style.display = 'block';
+        var blob = new Blob([jsonText], {type: "application/json"}),
+        url = URL.createObjectURL(blob);
+
+        var downloadLink = document.createElement("a");
+        downloadLink.href = url;
+        downloadLink.download = "data.json";
+        document.body.appendChild(downloadLink);
+        downloadLink.click();
+        document.body.removeChild(downloadLink);
     }
     catch (error)
     {
@@ -228,3 +234,6 @@ async function deleteProfile(event)
         }
     }
 }
+
+const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
+const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
