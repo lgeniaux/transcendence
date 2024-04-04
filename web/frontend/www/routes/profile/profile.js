@@ -131,7 +131,8 @@ async function updateProfile(event)
         let username = document.querySelector('[name="username"]').value;
         formData.append('username', username || (await fetchUserProfile()).username);
         let avatar = document.querySelector('[name="avatar"]').files[0];
-        formData.append('avatar', avatar);
+        if (avatar)
+            formData.append('avatar', avatar);
 
         const response = await fetch('/api/me/', {
             method: 'PUT',

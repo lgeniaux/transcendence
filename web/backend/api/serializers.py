@@ -19,7 +19,7 @@ class UserSerializer(serializers.ModelSerializer):
 
 
 class UserChangeSerializer(serializers.ModelSerializer):
-    username = serializers.CharField(required=False, max_length=20)
+    username = serializers.CharField(required=True, max_length=20)
     avatar = serializers.ImageField(required=False)
 
     class Meta:
