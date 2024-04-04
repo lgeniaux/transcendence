@@ -14,6 +14,7 @@ from django.db import models
 from .models import Game
 from livechat.models import PrivateMessage
 from .IsAuth import IsAuth
+from django.shortcuts import get_object_or_404
 
 
 class UserProfile(APIView):
@@ -109,15 +110,28 @@ class DownloadData(APIView):
                 status=status.HTTP_400_BAD_REQUEST,
             )
         try:
+            games = [get_object_or_404(Game, game_id=game.game_id) for game in Game.objects.filter(
+                models.Q(player1=request.user) | models.Q(player2=request.user)
+            )]
+            games_details = [
+                {
+                    "game_id": game.game_id,
+                    "player1": game.player1.username,
+                    "player2": game.player2.username,
+                    "status": game.status,
+                    "winner": game.winner.username if game.winner else None,
+                    "score_player1": game.score_player1,
+                    "score_player2": game.score_player2,
+                    "tournament": game.tournament.name if game.tournament else None,
+                    "round_name": game.round_name if game.round_name else None,
+                }
+                for game in games
+            ]
+            
             data = {
                 "username": request.user.username,
                 "email": request.user.email,
-                "game_ids": [
-                    game.game_id
-                    for game in Game.objects.filter(
-                        models.Q(player1=request.user) | models.Q(player2=request.user)
-                    )
-                ],
+                "games": games_details, 
                 "tournament_ids": [
                     tournament.id for tournament in request.user.tournaments.all()
                 ],
