@@ -20,6 +20,7 @@ from channels.layers import get_channel_layer
 from tournaments.views import broadcast_to_tournament_group
 from django.views.decorators.csrf import csrf_exempt
 from django.db.models import Q
+from .IsAuth import IsAuth
 
 
 User = get_user_model()
@@ -51,7 +52,7 @@ class BlockOrUnblockUserSerializer(serializers.Serializer):
 
 class BlockOrUnblockUser(APIView):
     authentication_classes = [TokenAuthentication]
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuth]
 
     def post(self, request, *args, **kwargs):
         serializer = BlockOrUnblockUserSerializer(
@@ -114,7 +115,7 @@ class AddOrDeleteFriendSerializer(serializers.Serializer):
 
 class AddOrDeleteFriend(APIView):
     authentication_classes = [TokenAuthentication]
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuth]
 
     def post(self, request, *args, **kwargs):
         serializer = AddOrDeleteFriendSerializer(
@@ -189,7 +190,7 @@ class GetUsersList(APIView):
     """
 
     authentication_classes = [TokenAuthentication]
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuth]
 
     def get(self, request, *args, **kwargs):
         users = User.objects.all().exclude(id=request.user.id).exclude(is_active=False)
@@ -213,7 +214,7 @@ class GetUserNotifications(APIView):
     """
 
     authentication_classes = [TokenAuthentication]
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuth]
 
     def get(self, request, *args, **kwargs):
         notifications = Notification.objects.filter(
@@ -259,7 +260,7 @@ class ManageInvitationNotificationSerializer(serializers.Serializer):
 
 class ManageInvitationNotification(APIView):
     authentication_classes = [TokenAuthentication]
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuth]
 
     def post(self, request, *args, **kwargs):
         serializer = ManageInvitationNotificationSerializer(
@@ -398,7 +399,7 @@ class InvitePlayerToGameSerializer(serializers.Serializer):
 
 class InvitePlayerToGame(APIView):
     authentication_classes = [TokenAuthentication]
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuth]
 
     def post(self, request, *args, **kwargs):
         serializer = InvitePlayerToGameSerializer(

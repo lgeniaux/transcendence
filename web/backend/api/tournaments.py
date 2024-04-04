@@ -8,6 +8,7 @@ from rest_framework.permissions import IsAuthenticated
 from .models import Tournament, User
 from notifications.models import Notification
 from notifications.views import send_notification, send_notification_to_user
+from .IsAuth import IsAuth
 
 
 User = get_user_model()
@@ -101,7 +102,7 @@ class TournamentSerializer(serializers.ModelSerializer):
 
 
 class CreateTournament(APIView):
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuth]
 
     def post(self, request, *args, **kwargs):
         serializer = TournamentSerializer(
@@ -123,7 +124,7 @@ class CreateTournament(APIView):
 
 
 class GetMyTournaments(APIView):
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuth]
 
     def get(self, request, *args, **kwargs):
         tournaments = Tournament.objects.filter(participants=request.user)
@@ -147,7 +148,7 @@ class GetTournamentState(APIView):
     /api/tournament/${tournamentId}/state/
     """
 
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuth]
 
     def get(self, request, *args, **kwargs):
         tournament_id = kwargs["tournament_id"]
@@ -233,7 +234,7 @@ class InvitePlayerToTournamentSerializer(serializers.Serializer):
 
 
 class InvitePlayerToTournament(APIView):
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuth]
 
     def post(self, request, *args, **kwargs):
         serializer = InvitePlayerToTournamentSerializer(
@@ -260,7 +261,7 @@ class InvitePlayerToTournament(APIView):
 
 
 class StartTournament(APIView):
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuth]
 
     def post(self, request, *args, **kwargs):
         tournament_id = kwargs["tournament_id"]

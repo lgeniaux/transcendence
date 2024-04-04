@@ -9,6 +9,7 @@ from django.core.files.base import ContentFile
 import os
 from django.db import IntegrityError
 from django.db.models import Q
+from datetime import datetime
 
 
 class CodeForToken(APIView):
@@ -62,19 +63,12 @@ class CodeForToken(APIView):
                     if not created:
                         token.delete()
                         token = Token.objects.create(user=existing_oauth_user)
-                        existing_oauth_user.is_active = True
-                        existing_oauth_user.save()
-                        return Response(
-                            {"detail": "Success", "auth_token": token.key},
-                            status=status.HTTP_200_OK,
-                        )
-                    else:
-                        existing_oauth_user.is_active = True
-                        existing_oauth_user.save()
-                        return Response(
-                            {"detail": "Success", "auth_token": token.key},
-                            status=status.HTTP_200_OK,
-                        )
+                    existing_oauth_user.online_status = datetime.now().timestamp()
+                    existing_oauth_user.save()
+                    return Response(
+                        {"detail": "Success", "auth_token": token.key},
+                        status=status.HTTP_200_OK,
+                    )
                 elif existing_user:
                     return Response(
                         {
@@ -113,7 +107,7 @@ class CodeForToken(APIView):
                         )
 
                     token, _ = Token.objects.get_or_create(user=user)
-                    user.is_active = True
+                    user.online_status = datetime.now().timestamp()
                     user.save()
                     return Response(
                         {"detail": "Success", "auth_token": token.key},

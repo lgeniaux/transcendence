@@ -14,7 +14,7 @@ class User(AbstractUser):
     username = models.CharField(max_length=20, unique=True)
     email = models.EmailField(max_length=254, unique=True)
     avatar = models.ImageField(blank=True)
-    online_status = models.BooleanField(default=False)
+    online_status = models.IntegerField(null=True, blank=True)
     friendlist = models.ManyToManyField(
         "self", symmetrical=False, blank=True, related_name="friends"
     )

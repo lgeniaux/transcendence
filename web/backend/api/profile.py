@@ -13,10 +13,11 @@ from uuid import uuid4
 from django.db import models
 from .models import Game
 from livechat.models import PrivateMessage
+from .IsAuth import IsAuth
 
 
 class UserProfile(APIView):
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [IsAuth]
 
     def get(self, request, *args, **kwargs):
         serializer = UserSerializer(request.user)
@@ -39,7 +40,7 @@ class UserProfile(APIView):
 
 
 class ChangePassword(APIView):
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [IsAuth]
 
     def put(self, request, *args, **kwargs):
         if request.user.is_oauth:
@@ -99,7 +100,7 @@ class UserDelete(APIView):
 
 class DownloadData(APIView):
 
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [IsAuth]
 
     def get(self, request, *args, **kwargs):
         if not request.user.is_active:

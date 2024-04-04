@@ -77,8 +77,9 @@ function getUserHtml(user)
 {
     const dropdownId = `dropdown-${user.username}`;
     const avatarSrc = user.avatar ? user.avatar : '/media/zippy.jpg'
-    const onlineStatusClass = user.online_status ? 'bg-success' : 'bg-danger';
-    const onlineStatusText = user.online_status ? 'Online' : 'Offline';
+    const isOnline = user.online_status != null ? Date.now() / 1000 - user.online_status < 30 : false;
+    const onlineStatusClass = isOnline ? 'bg-success' : 'bg-danger';
+    const onlineStatusText = isOnline ? 'Online' : 'Offline';
 
     return `
         <button class="user dropdown-toggle" type="button" data-username="${user.username}" data-bs-toggle="dropdown" aria-expanded="false" id="${dropdownId}">

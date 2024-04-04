@@ -9,6 +9,7 @@ from .models import Tournament, User, Game
 from django.db import models
 from django.db.models import Q, F, Case, When, Avg
 import pdb
+from .IsAuth import IsAuth
 
 User = get_user_model()
 
@@ -19,7 +20,7 @@ class GetUserStats(APIView):
     Returns a JSON containing user stats.
     """
 
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuth]
 
     def get(self, request, *args, **kwargs):
         try:

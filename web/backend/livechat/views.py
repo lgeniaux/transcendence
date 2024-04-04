@@ -8,6 +8,7 @@ from rest_framework.authtoken.models import Token
 from rest_framework.authentication import TokenAuthentication
 from rest_framework import serializers
 from .models import PrivateMessage
+from api.IsAuth import IsAuth
 
 
 class GetConversationMessagesSerializer(serializers.Serializer):
@@ -25,7 +26,7 @@ class GetConversationMessagesSerializer(serializers.Serializer):
 
 
 class GetConversationMessages(APIView):
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuth]
     authentication_classes = [TokenAuthentication]
 
     def post(self, request):

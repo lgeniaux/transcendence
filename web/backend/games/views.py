@@ -12,6 +12,7 @@ from asgiref.sync import async_to_sync
 from channels.layers import get_channel_layer
 from tournaments.views import broadcast_to_tournament_group
 from notifications.models import Notification
+from api.IsAuth import IsAuth
 
 
 class GetGameStatus(APIView):
@@ -19,7 +20,7 @@ class GetGameStatus(APIView):
     /api/game/get-status/<int:game_id>/
     """
 
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuth]
 
     def get(self, request, game_id, format=None):
         try:
@@ -72,7 +73,7 @@ class StartGameSerializer(serializers.Serializer):
 
 
 class StartGame(APIView):
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuth]
 
     def post(self, request, *args, **kwargs):
         serializer = StartGameSerializer(
@@ -135,7 +136,7 @@ class EndGameSerializer(serializers.Serializer):
 
 
 class EndGame(APIView):
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuth]
 
     def post(self, request, *args, **kwargs):
         serializer = EndGameSerializer(data=request.data, context={"request": request})
