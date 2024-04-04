@@ -11,7 +11,7 @@ import requests
 import random
 from uuid import uuid4
 from django.db import models
-from .models import Game
+from .models import Game, Tournament
 from livechat.models import PrivateMessage
 from .IsAuth import IsAuth
 from django.shortcuts import get_object_or_404
@@ -127,14 +127,27 @@ class DownloadData(APIView):
                 }
                 for game in games
             ]
+            tournaments = [tournament for tournament in Tournament.objects.filter()]
+            tournament_details = [
+                {
+                    "id": tournament.id,
+                    "name": tournament.name,
+                    "creator": tournament.creator.username,
+                    "participants": [
+                        participant.username for participant in tournament.participants.all()
+                    ],
+                    "start_time": tournament.start_time,
+                    "state": tournament.state,
+                }
+                for tournament in tournaments
+            ]
             
             data = {
                 "username": request.user.username,
                 "email": request.user.email,
+                "last_online": request.user.online_status,
                 "games": games_details, 
-                "tournament_ids": [
-                    tournament.id for tournament in request.user.tournaments.all()
-                ],
+                "tournaments": tournament_details,
                 "messages_sent": [
                     {
                         "content": message.content,

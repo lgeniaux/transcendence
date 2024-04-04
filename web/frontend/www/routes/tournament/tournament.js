@@ -20,16 +20,18 @@ export async function inviteToTournament(username, tournamentId)
         }).then(response => {
             return response.json();
         }).then(data => {
-            if (!data.message && Object.keys(data).length > 0){
-                var error = '';
-                for (var key in data)
-                {
-                    error += `${data[key]}\n`;
+            if (!data.message) {
+                if (Object.keys(data).length > 0){
+                    var error = '';
+                    for (var key in data)
+                    {
+                        error += `${data[key]}\n`;
+                    }
+                    throw new Error(error);
                 }
-                throw new Error(error);
+                else
+                    throw new Error('Could not invite user');
             }
-            else
-                throw new Error('Could not invite user');
         }).catch(error => {
             alert(error.message);
         });
