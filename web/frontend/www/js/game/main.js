@@ -181,7 +181,7 @@ async function launchGame(player1 = "Left player", player2 = "Right player", pro
 
 async function displayTutorial()
 {
-    await loadContent('static/html/game/tutorial.html', '#endScreen');
+    await loadContent('frontend/www/html/game/tutorial.html', '#endScreen');
 	document.querySelector('#endScreen').style.opacity = '1';
 }
 

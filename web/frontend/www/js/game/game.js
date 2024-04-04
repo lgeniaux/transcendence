@@ -178,7 +178,7 @@ export async function init() {
 
                 ws.onmessage = function (event) {
                     const message = JSON.parse(event.data);
-                    if (message.message === 'Game has been reset' || message.message === 'Game has ended') {
+                    if ( message.message === 'Game has ended') {
                         alert(message.message);
                         displayGameView(game, true);
                     }
