@@ -145,7 +145,15 @@ class DownloadData(APIView):
             data = {
                 "username": request.user.username,
                 "email": request.user.email,
+                "avatar": "/media/" + str(request.user.avatar) if request.user.avatar else None,
+                "is_oauth": request.user.is_oauth,
                 "last_online": request.user.online_status,
+                "friends": [
+                    friend.username for friend in request.user.friendlist.all()
+                ],
+                "blocked_users": [
+                    blocked_user.username for blocked_user in request.user.blocklist.all()
+                ],
                 "games": games_details, 
                 "tournaments": tournament_details,
                 "messages_sent": [
