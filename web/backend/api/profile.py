@@ -81,7 +81,7 @@ class UserDelete(APIView):
             # delete avatar from server and set the default one
             if request.user.avatar:
                 request.user.avatar.delete()
-                request.user.avatar = "/media/zippy.jpg"
+                request.user.avatar = "/static/img/person-fill.svg"
             request.user.username = str(uuid4())[:20]
             request.user.email = str(uuid4())[:20] + "@deleted.com"
             request.user.is_active = False

@@ -64,7 +64,7 @@ function displayUsers(users)
 
     users.forEach(user => {
         var actionContainerId = `actions-${user.username}`;
-        var avatarSrc = user.avatar ? user.avatar : 'media/zippy.jpg';
+        var avatarSrc = user.avatar ? user.avatar : 'static/img/person-fill.svg';
         var userHTML = `
         <div class="card bg-dark text-white mb-3">
             <div class="card-body">

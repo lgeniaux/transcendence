@@ -177,7 +177,7 @@ function displayInviteList(users)
     inviteList.innerHTML = '';
 
     users.forEach(user => {
-        const avatarSrc = user.avatar ? user.avatar : '/media/zippy.jpg';
+        const avatarSrc = user.avatar ? user.avatar : '/static/img/person-fill.svg';
         if (user.status == 'friends')
         {
             var userHTML = `
