@@ -185,7 +185,7 @@ function displayInviteList(users)
                 <div class="card-body">
                     <div class="d-flex justify-content-between align-items-center">
                         <div class="d-flex align-items-center">
-                            <img src="${avatarSrc}" alt="User avatar" class="rounded-circle me-3" style="width: 60px; height: 60px;">
+                            <img src="${avatarSrc}" alt="User avatar" class="rounded-circle me-3" style="width: 60px; height: 60px; object-fit: cover;">
                             <div>
                                 <h3 class="h5 mb-0">${user.username}</h3>
                             </div>
