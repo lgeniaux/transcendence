@@ -2,12 +2,15 @@
 
 <div align="center">
 
-*A 3D Pong game with tournaments, live chat, and social features*
+![Game Demo](demo.gif)
 
-[![Docker](https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=docker&logoColor=white)](https://www.docker.com/)
+*A 3D Pong game web-application with tournaments, live chat, and social features*
+
 [![Django](https://img.shields.io/badge/Django-092E20?style=for-the-badge&logo=django&logoColor=white)](https://djangoproject.com/)
 [![Three.js](https://img.shields.io/badge/Three.js-000000?style=for-the-badge&logo=three.js&logoColor=white)](https://threejs.org/)
 [![PostgreSQL](https://img.shields.io/badge/PostgreSQL-316192?style=for-the-badge&logo=postgresql&logoColor=white)](https://postgresql.org/)
+[![Docker](https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=docker&logoColor=white)](https://www.docker.com/)
+
 
 </div>
 
@@ -18,14 +21,6 @@
 A sophisticated web application that reimagines the classic Pong experience through **immersive 3D graphics**, **real-time multiplayer tournaments**, and **comprehensive social features**. Built with modern web technologies and inspired by the original 1972 Pong arcade board aesthetics.
 
 **🔥 Technical Achievement**: Full-stack single-page application with WebGL 3D rendering, real-time WebSocket communication, and containerized microservices architecture.
-
-<div align="center">
-
-![Game Demo](demo.gif)
-
-*3D Pong gameplay in action*
-
-</div>
 
 ---
 
