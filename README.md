@@ -19,6 +19,14 @@ A sophisticated web application that reimagines the classic Pong experience thro
 
 **🔥 Technical Achievement**: Full-stack single-page application with WebGL 3D rendering, real-time WebSocket communication, and containerized microservices architecture.
 
+<div align="center">
+
+![Game Demo](demo.gif)
+
+*3D Pong gameplay in action*
+
+</div>
+
 ---
 
 ## ✨ **Features**
